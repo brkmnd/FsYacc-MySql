@@ -11,7 +11,7 @@ module AbSyn =
         | Binary of string * Expr * Expr
         | Unary of string * Expr
         | Node of string
-        | NodeType of string * string
+        | NodeTyped of string * string
         | Null
         | Temp
     type Q_Select =
@@ -1655,48 +1655,48 @@ let _fsyacc_reductions ()  =    [|
                 (
                    (
 # 690 "mysql.yy"
-                                                       AbSyn.Expr.Temp 
+                                         
+                                 AbSyn.Expr.NodeTyped ("keyword","null")
+                                 
                    )
 # 690 "mysql.yy"
                  : 'literal));
-# 1662 "mysql.fs"
+# 1664 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 691 "mysql.yy"
+# 693 "mysql.yy"
                                               
-                                 AbSyn.Expr.Temp
-                                 //$$= NEW_PTN Item_int(@$, NAME_STRING("FALSE"), 0, 1);
-                               
-                   )
-# 691 "mysql.yy"
-                 : 'literal));
-# 1675 "mysql.fs"
-        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            Microsoft.FSharp.Core.Operators.box
-                (
-                   (
-# 695 "mysql.yy"
-                                         
-                             AbSyn.Expr.Temp
+                                 AbSyn.Expr.NodeTyped ("keyword","false")
                                  
                    )
-# 695 "mysql.yy"
+# 693 "mysql.yy"
                  : 'literal));
-# 1687 "mysql.fs"
+# 1676 "mysql.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 696 "mysql.yy"
+                                         
+                                 AbSyn.Expr.NodeTyped ("keyword","true")
+                                 
+                   )
+# 696 "mysql.yy"
+                 : 'literal));
+# 1688 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 698 "mysql.yy"
+# 699 "mysql.yy"
                                         
-                             AbSyn.Expr.Temp
-                                 //$$= NEW_PTN Item_hex_string(@$, _1);
+                                 AbSyn.Expr.Temp
                                  
                    )
-# 698 "mysql.yy"
+# 699 "mysql.yy"
                  : 'literal));
 # 1701 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1706,61 +1706,51 @@ let _fsyacc_reductions ()  =    [|
                    (
 # 702 "mysql.yy"
                                         
-                             AbSyn.Expr.Temp
-                                 //$$= NEW_PTN Item_bin_string(@$, _1);
+                                 AbSyn.Expr.Temp
                                  
                    )
 # 702 "mysql.yy"
                  : 'literal));
-# 1715 "mysql.fs"
+# 1714 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 711 "mysql.yy"
-                                                                   AbSyn.Expr.NodeType ("str",_1) 
+# 710 "mysql.yy"
+                                           
+                                 AbSyn.Expr.NodeTyped ("string",_1)
+                                 
                    )
-# 711 "mysql.yy"
+# 710 "mysql.yy"
                  : 'text_literal));
-# 1726 "mysql.fs"
+# 1727 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 718 "mysql.yy"
+# 719 "mysql.yy"
                                                    AbSyn.Expr.Temp 
                    )
-# 718 "mysql.yy"
+# 719 "mysql.yy"
                  : 'num_literal));
-# 1737 "mysql.fs"
+# 1738 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 728 "mysql.yy"
+# 729 "mysql.yy"
                                  
                              AbSyn.Expr.Node _1
                              
                    )
-# 728 "mysql.yy"
+# 729 "mysql.yy"
                  : 'ident));
-# 1750 "mysql.fs"
+# 1751 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
-            Microsoft.FSharp.Core.Operators.box
-                (
-                   (
-# 732 "mysql.yy"
-                                                   _1 
-                   )
-# 732 "mysql.yy"
-                 : 'simple_ident));
-# 1761 "mysql.fs"
-        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident_q)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
@@ -1769,41 +1759,52 @@ let _fsyacc_reductions ()  =    [|
                    )
 # 733 "mysql.yy"
                  : 'simple_ident));
-# 1772 "mysql.fs"
-        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
-            Microsoft.FSharp.Core.Operators.box
-                (
-                   (
-# 736 "mysql.yy"
-                                                   AbSyn.Expr.Temp 
-                   )
-# 736 "mysql.yy"
-                 : 'simple_ident_nospvar));
-# 1783 "mysql.fs"
+# 1762 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident_q)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
+# 734 "mysql.yy"
+                                                   _1 
+                   )
+# 734 "mysql.yy"
+                 : 'simple_ident));
+# 1773 "mysql.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
 # 737 "mysql.yy"
                                                    AbSyn.Expr.Temp 
                    )
 # 737 "mysql.yy"
                  : 'simple_ident_nospvar));
-# 1794 "mysql.fs"
+# 1784 "mysql.fs"
+        (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident_q)) in
+            Microsoft.FSharp.Core.Operators.box
+                (
+                   (
+# 738 "mysql.yy"
+                                                   AbSyn.Expr.Temp 
+                   )
+# 738 "mysql.yy"
+                 : 'simple_ident_nospvar));
+# 1795 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 740 "mysql.yy"
+# 741 "mysql.yy"
                                                                    AbSyn.Expr.Temp 
                    )
-# 740 "mysql.yy"
+# 741 "mysql.yy"
                  : 'simple_ident_q));
-# 1806 "mysql.fs"
+# 1807 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
@@ -1811,42 +1812,42 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 741 "mysql.yy"
+# 742 "mysql.yy"
                                                                    AbSyn.Expr.Temp 
                    )
-# 741 "mysql.yy"
+# 742 "mysql.yy"
                  : 'simple_ident_q));
-# 1819 "mysql.fs"
+# 1820 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 744 "mysql.yy"
+# 745 "mysql.yy"
                                                       
                                  _1
                                  //$$= NEW_PTN PTI_table_wild(@$, NULL, _1.str);
                                  
                    )
-# 744 "mysql.yy"
+# 745 "mysql.yy"
                  : 'table_wild));
-# 1833 "mysql.fs"
+# 1834 "mysql.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 748 "mysql.yy"
+# 749 "mysql.yy"
                                                                    
                                  _1
                                  //$$= NEW_PTN PTI_table_wild(@$, _1.str, _3.str);
                                  
                    )
-# 748 "mysql.yy"
+# 749 "mysql.yy"
                  : 'table_wild));
 |]
-# 1849 "mysql.fs"
+# 1850 "mysql.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;

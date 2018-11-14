@@ -5,7 +5,7 @@ module AbSyn =
         | Binary of string * Expr * Expr
         | Unary of string * Expr
         | Node of string
-        | NodeType of string * string
+        | NodeTyped of string * string
         | Null
         | Temp
     type Q_Select =
@@ -691,7 +691,7 @@ literal:
             AbSyn.Expr.NodeTyped ("keyword","null")
             }
         | VAL_FALSE     {
-            AbSyn.Expr.NodeType ("keyword","false")
+            AbSyn.Expr.NodeTyped ("keyword","false")
             }
         | VAL_TRUE {
             AbSyn.Expr.NodeTyped ("keyword","true")
@@ -708,7 +708,7 @@ literal:
 
 text_literal:
           VAL_STRING {
-            AbSyn.Expr.NodeType ("string",$1)
+            AbSyn.Expr.NodeTyped ("string",$1)
             }
         //| NCHAR_STRING {}
         //| UNDERSCORE_CHARSET TEXT_STRING {}
