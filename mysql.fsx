@@ -38,9 +38,9 @@ module Lexer =
             if tGroup.[1].Value <> "" then
                 tokens.Add(addToken_id tGroup.[1].Value)
             if tGroup.[2].Value <> "" then
-                tokens.Add(Parser.token.VAL_LITERAL tGroup.[2].Value)
+                tokens.Add(Parser.token.VAL_STRING tGroup.[2].Value)
             if tGroup.[3].Value <> "" then
-                tokens.Add(Parser.token.VAL_LITERAL tGroup.[3].Value)
+                tokens.Add(Parser.token.VAL_STRING tGroup.[3].Value)
             if tGroup.[4].Value <> "" then
                 tokens.Add(Parser.token.VAL_NUM tGroup.[4].Value)
             if tGroup.[5].Value <> "" then
@@ -78,5 +78,5 @@ let parseString (s : string) =
     Parser.start_entry (Lexer.getNextToken tokens) lexbuf
 
 //parseString "noget"
-let prg = parseString "select a,b,c as d;"
+let prg = parseString "select 'test' as d;"
 printfn "%A\n" (prg)

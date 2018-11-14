@@ -24,10 +24,11 @@ module AbSyn =
 //values
 %token<string>VAL_ID
 %token<string>VAL_NUM
-%token<string>VAL_LITERAL
+%token<string>VAL_STRING
 %token VAL_NULL
 %token VAL_TRUE
 %token VAL_FALSE
+%token VAL_UNKNOWN
 
 %start start_entry
 %type<AbSyn.Qs list> start_entry
@@ -342,7 +343,6 @@ query_specification:
           //opt_having_clause
           //opt_window_clause
           {
-          //hertil
           AbSyn.Qs.Select [
             AbSyn.Q_Select.SelectOptions $2  //Select options
             AbSyn.Q_Select.SelectItems $3
@@ -429,7 +429,6 @@ select_item_list:
             //$$= NEW_PTN PT_select_item_list;
             //if ($$ == NULL || $$->push_back(item))
             //  MYSQL_YYABORT;
-            //hertil
             [("*","")]
             }
         ;
@@ -446,24 +445,288 @@ select_item:
 select_alias:
           /* empty */   { "" }
         | KEY_AS ident      { $2 }
-        | KEY_AS VAL_LITERAL    { $2 }
+        | KEY_AS VAL_STRING    { $2 }
         | ident         { $1 }
-        | VAL_LITERAL       { $1 }
+        | VAL_STRING       { $1 }
         ;
 
 /*
         Expressions
 */
-//hertil - imp alle exprs fra oprindel grammar
 expr:
-      VAL_ID { $1 }
-    | VAL_NUM OP_TIMES VAL_NUM {
-        $1
-        }
+          expr or expr %prec OP_OR {
+            $$= flatten_associative_operator<Item_cond_or,
+                                             Item_func::COND_OR_FUNC>(
+                                                 YYMEM_ROOT, @$, $1, $3);
+            }
+        | expr OP_XOR expr %prec OP_XOR {
+            /* XOR is a proprietary extension */
+            $$ = NEW_PTN Item_func_xor(@$, $1, $3);
+            }
+        | expr and expr %prec OP_AND {
+            $$= flatten_associative_operator<Item_cond_and,
+                                             Item_func::COND_AND_FUNC>(
+                                                 YYMEM_ROOT, @$, $1, $3);
+            }
+        | OP_NOT expr %prec OP_NOT {
+            $$= NEW_PTN PTI_negate_expression(@$, $2);
+            }
+        | bool_pri KEY_IS VAL_TRUE %prec KEY_IS {
+            $$= NEW_PTN Item_func_istrue(@$, $1);
+            }
+        | bool_pri KEY_IS not VAL_TRUE %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnottrue(@$, $1);
+            }
+        | bool_pri KEY_IS VAL_FALSE %prec KEY_IS {
+            $$= NEW_PTN Item_func_isfalse(@$, $1);
+            }
+        | bool_pri KEY_IS not VAL_FALSE %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnotfalse(@$, $1);
+            }
+        | bool_pri KEY_IS VAL_UNKNOWN %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnull(@$, $1);
+            }
+        | bool_pri KEY_IS not VAL_UNKNOWN %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnotnull(@$, $1);
+            }
+        | bool_pri {}
+        ;
+bool_pri:
+          bool_pri KEY_IS VAL_NULL %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnull(@$, $1);
+            }
+        | bool_pri KEY_IS not VAL_NULL %prec KEY_IS {
+            $$= NEW_PTN Item_func_isnotnull(@$, $1);
+          }
+        | bool_pri comp_op predicate {
+            $$= NEW_PTN PTI_comp_op(@$, $1, $2, $3);
+            }
+        | bool_pri comp_op all_or_any table_subquery %prec OP_EQ {
+            if ($2 == &comp_equal_creator)
+              /*
+                We throw this manual parse error rather than split the rule
+                comp_op into a null-safe and a non null-safe rule, since doing
+                so would add a shift/reduce conflict. It's actually this rule
+                and the ones referencing it that cause all the conflicts, but
+                we still don't want the count to go up.
+              */
+              YYTHD->syntax_error_at(@2);
+            $$= NEW_PTN PTI_comp_op_all(@$, $1, $2, $3, $4);
+            }
+        | predicate {}
+        ;
+predicate:
+          bit_expr KEY_IN table_subquery {
+            $$= NEW_PTN Item_in_subselect(@$, $1, $3);
+            }
+        | bit_expr not OP_IN table_subquery {
+            Item *item= NEW_PTN Item_in_subselect(@$, $1, $4);
+            $$= NEW_PTN PTI_negate_expression(@$, item);
+            }
+        | bit_expr OP_IN PAR_LPAR expr PAR_RPAR {
+            $$= NEW_PTN PTI_handle_sql2003_note184_exception(@$, $1, true, $4);
+            }
+        | bit_expr OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
+            if ($6 == NULL || $6->push_front($4) || $6->push_front($1))
+              MYSQL_YYABORT;
 
+            $$= NEW_PTN Item_func_in(@$, $6, false);
+            }
+        | bit_expr not OP_IN PAR_LPAR expr PAR_RPAR {
+            $$= NEW_PTN PTI_handle_sql2003_note184_exception(@$, $1, false, $5);
+            }
+        | bit_expr not OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
+            if ($7 == NULL || $7->push_front($5) || $7->value.push_front($1))
+              MYSQL_YYABORT;
 
+            $$= NEW_PTN Item_func_in(@$, $7, true);
+            }
+        | bit_expr OP_BETWEEN bit_expr OP_AND predicate {
+            $$= NEW_PTN Item_func_between(@$, $1, $3, $5, false);
+            }
+        | bit_expr not OP_BETWEEN bit_expr OP_AND predicate {
+            $$= NEW_PTN Item_func_between(@$, $1, $4, $6, true);
+          }
+        | bit_expr OP_SOUNDS OP_LIKE bit_expr {
+            Item *item1= NEW_PTN Item_func_soundex(@$, $1);
+            Item *item4= NEW_PTN Item_func_soundex(@$, $4);
+            if ((item1 == NULL) || (item4 == NULL))
+              MYSQL_YYABORT;
+            $$= NEW_PTN Item_func_eq(@$, item1, item4);
+            }
+        | bit_expr OP_LIKE simple_expr opt_escape {
+            $$= NEW_PTN Item_func_like(@$, $1, $3, $4);
+            }
+        | bit_expr not OP_LIKE simple_expr opt_escape {
+            Item *item= NEW_PTN Item_func_like(@$, $1, $4, $5);
+            if (item == NULL)
+              MYSQL_YYABORT;
+            $$= NEW_PTN Item_func_not(@$, item);
+            }
+        | bit_expr KEY_REGEXP bit_expr {
+            auto args= NEW_PTN PT_item_list;
+            args->push_back($1);
+            args->push_back($3);
+
+            $$= NEW_PTN Item_func_regexp_like(@1, args);
+            }
+        | bit_expr not KEY_REGEXP bit_expr {
+            auto args= NEW_PTN PT_item_list;
+            args->push_back($1);
+            args->push_back($4);
+            Item *item= NEW_PTN Item_func_regexp_like(@$, args);
+            $$= NEW_PTN PTI_negate_expression(@$, item);
+            }
+        | bit_expr {}
+        ;
+
+bit_expr:
+          bit_expr OP_BOR bit_expr %prec OP_BOR {
+            $$= NEW_PTN Item_func_bit_or(@$, $1, $3);
+            }
+        | bit_expr OP_BAND bit_expr %prec OP_BAND {
+            $$= NEW_PTN Item_func_bit_and(@$, $1, $3);
+            }
+        | bit_expr OP_SHIFT_LEFT bit_expr %prec OP_SHIFT_LEFT {
+            $$= NEW_PTN Item_func_shift_left(@$, $1, $3);
+            }
+        | bit_expr OP_SHIFT_RIGHT bit_expr %prec OP_SHIFT_RIGHT {
+            $$= NEW_PTN Item_func_shift_right(@$, $1, $3);
+            }
+        | bit_expr OP_PLUS bit_expr %prec OP_PLUS {
+            $$= NEW_PTN Item_func_plus(@$, $1, $3);
+            }
+        | bit_expr OP_MINUS bit_expr %prec OP_MINUS {
+            $$= NEW_PTN Item_func_minus(@$, $1, $3);
+            }
+        | bit_expr OP_PLUS INTERVAL_SYM expr interval %prec OP_PLUS {
+            $$= NEW_PTN Item_date_add_interval(@$, $1, $4, $5, 0);
+            }
+        | bit_expr OP_MINUS INTERVAL_SYM expr interval %prec OP_MINUS {
+            $$= NEW_PTN Item_date_add_interval(@$, $1, $4, $5, 1);
+            }
+        | bit_expr OP_TIMES bit_expr %prec OP_TIMES {
+            $$= NEW_PTN Item_func_mul(@$, $1, $3);
+            }
+        | bit_expr OP_DIV bit_expr %prec OP_DIV {
+            $$= NEW_PTN Item_func_div(@$, $1,$3);
+            }
+        | bit_expr OP_PERC bit_expr %prec OP_PERC {
+            $$= NEW_PTN Item_func_mod(@$, $1,$3);
+            }
+        | bit_expr OP_DIV_SYM bit_expr %prec OP_DIV_SYM {
+            $$= NEW_PTN Item_func_int_div(@$, $1,$3);
+            }
+        | bit_expr OP_MOD bit_expr %prec OP_MOD {
+            $$= NEW_PTN Item_func_mod(@$, $1, $3);
+            }
+        | bit_expr OP_UP bit_expr {
+            $$= NEW_PTN Item_func_bit_xor(@$, $1, $3);
+            }
+        | simple_expr {}
+        ;
+or:
+          OP_OR  {}
+       |  OP_OR2 {}
+       ;
+
+and:
+          OP_AND   {}
+       |  OP_AND2  {}
+       ;
+
+not:
+          OP_NOT    {}
+        | OP_NOT2   {}
+        ;
+
+not2:
+          OP_BANG   {}
+        | OP_NOT2   {}
+        ;
+
+comp_op:
+          OP_EQ     { $$ = &comp_eq_creator; }
+        | OP_EQ2    { $$ = &comp_equal_creator; }
+        | OP_GEQ    { $$ = &comp_ge_creator; }
+        | OP_GT     { $$ = &comp_gt_creator; }
+        | OP_LEQ    { $$ = &comp_le_creator; }
+        | OP_LT     { $$ = &comp_lt_creator; }
+        | OP_NE     { $$ = &comp_ne_creator; }
+        ;
+
+all_or_any:
+          KEY_ALL   { $$ = 1; }
+        | KEY_ANY   { $$ = 0; }
+        ;
+
+simple_expr:
+          simple_ident              {}
+        //| function_call_keyword     {}
+        //| function_call_nonkeyword  {}
+        //| function_call_generic     {}
+        //| function_call_conflict    {}
+        //| simple_expr KEY_COLLATE ident_or_text %prec OP_NEG {}
+        | literal {}
+        //| param_marker { $$= $1; }
+        //| variable
+        //| set_function_specification
+        //| window_func_call
+        //| simple_expr OP_OR simple_expr {}
+        | OP_PLUS simple_expr %prec OP_NEG {}
+        | OP_MINUS simple_expr %prec OP_NEG {}
+        | OP_TILDE simple_expr %prec OP_NEG {}
+        | not2 simple_expr %prec OP_NEG {}
+        //| row_subquery {}
+        //| PAR_LPAR expr PAR_RPAR { $$= $2; }
+        //| PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
+        //| ROW_SYM PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
+        //| OP_EXISTS table_subquery {}
+        //| PAR_LBRACE ident expr PAR_RBRACE {}
+        //| KEY_MATCH ident_list_arg KEY_AGAINST PAR_LPAR bit_expr fulltext_options PAR_RPAR {}
+        //| BINARY_SYM simple_expr %prec OP_NEG {}
+        //| CAST_SYM PAR_LPAR expr KEY_AS cast_type PAR_RPAR {}
+        //| CASE_SYM opt_expr when_list opt_else END {}
+        //| CONVERT_SYM '(' expr ',' cast_type ')' {}
+        //| CONVERT_SYM '(' expr USING charset_name ')' {}
+        //| DEFAULT_SYM '(' simple_ident ')' {}
+        //| VALUES '(' simple_ident_nospvar ')' {}
+        //| INTERVAL_SYM expr interval '+' expr %prec INTERVAL_SYM {}
+        //| simple_ident JSON_SEPARATOR_SYM TEXT_STRING_literal {}
+        //| simple_ident JSON_UNQUOTED_SEPARATOR_SYM TEXT_STRING_literal {}
+        ;
+literal:
+          text_literal  { $$= $1; }
+        | VAL_NUM       { $$= $1; }
+        //| temporal_literal
+        | VAL_NULL      {}
+        | VAL_FALSE     {
+            //$$= NEW_PTN Item_int(@$, NAME_STRING("FALSE"), 0, 1);
+          }
+        | VAL_TRUE {
+            $$= NEW_PTN Item_int(@$, NAME_STRING("TRUE"), 1, 1);
+            }
+        | VAL_HEX {
+            //$$= NEW_PTN Item_hex_string(@$, $1);
+            }
+        | VAL_BIN {
+            //$$= NEW_PTN Item_bin_string(@$, $1);
+            }
+        //| UNDERSCORE_CHARSET HEX_NUM {}
+        //| UNDERSCORE_CHARSET BIN_NUM {}
+        ;
+
+NUM_literal:
+          VAL_NUM {
+            $$= NEW_PTN Item_int(@$, $1);
+            }
+        //| LONG_NUM {}
+        //| ULONGLONG_NUM {}
+        //| DECIMAL_NUM {}
+        //| FLOAT_NUM {}
+        ;
 /*
-        Identities
+        Identifiers
 */
 ident:
     VAL_ID { $1 }
