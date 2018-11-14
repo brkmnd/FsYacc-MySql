@@ -17,6 +17,17 @@ module Lexer =
             | "null" -> Parser.token.VAL_NULL
             | "true" -> Parser.token.VAL_TRUE
             | "false" -> Parser.token.VAL_FALSE
+            | "in" -> Parser.token.OP_IN
+            | "between" -> Parser.token.OP_BETWEEN
+            | "sounds" -> Parser.token.OP_SOUNDS
+            | "like" -> Parser.token.OP_LIKE
+            | "mod" -> Parser.token.OP_MOD_TXT
+            | "div" -> Parser.token.OP_DIV_TXT
+            | "not" -> Parser.token.OP_NOT_TXT
+            | "or" -> Parser.token.OP_OR_TXT
+            | "and" -> Parser.token.OP_AND_TXT
+            | "all" -> Parser.token.KEY_ALL
+            | "any" -> Parser.token.KEY_ANY
             | id -> Parser.token.VAL_ID id
         let addToken_delim = function
             | ";" -> Parser.token.DELIM_SCOLON
@@ -31,29 +42,48 @@ module Lexer =
             | "/" -> Parser.token.OP_DIV
             | "%" -> Parser.token.OP_PERC
             | "." -> Parser.token.OP_DOT
+            | "||" -> Parser.token.OP_OR
+            | "|" -> Parser.token.OP_BOR
+            | "<<" -> Parser.token.OP_SHIFT_LEFT
+            | ">>" -> Parser.token.OP_SHIFT_RIGHT
+            | "!" -> Parser.token.OP_BANG
+            | "=" -> Parser.token.OP_EQ
+            | "==" -> Parser.token.OP_EQ2
+            | "!=" -> Parser.token.OP_NEQ
+            | "<>" -> Parser.token.OP_NEQ2
+            | "<" -> Parser.token.OP_LT
+            | ">" -> Parser.token.OP_GT
+            | "<=" -> Parser.token.OP_GEQ
+            | ">=" -> Parser.token.OP_LEQ
             | t ->
                 printfn "token_added(op): %s" t
                 Parser.token.OP_DOT
         let addToken xIndex (tGroup : GroupCollection) =
             if tGroup.[1].Value <> "" then
-                tokens.Add(addToken_id tGroup.[1].Value)
+                tokens.Add(Parser.token.VAL_HEX tGroup.[1].Value)
             if tGroup.[2].Value <> "" then
-                tokens.Add(Parser.token.VAL_STRING tGroup.[2].Value)
+                tokens.Add(Parser.token.VAL_HEX tGroup.[2].Value)
             if tGroup.[3].Value <> "" then
-                tokens.Add(Parser.token.VAL_STRING tGroup.[3].Value)
+                tokens.Add(addToken_id tGroup.[3].Value)
             if tGroup.[4].Value <> "" then
-                tokens.Add(Parser.token.VAL_NUM tGroup.[4].Value)
+                tokens.Add(Parser.token.VAL_STRING tGroup.[4].Value)
             if tGroup.[5].Value <> "" then
-                tokens.Add(addToken_delim tGroup.[5].Value)
+                tokens.Add(Parser.token.VAL_STRING tGroup.[5].Value)
             if tGroup.[6].Value <> "" then
-                tokens.Add(addToken_op tGroup.[6].Value)
+                tokens.Add(Parser.token.VAL_NUM tGroup.[6].Value)
+            if tGroup.[7].Value <> "" then
+                tokens.Add(addToken_delim tGroup.[7].Value)
+            if tGroup.[8].Value <> "" then
+                tokens.Add(addToken_op tGroup.[8].Value)
         let regToken =
+            "x'([^']+)'|"+
+            "0x([a-zA-Z0-9]+)|"+
             "([a-zA-Z]+)|"+
             "\"([^\"]*)\"|"+
             "'([^\']*)'|"+
             "([0-9]+)|"+
             "(;|,)|"+
-            "(\\+|-|\\*|%|\\.)|"+
+            "(\\|\\|\\||\\+|-|\\*|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!)|"+
             //ignore
             " +|\\n+"
         let matchF (m : Match) =

@@ -3,15 +3,12 @@
 module AbSyn =
     type Expr =
         | Binary of string * Expr * Expr
-        | Unary of string * Expr
+        | Unary of string Expr
         | Node of string
-        | NodeType of string * string
-        | Null
-        | Temp
     type Q_Select =
         | SelectNull
         | SelectOptions of Option<string>
-        | SelectItems of (Expr * Expr) list
+        | SelectItems of (Expr * string) list
     type Qs =
         | Select of Q_Select list
 %}
@@ -44,23 +41,6 @@ module AbSyn =
 %token VAL_FALSE
 %token VAL_UNKNOWN
 
-%left   OP_OR OP_OR_TXT OP_BOR
-%left   OP_XOR
-%left   OP_AND OP_AND_TXT
-%left   OP_BETWEEN KEY_CASE KEY_WHEN KEY_THEN KEY_ELSE
-%left   OP_EQ OP_EQ2 OP_GEQ OP_GT OP_LEQ OP_LT OP_NEQ OP_IS OP_LIKE OP_REGEXP OP_IN
-%left   OP_LOR
-%left   OP_LAND
-%left   OP_SHIFT_LEFT OP_SHIFT_RIGHT
-%left   OP_MINUS OP_PLUS
-%left   OP_TIMES OP_DIV OP_PERC OP_DIV_TXT OP_MOD_TXT
-%left   OP_UP
-%left   OP_TILDE NEG
-%right  OP_NOT OP_NOT_TXT
-%right  BINARY_SYM COLLATE_SYM
-%left  INTERVAL_SYM
-%left SUBQUERY_AS_EXPR
-%left PAR_LPAR PAR_RPAR
 %start start_entry
 %type<AbSyn.Qs list> start_entry
 
@@ -460,13 +440,13 @@ select_item_list:
             //$$= NEW_PTN PT_select_item_list;
             //if ($$ == NULL || $$->push_back(item))
             //  MYSQL_YYABORT;
-            [(AbSyn.Expr.Node "*",AbSyn.Expr.Null)]
+            [(AbSyn.Expr.Node "*","")]
             }
         ;
 
 select_item:
           table_wild {
-            ($1,AbSyn.Expr.Null)
+            ($1,"")
             }
         | expr select_alias {
             //$$= NEW_PTN PTI_expr_with_alias(@$, $1, @1.cpp, $2);
@@ -474,149 +454,149 @@ select_item:
             }
         ;
 select_alias:
-          /* empty */       { AbSyn.Expr.Null }
+          /* empty */       { "" }
         | KEY_AS ident      { $2 }
-        | KEY_AS VAL_STRING { AbSyn.Expr.Temp }
+        | KEY_AS VAL_STRING { $2 }
         | ident             { $1 }
-        | VAL_STRING        { AbSyn.Expr.Temp }
+        | VAL_STRING        { $1 }
         ;
 
 /*
         Expressions
 */
 expr_list:
-          expr                          { $1 }
-        | expr_list DELIM_COMMA expr    { $3 }
+          expr {}
+        | expr_list DELIM_COMMA expr {}
         ;
 expr:
           expr op_or expr %prec OP_OR {
-            //AbSyn.Expr.Binary ("or",$1,$3)
-            AbSyn.Expr.Temp
+            AbSyn.Expr.Binary ("or",$1,$3)
             }
         | expr OP_XOR expr %prec OP_XOR {
-            //AbSyn.Expr.Binary ("xor",$1,$3)
-            AbSyn.Expr.Temp
+            AbSyn.Expr.Binary ("xor",$1,$3)
             }
         | expr op_and expr %prec OP_AND {
-            //AbSyn.Expr.Binary ("and",$1,$3)
-            AbSyn.Expr.Temp
+            $$= flatten_associative_operator<Item_cond_and,
+                                             Item_func::COND_AND_FUNC>(
+                                                 YYMEM_ROOT, @$, $1, $3);
             }
         | OP_NOT expr %prec OP_NOT {
-            //AbSyn.Expr.Unary ("not",$2)
-            AbSyn.Expr.Temp
+            $$= NEW_PTN PTI_negate_expression(@$, $2);
             }
         | bool_pri KEY_IS VAL_TRUE %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_istrue(@$, $1);
             }
         | bool_pri KEY_IS not VAL_TRUE %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnottrue(@$, $1);
             }
         | bool_pri KEY_IS VAL_FALSE %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isfalse(@$, $1);
             }
         | bool_pri KEY_IS not VAL_FALSE %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnotfalse(@$, $1);
             }
         | bool_pri KEY_IS VAL_UNKNOWN %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnull(@$, $1);
             }
         | bool_pri KEY_IS not VAL_UNKNOWN %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnotnull(@$, $1);
             }
-        | bool_pri {
-            $1
-            }
+        | bool_pri {}
         ;
 bool_pri:
           bool_pri KEY_IS VAL_NULL %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnull(@$, $1);
             }
         | bool_pri KEY_IS not VAL_NULL %prec KEY_IS {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_isnotnull(@$, $1);
           }
         | bool_pri comp_op predicate {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN PTI_comp_op(@$, $1, $2, $3);
             }
         //| bool_pri comp_op all_or_any table_subquery %prec OP_EQ {}
-        | predicate {
-            $1
-            }
+        | predicate {}
         ;
 predicate:
         //  bit_expr OP_IN table_subquery {}
         //| bit_expr not OP_IN table_subquery {}
         | bit_expr OP_IN PAR_LPAR expr PAR_RPAR {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN PTI_handle_sql2003_note184_exception(@$, $1, true, $4);
             }
         | bit_expr OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
-            AbSyn.Expr.Temp
+            if ($6 == NULL || $6->push_front($4) || $6->push_front($1))
+              MYSQL_YYABORT;
+
+            $$= NEW_PTN Item_func_in(@$, $6, false);
             }
         | bit_expr not OP_IN PAR_LPAR expr PAR_RPAR {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN PTI_handle_sql2003_note184_exception(@$, $1, false, $5);
             }
         | bit_expr not OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
-            AbSyn.Expr.Temp
+            if ($7 == NULL || $7->push_front($5) || $7->value.push_front($1))
+              MYSQL_YYABORT;
+
+            $$= NEW_PTN Item_func_in(@$, $7, true);
             }
         | bit_expr OP_BETWEEN bit_expr OP_AND predicate {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_between(@$, $1, $3, $5, false);
             }
         | bit_expr not OP_BETWEEN bit_expr OP_AND predicate {
-            AbSyn.Expr.Temp
-            }
+            $$= NEW_PTN Item_func_between(@$, $1, $4, $6, true);
+          }
         | bit_expr OP_SOUNDS OP_LIKE bit_expr {
-            AbSyn.Expr.Temp
+            Item *item1= NEW_PTN Item_func_soundex(@$, $1);
+            Item *item4= NEW_PTN Item_func_soundex(@$, $4);
+            if ((item1 == NULL) || (item4 == NULL))
+              MYSQL_YYABORT;
+            $$= NEW_PTN Item_func_eq(@$, item1, item4);
             }
         //| bit_expr OP_LIKE simple_expr opt_escape {}
         //| bit_expr not OP_LIKE simple_expr opt_escape {}
         //| bit_expr KEY_REGEXP bit_expr {}
         //| bit_expr not KEY_REGEXP bit_expr {}
-        | bit_expr {
-            $1
-            }
+        | bit_expr {}
         ;
 
 bit_expr:
           bit_expr OP_BOR bit_expr %prec OP_BOR {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_bit_or(@$, $1, $3);
             }
         | bit_expr OP_BAND bit_expr %prec OP_BAND {
-           AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_bit_and(@$, $1, $3);
             }
         | bit_expr OP_SHIFT_LEFT bit_expr %prec OP_SHIFT_LEFT {
-           AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_shift_left(@$, $1, $3);
             }
         | bit_expr OP_SHIFT_RIGHT bit_expr %prec OP_SHIFT_RIGHT {
-           AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_shift_right(@$, $1, $3);
             }
         | bit_expr OP_PLUS bit_expr %prec OP_PLUS {
-           AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_plus(@$, $1, $3);
             }
         | bit_expr OP_MINUS bit_expr %prec OP_MINUS {
-           AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_minus(@$, $1, $3);
             }
         //| bit_expr OP_PLUS INTERVAL_SYM expr interval %prec OP_PLUS {}
         //| bit_expr OP_MINUS INTERVAL_SYM expr interval %prec OP_MINUS {}
         | bit_expr OP_TIMES bit_expr %prec OP_TIMES {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_mul(@$, $1, $3);
             }
         | bit_expr OP_DIV bit_expr %prec OP_DIV {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_div(@$, $1,$3);
             }
         | bit_expr OP_PERC bit_expr %prec OP_PERC {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_mod(@$, $1,$3);
             }
         | bit_expr OP_DIV_TXT bit_expr %prec OP_DIV_TXT {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_int_div(@$, $1,$3);
             }
         | bit_expr OP_MOD_TXT bit_expr %prec OP_MOD {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_mod(@$, $1, $3);
             }
         | bit_expr OP_UP bit_expr {
-            AbSyn.Expr.Temp
+            $$= NEW_PTN Item_func_bit_xor(@$, $1, $3);
             }
-        | simple_expr {
-            $1
-            }
+        | simple_expr {}
         ;
 op_or:
           OP_OR         {}
@@ -634,37 +614,37 @@ not:
         ;
 
 comp_op:
-          OP_EQ     { "" }
-        | OP_EQ2    { "" }
-        | OP_GEQ    { "" }
-        | OP_GT     { "" }
-        | OP_LEQ    { "" }
-        | OP_LT     { "" }
-        | OP_NEQ    { "" }
+          OP_EQ     { $$ = &comp_eq_creator; }
+        | OP_EQ2    { $$ = &comp_equal_creator; }
+        | OP_GEQ    { $$ = &comp_ge_creator; }
+        | OP_GT     { $$ = &comp_gt_creator; }
+        | OP_LEQ    { $$ = &comp_le_creator; }
+        | OP_LT     { $$ = &comp_lt_creator; }
+        | OP_NEQ    { $$ = &comp_ne_creator; }
         ;
 
 all_or_any:
-          KEY_ALL   { "" }
-        | KEY_ANY   { "" }
+          KEY_ALL   { $$ = 1; }
+        | KEY_ANY   { $$ = 0; }
         ;
 
 simple_expr:
-          simple_ident                  { $1 }
+          simple_ident              {}
         //| function_call_keyword     {}
         //| function_call_nonkeyword  {}
         //| function_call_generic     {}
         //| function_call_conflict    {}
         //| simple_expr KEY_COLLATE ident_or_text %prec OP_NEG {}
-        | literal                       { $1 }
+        | literal {}
         //| param_marker { $$= $1; }
         //| variable
         //| set_function_specification
         //| window_func_call
         //| simple_expr OP_OR simple_expr {}
-        | OP_PLUS simple_expr %prec OP_NEG { AbSyn.Expr.Temp }
-        | OP_MINUS simple_expr %prec OP_NEG {   AbSyn.Expr.Temp }
-        | OP_TILDE simple_expr %prec OP_NEG { AbSyn.Expr.Temp }
-        | OP_BANG simple_expr %prec OP_NEG { AbSyn.Expr.Temp }
+        | OP_PLUS simple_expr %prec OP_NEG {}
+        | OP_MINUS simple_expr %prec OP_NEG {}
+        | OP_TILDE simple_expr %prec OP_NEG {}
+        | OP_BANG simple_expr %prec OP_NEG {}
         //| row_subquery {}
         //| PAR_LPAR expr PAR_RPAR { $$= $2; }
         //| PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
@@ -684,39 +664,37 @@ simple_expr:
         //| simple_ident JSON_UNQUOTED_SEPARATOR_SYM TEXT_STRING_literal {}
         ;
 literal:
-          text_literal          { $1 }
-        | num_literal           { $1 }
+          text_literal      { $$= $1; }
+        | num_literal       { $$= $1; }
         //| temporal_literal
-        | VAL_NULL {
-            AbSyn.Expr.NodeTyped ("keyword","null")
-            }
+        | VAL_NULL      {}
         | VAL_FALSE     {
-            AbSyn.Expr.NodeType ("keyword","false")
-            }
+            //$$= NEW_PTN Item_int(@$, NAME_STRING("FALSE"), 0, 1);
+          }
         | VAL_TRUE {
-            AbSyn.Expr.NodeTyped ("keyword","true")
+            $$= NEW_PTN Item_int(@$, NAME_STRING("TRUE"), 1, 1);
             }
         | VAL_HEX {
-            AbSyn.Expr.Temp
+            //$$= NEW_PTN Item_hex_string(@$, $1);
             }
         | VAL_BIN {
-            AbSyn.Expr.Temp
+            //$$= NEW_PTN Item_bin_string(@$, $1);
             }
         //| UNDERSCORE_CHARSET HEX_NUM {}
         //| UNDERSCORE_CHARSET BIN_NUM {}
         ;
 
 text_literal:
-          VAL_STRING {
-            AbSyn.Expr.NodeType ("string",$1)
-            }
+          VAL_STRING {}
         //| NCHAR_STRING {}
         //| UNDERSCORE_CHARSET TEXT_STRING {}
         //| text_literal TEXT_STRING_literal {}
         ;
 
 num_literal:
-          VAL_NUM           { AbSyn.Expr.Temp }
+          VAL_NUM {
+            $$= NEW_PTN Item_int(@$, $1);
+            }
         //| LONG_NUM {}
         //| ULONGLONG_NUM {}
         //| DECIMAL_NUM {}
@@ -726,20 +704,26 @@ num_literal:
         Identifiers
 */
 ident:
-    VAL_ID {
-        AbSyn.Expr.Node $1
-        }
+    VAL_ID { $1 }
 simple_ident:
-          ident             { $1 }
-        | simple_ident_q    { $1 }
+          ident {
+            $$= NEW_PTN PTI_simple_ident_ident(@$, $1);
+          }
+        | simple_ident_q {}
         ;
 simple_ident_nospvar:
-          ident             { AbSyn.Expr.Temp }
-        | simple_ident_q    { AbSyn.Expr.Temp }
+          ident {
+            $$= NEW_PTN PTI_simple_ident_nospvar_ident(@$, $1);
+            }
+        | simple_ident_q {}
         ;
 simple_ident_q:
-          ident OP_DOT ident                { AbSyn.Expr.Temp }
-        | ident OP_DOT ident OP_DOT ident   { AbSyn.Expr.Temp }
+          ident OP_DOT ident {
+            $$= NEW_PTN PTI_simple_ident_q_2d(@$, $1.str, $3.str);
+          }
+        | ident OP_DOT ident OP_DOT ident {
+            $$= NEW_PTN PTI_simple_ident_q_3d(@$, $1.str, $3.str, $5.str);
+            }
         ;
 table_wild:
           ident OP_DOT OP_TIMES {
