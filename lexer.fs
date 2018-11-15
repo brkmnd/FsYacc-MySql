@@ -44,6 +44,11 @@ let lex inStr =
             | "keys" -> Parser.token.KEY_KEYS
             | "unique" -> Parser.token.KEY_UNIQUE
             | "json_table" -> Parser.token.OP_JSON_TABLE
+            | "columns" -> Parser.token.KEY_COLUMN
+            | "for" -> Parser.token.KEY_FOR
+            | "ordinality" -> Parser.token.NOKEY_ORDINALITY
+            | "nested" -> Parser.token.NOKEY_NESTED
+            | "path" -> Parser.token.NOKEY_PATH
             | id -> Parser.token.VAL_ID id
         (idStr,t2type)
     let addToken_delim t =
@@ -106,7 +111,7 @@ let lex inStr =
     let regToken =
         "x'([^']+)'|"+
         "0x([a-zA-Z0-9]+)|"+
-        "([a-zA-Z_]+)|"+
+        "([a-zA-Z_][a-zA-Z0-9_]*)|"+
         "\"([^\"]*)\"|"+
         "'([^\']*)'|"+
         "([0-9]+)|"+

@@ -6190,7 +6190,7 @@ opt_stored_attribute:
         | STORED_SYM  { $$= Virtual_or_stored::STORED; }
         ;
 
-type:
+expr_type:
           int_type opt_field_length field_options
           {
             $$= NEW_PTN PT_numeric_type($1, $2, $3);
@@ -10827,7 +10827,7 @@ columns_list:
         ;
 
 jt_column:
-          ident FOR_SYM ORDINALITY_SYM
+          ident FOR_SYM KEY_ORDINALITY
           {
             $$= NEW_PTN PT_json_table_column_for_ordinality($1);
           }

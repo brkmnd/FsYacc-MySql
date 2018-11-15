@@ -35,6 +35,10 @@ module AbSyn =
 %token OP_IN OP_BETWEEN OP_SOUNDS
 %token OP_MOD_TXT OP_DIV_TXT OP_NOT_TXT OP_OR_TXT OP_AND_TXT
 %token OP_JSON_TABLE
+//not in lexer yet
+%token OP_OUTER
+%token OP_GROUP
+%token OP_AS
 //keywords
 %token KEY_SELECT
 %token KEY_AS
@@ -50,6 +54,22 @@ module AbSyn =
 %token KEY_INDEX
 %token KEY_INDEXES
 %token KEY_UNIQUE
+%token KEY_COLUMNS
+%token KEY_FOR
+//not in lexer yet
+%token KEY_ON
+%token KEY_PARTITION
+%token KEY_DISTINCT
+%token KEY_EXISTS
+%token KEY_DEFAULT
+%token KEY_ORDER
+%token KEY_BY
+%token KEY_USE
+%token KEY_PRIMARY
+//nokeys are not reserverd keywords. these can be used for idents 
+%token NOKEY_ORDINALITY
+%token NOKEY_PATH
+%token NOKEY_NESTED
 //values
 %token<string>VAL_ID
 %token<string>VAL_NUM
@@ -61,6 +81,10 @@ module AbSyn =
 %token VAL_FALSE
 %token VAL_UNKNOWN
 %token VAL_DUAL
+//not in lexer yet
+%token VAL_BOOL
+%token VAL_EMPTY
+%token VAL_ERROR
 
 %left   PREC_CONDITIONLESS_JOIN
 %left   OP_JOIN OP_INNER OP_CROSS OP_STRAIGHT_JOIN OP_NATURAL OP_LEFT OP_RIGHT OP_ON OP_USING
@@ -79,7 +103,7 @@ module AbSyn =
 %right  OP_NOT OP_NOT_TXT
 %right  BINARY_SYM COLLATE_SYM
 %left  INTERVAL_SYM
-%left SUBQUERY_AS_EXPR
+%left PREC_SUBQUERY_AS_EXPR
 %left PAR_LPAR PAR_RPAR
 
 %left PREC_EMPTY_FROM_CLAUSE
@@ -272,7 +296,24 @@ select_stmt:
         */
         //| select_stmt_with_into {}
         ;
+/* union for select statements */
+union_option:
+          /* empty */       {  }
+        | KEY_DISTINCT      {  }
+        | KEY_ALL           {  }
+        ;
+row_subquery:
+          subquery          { }
+        ;
 
+table_subquery:
+          subquery          {}
+        ;
+
+subquery:
+          query_expression_parens %prec PREC_SUBQUERY_AS_EXPR {
+            }
+        ;
 query_expression:
           query_expression_body
           //opt_order_clause
@@ -376,7 +417,24 @@ query_expression_body:
             }
             */
         ;
+query_expression_parens:
+          PAR_LPAR query_expression_parens PAR_RPAR {}
+        | PAR_LPAR query_expression PAR_RPAR {
+            (* /*
+              We don't call set_parentheses() on a query expression here. It
+              makes no difference to the contextualization phase whether a
+              query expression was within parentheses unless it is used in
+              conjunction with UNION. Therefore set_parentheses() is called
+              only in the rules producing UNION syntax.
 
+              The need for set_parentheses() is purely to support legacy parse
+              rules, and we are gradually moving away from them and using the
+              query_expression_body to define UNION syntax. When this move is
+              complete, we will not need set_parentheses() any more, and the
+              contextualize() phase can be greatly simplified.
+            */ *)
+          }
+        ;
 query_primary:
           query_specification {
             $1
@@ -523,7 +581,7 @@ into_destination:
         ;
 opt_from_clause:
           /* Empty. */ %prec PREC_EMPTY_FROM_CLAUSE {
-            AbSyn.Q_Select.SelectFrom (AbSyn.Expr.Null)
+            AbSyn.Q_Select.SelectFrom [AbSyn.Expr.Null]
             }
         | from_clause {
             AbSyn.Q_Select.SelectFrom $1
@@ -536,7 +594,7 @@ from_clause:
 from_tables:
           VAL_DUAL {
             //dual is dummy for no table
-            AbSyn.Expr.Null
+            [AbSyn.Expr.Null]
             }
         | table_reference_list { $1 }
         ;
@@ -608,7 +666,7 @@ opt_use_partition:
         ;
 
 use_partition:
-          PARTITION_SYM PAR_LPAR using_list PAR_RPAR {
+          KEY_PARTITION PAR_LPAR using_list PAR_RPAR {
             $3
             }
         ;
@@ -656,173 +714,101 @@ table_reference_list_parens:
         ;
 
 single_table_parens:
-          PAR_LPAR single_table_parens PAR_RPAR { $2 }
-        | PAR_LPAR single_table PAR_RPAR        { $2 }
+          PAR_LPAR single_table_parens PAR_RPAR { AbSyn.Expr.Temp }
+        | PAR_LPAR single_table PAR_RPAR        { AbSyn.Expr.Temp }
         ;
 
 single_table:
           table_ident opt_use_partition opt_table_alias opt_key_definition {
-            AbSyn.Expr.ExprListType ("id",[$1;$2;$3;$4])
+            AbSyn.Expr.ExprListTyped ("id",[$1;$2;$3;$4])
             }
         ;
 
 joined_table_parens:
-          PAR_LPAR joined_table_parens PAR_RPAR { $2 }
-        | PAR_LPAR joined_table PAR_RPAR        { $2 }
+          PAR_LPAR joined_table_parens PAR_RPAR { AbSyn.Expr.Temp }
+        | PAR_LPAR joined_table PAR_RPAR        { AbSyn.Expr.Temp }
         ;
 
 derived_table:
-          table_subquery opt_table_alias opt_derived_column_list
-          {
-            /*
-              The alias is actually not optional at all, but being MySQL we
-              are friendly and give an informative error message instead of
-              just 'syntax error'.
-            */
-            if ($2.str == nullptr)
-              my_message(ER_DERIVED_MUST_HAVE_ALIAS,
-                         ER_THD(YYTHD, ER_DERIVED_MUST_HAVE_ALIAS), MYF(0));
-
-            $$= NEW_PTN PT_derived_table($1, $2, &$3);
-          }
+          table_subquery opt_table_alias opt_derived_column_list {
+            AbSyn.Expr.Temp
+            }
         ;
-
+opt_derived_column_list:
+          /* empty */ {
+            AbSyn.Expr.Temp
+            }
+        | PAR_LPAR simple_ident_list PAR_RPAR {
+            AbSyn.Expr.Temp
+            }
+        ;
+simple_ident_list:
+          ident                                 { $1 }
+        | simple_ident_list DELIM_COMMA ident   { AbSyn.Expr.Temp }
+        ;
 table_function:
-          OP_JSON_TABLE PAR_LPAR expr OP_COMMA
-          //hertil
+          OP_JSON_TABLE PAR_LPAR expr DELIM_COMMA
           text_string_sys columns_clause PAR_RPAR
           opt_table_alias {
             // Alias isn't optional, follow derived's behavior
+            AbSyn.Expr.Temp
             }
         ;
 
 columns_clause:
-          COLUMNS '(' columns_list ')'
-          {
-            $$= $3;
-          }
+          KEY_COLUMNS PAR_LPAR columns_list PAR_RPAR {
+            AbSyn.Expr.Temp
+            }
         ;
 
 columns_list:
-          jt_column
-          {
-            $$= NEW_PTN Mem_root_array<PT_json_table_column *>(YYMEM_ROOT);
-            if ($$ == NULL || $$->push_back($1))
-              MYSQL_YYABORT; // OOM
-          }
-        | columns_list ',' jt_column
-          {
-            $$= $1;
-            if ($$->push_back($3))
-              MYSQL_YYABORT; // OOM
-          }
+          jt_column                             { AbSyn.Expr.Temp }
+        | columns_list DELIM_COMMA jt_column    { AbSyn.Expr.Temp }
         ;
 
 jt_column:
-          ident FOR_SYM ORDINALITY_SYM
-          {
-            $$= NEW_PTN PT_json_table_column_for_ordinality($1);
-          }
-        | ident type jt_column_type PATH_SYM TEXT_STRING_sys
-          opt_on_empty_or_error
-          {
-            $$= NEW_PTN PT_json_table_column_with_path($1, $2, $3, $5 ,
-                                                       $6.error.type,
-                                                       *$6.error.default_str,
-                                                       $6.empty.type,
-                                                       *$6.empty.default_str);
-          }
-        | NESTED_SYM PATH_SYM TEXT_STRING_sys columns_clause
-          {
-            $$= NEW_PTN PT_json_table_column_with_nested_path($3, $4);
-          }
+          ident KEY_FOR NOKEY_ORDINALITY {
+            AbSyn.Expr.Temp
+            }
+        | ident set_type jt_column_type NOKEY_PATH text_string_sys
+          opt_on_empty_or_error {
+            AbSyn.Expr.Temp
+            }
+        | NOKEY_NESTED NOKEY_PATH text_string_sys columns_clause {
+            AbSyn.Expr.Temp
+            }
         ;
 
 jt_column_type:
-          {
-            $$= enum_jt_column::JTC_PATH;
-          }
-        | EXISTS
-          {
-            $$= enum_jt_column::JTC_EXISTS;
-          }
+          /* empty */   { AbSyn.Expr.Temp }
+        | KEY_EXISTS    { AbSyn.Expr.Temp }
         ;
 
 opt_on_empty_or_error:
-          /* empty */
-          {
-            $$.error.type= enum_jtc_on::JTO_IMPLICIT;
-            $$.error.default_str= &NULL_STR;
-
-            $$.empty.type= enum_jtc_on::JTO_IMPLICIT;
-            $$.empty.default_str= &NULL_STR;
-          }
-        | opt_on_empty
-          {
-            $$.error.type= enum_jtc_on::JTO_IMPLICIT;
-            $$.error.default_str= &NULL_STR;
-
-            $$.empty.type= $1.type;
-            $$.empty.default_str= $1.default_str;
-          }
-        | opt_on_error
-          {
-            $$.error.type= $1.type;
-            $$.error.default_str= $1.default_str;
-
-            $$.empty.type= enum_jtc_on::JTO_IMPLICIT;
-            $$.empty.default_str= &NULL_STR;
-          }
-        | opt_on_empty opt_on_error
-          {
-            $$.error.type= $2.type;
-            $$.error.default_str= $2.default_str;
-
-            $$.empty.type= $1.type;
-            $$.empty.default_str= $1.default_str;
-          }
-        | opt_on_error opt_on_empty
-          {
-            $$.error.type= $1.type;
-            $$.error.default_str= $1.default_str;
-
-            $$.empty.type= $2.type;
-            $$.empty.default_str= $2.default_str;
-          }
+          /* empty */               { AbSyn.Expr.Temp }
+        | opt_on_empty              { AbSyn.Expr.Temp }
+        | opt_on_error              { AbSyn.Expr.Temp }
+        | opt_on_empty opt_on_error { AbSyn.Expr.Temp }
+        | opt_on_error opt_on_empty { AbSyn.Expr.Temp }
         ;
 
 opt_on_empty:
-          jt_on_response ON_SYM EMPTY_SYM       { $$= $1; }
+          jt_on_response KEY_ON VAL_EMPTY       { AbSyn.Expr.Temp }
         ;
 opt_on_error:
-          jt_on_response ON_SYM ERROR_SYM       { $$= $1; }
+          jt_on_response KEY_ON VAL_ERROR       { AbSyn.Expr.Temp }
         ;
 jt_on_response:
-          ERROR_SYM
-          {
-            $$.type= enum_jtc_on::JTO_ERROR;
-            $$.default_str= &NULL_STR;
-          }
-        | NULL_SYM
-          {
-            $$.type= enum_jtc_on::JTO_NULL;
-            $$.default_str= &NULL_STR;
-          }
-        | DEFAULT_SYM TEXT_STRING_sys
-          {
-            $$.type= enum_jtc_on::JTO_DEFAULT;
-            $$.default_str= YYTHD->memdup_typed(&$2);
-          }
+          VAL_ERROR                     { AbSyn.Expr.Temp }
+        | VAL_NULL                      { AbSyn.Expr.Temp }
+        | KEY_DEFAULT text_string_sys   { AbSyn.Expr.Temp }
         ;
 
 index_hint_clause:
-          /* empty */
-          {
-            $$= old_mode ?  INDEX_HINT_MASK_JOIN : INDEX_HINT_MASK_ALL;
-          }
-        | FOR_SYM JOIN_SYM      { $$= INDEX_HINT_MASK_JOIN;  }
-        | FOR_SYM ORDER_SYM BY  { $$= INDEX_HINT_MASK_ORDER; }
-        | FOR_SYM GROUP_SYM BY  { $$= INDEX_HINT_MASK_GROUP; }
+          /* empty */               { AbSyn.Expr.Temp }
+        | KEY_FOR OP_JOIN           { AbSyn.Expr.Temp }
+        | KEY_FOR KEY_ORDER KEY_BY  { AbSyn.Expr.Temp }
+        | KEY_FOR OP_GROUP KEY_BY   { AbSyn.Expr.Temp }
         ;
 
 index_hint_type:
@@ -833,12 +819,11 @@ index_hint_type:
 index_hint_definition:
           index_hint_type key_or_index index_hint_clause
           PAR_LPAR key_usage_list PAR_RPAR {
-            
+            AbSyn.Expr.Temp 
             }
-        | USE_SYM key_or_index index_hint_clause
+        | KEY_USE key_or_index index_hint_clause
           PAR_LPAR opt_key_usage_list PAR_RPAR {
-            init_index_hints($5, INDEX_HINT_USE, $3);
-            $$= $5;
+            AbSyn.Expr.Temp 
             }
        ;
 
@@ -859,68 +844,27 @@ opt_key_definition:
         ;
 
 opt_key_usage_list:
-          /* empty */
-          {
-            $$= NEW_PTN List<Index_hint>;
-            Index_hint *hint= NEW_PTN Index_hint(NULL, 0);
-            if ($$ == NULL || hint == NULL || $$->push_front(hint))
-              MYSQL_YYABORT;
-          }
-        | key_usage_list
+          /* empty */       { AbSyn.Expr.Temp }
+        | key_usage_list    { AbSyn.Expr.Temp }
         ;
 
 key_usage_element:
-          ident
-          {
-            $$= NEW_PTN Index_hint($1.str, $1.length);
-            if ($$ == NULL)
-              MYSQL_YYABORT;
-          }
-        | PRIMARY_SYM
-          {
-            $$= NEW_PTN Index_hint(STRING_WITH_LEN("PRIMARY"));
-            if ($$ == NULL)
-              MYSQL_YYABORT;
-          }
+          ident             { AbSyn.Expr.Temp }
+        | KEY_PRIMARY       { AbSyn.Expr.Temp }
         ;
 
 key_usage_list:
-          key_usage_element
-          {
-            $$= NEW_PTN List<Index_hint>;
-            if ($$ == NULL || $$->push_front($1))
-              MYSQL_YYABORT;
-          }
-        | key_usage_list ',' key_usage_element
-          {
-            if ($$->push_front($3))
-              MYSQL_YYABORT;
-          }
+          key_usage_element                             { AbSyn.Expr.Temp }
+        | key_usage_list DELIM_COMMA key_usage_element  { AbSyn.Expr.Temp }
         ;
 
 using_list:
-          ident_string_list
+          ident_string_list { AbSyn.Expr.Temp }
         ;
 
 ident_string_list:
-          ident
-          {
-            $$= NEW_PTN List<String>;
-            String *s= NEW_PTN String(const_cast<const char *>($1.str),
-                                               $1.length,
-                                               system_charset_info);
-            if ($$ == NULL || s == NULL || $$->push_back(s))
-              MYSQL_YYABORT;
-          }
-        | ident_string_list ',' ident
-          {
-            String *s= NEW_PTN String(const_cast<const char *>($3.str),
-                                               $3.length,
-                                               system_charset_info);
-            if (s == NULL || $1->push_back(s))
-              MYSQL_YYABORT;
-            $$= $1;
-          }
+          ident                                 { $1 }
+        | ident_string_list DELIM_COMMA ident   { AbSyn.Expr.Temp }
         ;
 
 
@@ -973,6 +917,11 @@ opt_unique:
           /* empty */  { "" }
         | KEY_UNIQUE   { "unique" }
         ;
+/*
+        Types
+*/
+set_type:
+        VAL_BOOL        { AbSyn.Expr.Temp }
 /*
         Expressions
 */
