@@ -18,6 +18,8 @@ type token =
   | NOKEY_PATH
   | NOKEY_ORDINALITY
   | KEY_SQL_NO_CACHE
+  | KEY_WINDOW
+  | KEY_HAVING
   | KEY_ROLLUP
   | KEY_SQL_CALC_FOUND_ROWS
   | KEY_SQL_BUFFER_RESULT
@@ -26,12 +28,16 @@ type token =
   | KEY_HIGH_PRIORITY
   | KEY_PRIMARY
   | KEY_USE
-  | KEY_BY
-  | KEY_ORDER
   | KEY_DEFAULT
   | KEY_EXISTS
   | KEY_DISTINCT
   | KEY_PARTITION
+  | KEY_OFFSET
+  | KEY_DESC
+  | KEY_ASC
+  | KEY_LIMIT
+  | KEY_BY
+  | KEY_ORDER
   | KEY_WHERE
   | KEY_FOR
   | KEY_COLUMNS
@@ -97,6 +103,7 @@ type token =
   | OP_ON
   | OP_USING
   | OP_INTO
+  | OP_UNION
   | PAR_LPAR
   | PAR_RPAR
   | PAR_LBRACE
@@ -122,6 +129,8 @@ type tokenId =
     | TOKEN_NOKEY_PATH
     | TOKEN_NOKEY_ORDINALITY
     | TOKEN_KEY_SQL_NO_CACHE
+    | TOKEN_KEY_WINDOW
+    | TOKEN_KEY_HAVING
     | TOKEN_KEY_ROLLUP
     | TOKEN_KEY_SQL_CALC_FOUND_ROWS
     | TOKEN_KEY_SQL_BUFFER_RESULT
@@ -130,12 +139,16 @@ type tokenId =
     | TOKEN_KEY_HIGH_PRIORITY
     | TOKEN_KEY_PRIMARY
     | TOKEN_KEY_USE
-    | TOKEN_KEY_BY
-    | TOKEN_KEY_ORDER
     | TOKEN_KEY_DEFAULT
     | TOKEN_KEY_EXISTS
     | TOKEN_KEY_DISTINCT
     | TOKEN_KEY_PARTITION
+    | TOKEN_KEY_OFFSET
+    | TOKEN_KEY_DESC
+    | TOKEN_KEY_ASC
+    | TOKEN_KEY_LIMIT
+    | TOKEN_KEY_BY
+    | TOKEN_KEY_ORDER
     | TOKEN_KEY_WHERE
     | TOKEN_KEY_FOR
     | TOKEN_KEY_COLUMNS
@@ -201,6 +214,7 @@ type tokenId =
     | TOKEN_OP_ON
     | TOKEN_OP_USING
     | TOKEN_OP_INTO
+    | TOKEN_OP_UNION
     | TOKEN_PAR_LPAR
     | TOKEN_PAR_RPAR
     | TOKEN_PAR_LBRACE
@@ -218,12 +232,26 @@ type nonTerminalId =
     | NONTERM_simple_statement_or_begin
     | NONTERM_simple_statement
     | NONTERM_select_stmt
-    | NONTERM_union_option
     | NONTERM_row_subquery
     | NONTERM_table_subquery
     | NONTERM_subquery
     | NONTERM_query_expression
+    | NONTERM_opt_order_clause
+    | NONTERM_order_clause
+    | NONTERM_order_list
+    | NONTERM_order_expr
+    | NONTERM_opt_ordering_direction
+    | NONTERM_ordering_direction
+    | NONTERM_opt_limit_clause
+    | NONTERM_limit_clause
+    | NONTERM_limit_options
+    | NONTERM_limit_option
+    | NONTERM_opt_simple_limit
+    | NONTERM_opt_locking_clause_list
+    | NONTERM_locking_clause_list
+    | NONTERM_locking_clause
     | NONTERM_query_expression_body
+    | NONTERM_union_option
     | NONTERM_query_expression_parens
     | NONTERM_query_primary
     | NONTERM_query_specification
@@ -277,6 +305,12 @@ type nonTerminalId =
     | NONTERM_opt_group_clause
     | NONTERM_group_list
     | NONTERM_olap_opt
+    | NONTERM_opt_having_clause
+    | NONTERM_opt_window_clause
+    | NONTERM_window_definition_list
+    | NONTERM_window_definition
+    | NONTERM_window_name
+    | NONTERM_window_spec
     | NONTERM_opt_key_usage_list
     | NONTERM_key_usage_element
     | NONTERM_key_usage_list

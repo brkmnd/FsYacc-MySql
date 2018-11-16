@@ -40,6 +40,13 @@ let testPrg prg =
     | l -> sprintf "success: %A" l
 //parseString "noget"
 printfn "\ntests-----------"
+//select tests
 let prg1 = "select 'test' as d, 2 + 3i * 4 - 5 / 6  as c"
 let prg2 = "select 1 = 2 is true as a, 'test' as b from (t1,t2) join t3 on t1.noget = t2.noget where id = 200"
-printfn "test1:\n%s" (testPrg prg2)
+let prg3 =
+    "select id from a join b on a.t = b.t"+
+    " union "+
+    "select id from c join d on c.t = d.some"+
+    " order by id desc"
+//
+printfn "test1:\n%s" (testPrg prg3)

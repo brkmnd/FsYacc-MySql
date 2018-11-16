@@ -15,20 +15,40 @@ module AbSyn =
         | SelectNull
         | SelectOptions of Expr list
         | SelectItems of (Expr * Expr) list
-        | SelectInto
+        | SelectInto of Expr
         | SelectFrom of Expr list
         | SelectWhere of Expr
+        | SelectGroup of Expr
+        | SelectHaving of Expr
+        | SelectWindow of Expr
+        | SelectOrder of Expr
+        | SelectLimit of Expr
+    type Qs_Option =
+        | OptOrder of Expr
+        | OptLimit of Expr
+        | OptLocking of Expr
     type Qs =
         | Select of Q_Select list
+        | Options of Qs * (Qs_Option list)
+        | Union of string * Qs * Qs
         | Error of string
         | Null
 %}
-
+/*
+    Tokens
+        I have tried to differ the keywords on key and nokey
+        -nokey should be allowed as id - thus include all nokey in ident
+        -key should not be allowed unless enclosed in '' or "".
+        Keywords are listed here: https://dev.mysql.com/doc/refman/8.0/en/keywords.html
+        R/reserved for key
+        noreserved for nokey
+*/
 //delimiters
 %token DELIM_SCOLON DELIM_COMMA END_OF_INPUT
 //pars
 %token PAR_LPAR PAR_RPAR PAR_LBRACE PAR_RBRACE
 //operators
+%token OP_UNION
 %token OP_JOIN OP_INNER OP_CROSS OP_STRAIGHT_JOIN OP_NATURAL OP_LEFT OP_RIGHT OP_ON OP_USING OP_INTO
 %token OP_PLUS OP_MINUS OP_DIV OP_TIMES OP_PERC OP_DOT
 %token OP_NOT OP_OR OP_XOR OP_AND OP_TILDE OP_LIKE OP_BANG
@@ -59,13 +79,17 @@ module AbSyn =
 %token KEY_COLUMNS
 %token KEY_FOR
 %token KEY_WHERE
+%token KEY_ORDER
+%token KEY_BY
+%token KEY_LIMIT
+%token KEY_ASC
+%token KEY_DESC
+%token KEY_OFFSET
 //not in lexer yet
 %token KEY_PARTITION
 %token KEY_DISTINCT
 %token KEY_EXISTS
 %token KEY_DEFAULT
-%token KEY_ORDER
-%token KEY_BY
 %token KEY_USE
 %token KEY_PRIMARY
 %token KEY_HIGH_PRIORITY
@@ -74,6 +98,8 @@ module AbSyn =
 %token KEY_SQL_BUFFER_RESULT
 %token KEY_SQL_CALC_FOUND_ROWS
 %token KEY_ROLLUP
+%token KEY_HAVING
+%token KEY_WINDOW
 //might be deprecated
 %token KEY_SQL_NO_CACHE
 //nokeys are not reserverd keywords. these can be used for idents 
@@ -123,82 +149,41 @@ module AbSyn =
 %type<AbSyn.Qs list> start_entry
 
 %%
+/*
+    Parses to a structure of types given in AbSyn.
+    The parser can be stopped with failwith "whatever"
+    - most likely "syntax error". Then a syntax error
+    will be returned as given in mysql.fs 
+*/
 start_entry:
           sql_statement { $1 }
-        /*
-        | GRAMMAR_SELECTOR_EXPR bit_expr END_OF_INPUT {
-            ITEMIZE($2, &$2);
-            static_cast<Expression_parser_state *>(YYP)->result= $2;
-            }
-        | GRAMMAR_SELECTOR_PART partition_clause END_OF_INPUT {
-              //We enter here when translating partition info string into
-              //partition_info data structure.
-            CONTEXTUALIZE($2);
-            static_cast<Partition_expr_parser_state *>(YYP)->result=
-              &$2->part_info;
-            }
-        | GRAMMAR_SELECTOR_GCOL IDENT_sys LPAR expr RPAR END_OF_INPUT {
-            
-              //We enter here when translating generated column info string into
-              //partition_info data structure.
-            
-
-            // Check gcol expression for the "PARSE_GCOL_EXPR" prefix:
-            if (!is_identifier($2, "PARSE_GCOL_EXPR"))
-              MYSQL_YYABORT;
-
-            auto gcol_info= NEW_PTN Value_generator;
-            if (gcol_info == NULL)
-              MYSQL_YYABORT; // OOM
-            ITEMIZE($4, &$4);
-            gcol_info->expr_item= $4;
-            static_cast<Gcol_expr_parser_state *>(YYP)->result= gcol_info;
-            }
-        | GRAMMAR_SELECTOR_CTE table_subquery END_OF_INPUT {
-            static_cast<Common_table_expr_parser_state *>(YYP)->result= $2;
-            }
-        */
+          /* Missing an array of GRAMMAR_SELECTOR expressions */
         ;
 
 sql_statement:
-          END_OF_INPUT {
-            //empty statement
-            []
-            //THD *thd= YYTHD;
-            //if (!thd->is_bootstrap_system_thread() &&
-            //    !thd->m_parser_state->has_comment())
-            //{
-            //  my_error(ER_EMPTY_QUERY, MYF(0));
-            //  MYSQL_YYABORT;
-            //}
-            //thd->lex->sql_command= SQLCOM_EMPTY_QUERY;
-            //YYLIP->found_semicolon= NULL;
-            }
+          END_OF_INPUT { [] }
         | simple_statement_or_begin DELIM_SCOLON opt_end_of_input {
-            [$1]
             //we found a wellformed query...
+            //join the queries parser-wise instead of inside the action
+            //as done in the original
+            [$1] @ $3
             }
         | simple_statement_or_begin END_OF_INPUT {
-            [$1]
             //single query, not terminated.
+            [$1]
             }
         ;
-
 opt_end_of_input:
-        /* empty */     {}
-        | END_OF_INPUT  {}
+        /* empty */         { [] }
+        | sql_statement     { $1 }
         ;
-
 simple_statement_or_begin:
-          simple_statement { $1
-            //*parse_tree= $1;
-            }
+          simple_statement  { $1 }
         //| begin_stmt
         ;
 
 simple_statement:
-        //comment out those statements that are op_not going to be used in the
-        //parse-tree generator
+        /* Not implemented yet has been commented out. */
         //  alter_database_stmt           { $$= nullptr; }
         //| alter_event_stmt              { $$= nullptr; }
         //| alter_function_stmt           { $$= nullptr; }
@@ -292,16 +277,11 @@ simple_statement:
 /*
         Statements
 */
+/* Start of SELECT statement */
 select_stmt:
           query_expression          { $1 }
         | query_expression_parens   { $1 }
         //| select_stmt_with_into {}
-        ;
-/* union for select statements */
-union_option:
-          /* empty */       { "" }
-        | KEY_DISTINCT      { "distinct" }
-        | KEY_ALL           { "all" }
         ;
 row_subquery:
           subquery          { AbSyn.Qs.Null }
@@ -318,11 +298,15 @@ subquery:
         ;
 query_expression:
           query_expression_body
-          //opt_order_clause
-          //opt_limit_clause
-          //opt_locking_clause_list
-          {
-          $1
+          opt_order_clause
+          opt_limit_clause
+          opt_locking_clause_list {
+          let options = [
+            AbSyn.Qs_Option.OptOrder $2
+            AbSyn.Qs_Option.OptLimit $3
+            AbSyn.Qs_Option.OptLocking $4
+            ]
+          AbSyn.Qs.Options ($1,options)
           }
         /*
         | with_clause
@@ -339,7 +323,7 @@ query_expression:
             auto nested= NEW_PTN PT_nested_query_expression($1);
             auto body= NEW_PTN PT_query_expression_body_primary(nested);
             $$= NEW_PTN PT_query_expression(body, $2, $3, $4);
-            }
+            r}
         | with_clause
           query_expression_parens
           order_clause
@@ -373,48 +357,92 @@ query_expression:
             }
         */
         ;
+/* order, limit, locking */
+opt_order_clause:
+          /* empty */                           { AbSyn.Expr.Null }
+        | order_clause                          { AbSyn.Expr.ExprList $1 }
+        ;
+order_clause:
+          KEY_ORDER KEY_BY order_list           { $3 }
+        ;
+order_list:
+          order_list DELIM_COMMA order_expr     { $1 @ [$3] }
+        | order_expr                            { [$1] }
+        ;
+order_expr:
+          expr opt_ordering_direction {
+            AbSyn.Expr.Unary ($2,$1)
+            }
+        ;
+opt_ordering_direction:
+          /* empty */           { "asc" }
+        | ordering_direction    { $1 }
+        ;
+ordering_direction:
+          KEY_ASC               { "asc" }
+        | KEY_DESC              { "desc" }
+        ;
+opt_limit_clause:
+          /* empty */               { AbSyn.Expr.Null }
+        | limit_clause              { AbSyn.Expr.ExprList $1 }
+        ;
+limit_clause:
+          KEY_LIMIT limit_options   { $2 }
+        ;
+limit_options:
+          limit_option                          { [$1] }
+        | limit_option DELIM_COMMA limit_option { [$1;$3] }
+        | limit_option KEY_OFFSET limit_option  { [$1;$3] }
+        ;
+limit_option:
+          ident             { $1 }
+        //| param_marker      {}
+        //| ULONGLONG_NUM     {}
+        //| LONG_NUM          {}
+        | VAL_NUM           { AbSyn.Expr.NodeTyped ("num",$1) }
+        ;
+opt_simple_limit:
+          /* empty */               { AbSyn.Expr.Temp }
+        | KEY_LIMIT limit_option    { AbSyn.Expr.Temp }
+        ;
+opt_locking_clause_list:
+          /* Empty */           { AbSyn.Expr.Null }
+        | locking_clause_list   { AbSyn.Expr.ExprList $1 }
+        ;
+
+locking_clause_list:
+          locking_clause_list locking_clause    { $1 @ [$2] }
+        | locking_clause                        { [$1] }
+        ;
+
+locking_clause:
+           KEY_FOR { AbSyn.Expr.Temp }
+        //  KEY_FOR lock_strength opt_locked_row_action
+        //| KEY_FOR lock_strength table_locking_list opt_locked_row_action
+        //| LOCK_SYM IN_SYM SHARE_SYM MODE_SYM
+        ;
 
 query_expression_body:
           query_primary { $1 }
-        /*
-        | query_expression_body UNION_SYM union_option query_primary {
-            $$= NEW_PTN PT_union(NEW_PTN PT_query_expression($1), @1, $3, $4);
+        | query_expression_body OP_UNION union_option query_primary {
+            AbSyn.Qs.Union ($3,$1,$4)
             }
-        | query_expression_parens UNION_SYM union_option query_primary {
-            if ($1 == NULL)
-              MYSQL_YYABORT; // OOM
-
-            $1->set_parentheses();
-
-            $$= NEW_PTN PT_union($1, @1, $3, $4);
+        | query_expression_parens OP_UNION union_option query_primary {
+            AbSyn.Qs.Union ($3,$1,$4)
             }
-        | query_expression_body UNION_SYM union_option query_expression_parens {
-            if ($4 == NULL)
-              MYSQL_YYABORT; // OOM
-
-            if ($4->is_union())
-              YYTHD->syntax_error_at(@4);
-
-            auto lhs_qe= NEW_PTN PT_query_expression($1);
-            PT_nested_query_expression *nested_qe=
-              NEW_PTN PT_nested_query_expression($4);
-
-            $$= NEW_PTN PT_union(lhs_qe, @1, $3, nested_qe);
+        | query_expression_body OP_UNION union_option 
+          query_expression_parens {
+            AbSyn.Qs.Union ($3,$1,$4)
             }
-        | query_expression_parens UNION_SYM union_option query_expression_parens {
-            if ($1 == NULL || $4 == NULL)
-              MYSQL_YYABORT; // OOM
-
-            if ($4->is_union())
-              YYTHD->syntax_error_at(@4);
-
-            $1->set_parentheses();
-
-            PT_nested_query_expression *nested_qe=
-              NEW_PTN PT_nested_query_expression($4);
-            $$= NEW_PTN PT_union($1, @1, $3, nested_qe);
+        | query_expression_parens OP_UNION union_option 
+          query_expression_parens {
+            AbSyn.Qs.Union ($3,$1,$4)
             }
-            */
+        ;
+union_option:
+          /* empty */       { "none" }
+        | KEY_DISTINCT      { "distinct" }
+        | KEY_ALL           { "all" }
         ;
 query_expression_parens:
           PAR_LPAR query_expression_parens PAR_RPAR { $2 }
@@ -430,32 +458,40 @@ query_specification:
           select_item_list
           into_clause
           opt_from_clause
-          //opt_where_clause
-          //opt_group_clause
-          //opt_having_clause
-          //opt_window_clause
-          {
-          AbSyn.Qs.Select [
-            AbSyn.Q_Select.SelectOptions $2
-            AbSyn.Q_Select.SelectItems $3
-            ]
+          opt_where_clause
+          opt_group_clause
+          opt_having_clause
+          opt_window_clause {
+            AbSyn.Qs.Select [
+                AbSyn.Q_Select.SelectOptions $2
+                AbSyn.Q_Select.SelectItems $3
+                AbSyn.Q_Select.SelectInto $4
+                AbSyn.Q_Select.SelectFrom $5
+                AbSyn.Q_Select.SelectWhere $6
+                AbSyn.Q_Select.SelectGroup $7
+                AbSyn.Q_Select.SelectHaving $8
+                AbSyn.Q_Select.SelectWindow $9
+                ]
             }
         | KEY_SELECT
           select_options
           select_item_list
           opt_from_clause
           opt_where_clause
-          //opt_group_clause
-          //opt_having_clause
-          //opt_window_clause
-          {
+          opt_group_clause
+          opt_having_clause
+          opt_window_clause {
             //same as above but no into
-        AbSyn.Qs.Select [
-            AbSyn.Q_Select.SelectOptions $2
-            AbSyn.Q_Select.SelectItems $3
-            AbSyn.Q_Select.SelectFrom $4
-            AbSyn.Q_Select.SelectWhere $5
-            ]
+            AbSyn.Qs.Select [
+                AbSyn.Q_Select.SelectOptions $2
+                AbSyn.Q_Select.SelectItems $3
+                AbSyn.Q_Select.SelectInto (AbSyn.Expr.Null)
+                AbSyn.Q_Select.SelectFrom $4
+                AbSyn.Q_Select.SelectWhere $5
+                AbSyn.Q_Select.SelectGroup $6
+                AbSyn.Q_Select.SelectHaving $7
+                AbSyn.Q_Select.SelectWindow $8
+                ]
             }
         ;
 select_options:
@@ -586,12 +622,17 @@ joined_table:
           table_reference inner_join_type table_reference OP_ON expr {
             AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("on",$3,$5))
             }
-        //| table_reference inner_join_type table_reference USING
-        //  PAR_LPAR using_list PAR_RPAR {}
+        | table_reference inner_join_type table_reference OP_USING
+          PAR_LPAR using_list PAR_RPAR {
+            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("using",$3,$6))
+            }
         | table_reference outer_join_type table_reference OP_ON expr {
             AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("on",$3,$5))
             }
-        //| table_reference outer_join_type table_reference USING '(' using_list ')' {}
+        | table_reference outer_join_type table_reference OP_USING
+          PAR_LPAR using_list PAR_RPAR {
+            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("using",$3,$6))
+            }
         | table_reference inner_join_type table_reference
           %prec PREC_CONDITIONLESS_JOIN {
             AbSyn.Expr.Binary ($2,$1,$3)
@@ -771,19 +812,16 @@ jt_on_response:
         | VAL_NULL                      { AbSyn.Expr.Temp }
         | KEY_DEFAULT text_string_sys   { AbSyn.Expr.Temp }
         ;
-
 index_hint_clause:
           /* empty */               { AbSyn.Expr.Temp }
         | KEY_FOR OP_JOIN           { AbSyn.Expr.Temp }
         | KEY_FOR KEY_ORDER KEY_BY  { AbSyn.Expr.Temp }
         | KEY_FOR OP_GROUP KEY_BY   { AbSyn.Expr.Temp }
         ;
-
 index_hint_type:
           KEY_FORCE  { "force" }
         | KEY_IGNORE { "ignore" }
         ;
-
 index_hint_definition:
           index_hint_type key_or_index index_hint_clause
           PAR_LPAR key_usage_list PAR_RPAR {
@@ -794,14 +832,12 @@ index_hint_definition:
             AbSyn.Expr.Temp 
             }
        ;
-
 index_hints_list:
           index_hint_definition { [] }
         | index_hints_list index_hint_definition {
             []
             }
         ;
-
 opt_index_hints_list:
           /* empty */           { [] }
         | index_hints_list      { $1 }
@@ -822,8 +858,8 @@ opt_key_definition:
         ;
 /* Start of group clause */
 /*
-grouping_expr where there to return a different type,
-but was just an expression. Has been skipped.
+grouping_expr was present to return a different type,
+but the production was just an expression. Has been skipped.
 */
 opt_group_clause:
           /* empty */                           { AbSyn.Expr.Null }
@@ -848,6 +884,36 @@ olap_opt:
             */
         ;
 /* End of group clause */
+/* Start of having clause */
+opt_having_clause:
+          /* empty */       { AbSyn.Expr.Null }
+        | KEY_HAVING expr   { $2 }
+        ;
+/* End of having clause */
+/* Start of window clause */
+opt_window_clause:
+          /* Nothing */                     { AbSyn.Expr.Null }
+        | KEY_WINDOW window_definition_list { AbSyn.Expr.ExprList $2 }
+        ;
+
+window_definition_list:
+          window_definition                                     { [$1] }
+        | window_definition_list DELIM_COMMA window_definition  { $1 @ [$3]}
+        ;
+
+window_definition:
+          window_name KEY_AS window_spec {
+            AbSyn.Expr.Binary ("as",$1,$3)
+            }
+        ;
+window_name:
+          ident         { $1 }
+        ;
+window_spec:
+          /* spec is left as. not completed */
+          PAR_LPAR /* window_spec_details */ PAR_RPAR { AbSyn.Expr.Null }
+        ;
+/* End of window clause */
 opt_key_usage_list:
           /* empty */       { AbSyn.Expr.Temp }
         | key_usage_list    { AbSyn.Expr.Temp }
@@ -864,21 +930,18 @@ key_usage_list:
         ;
 
 using_list:
-          ident_string_list { AbSyn.Expr.Temp }
+          ident_string_list { AbSyn.Expr.ExprListTyped ("id",$1) }
         ;
 
 ident_string_list:
-          ident                                 { $1 }
-        | ident_string_list DELIM_COMMA ident   { AbSyn.Expr.Temp }
+          ident                                 { [$1] }
+        | ident_string_list DELIM_COMMA ident   { $1 @ [$3] }
         ;
-
-
 opt_as_or_eq:
           /* empty */   { "" }
         | OP_AS         { "as" }
         | OP_EQ         { "eq" }
         ;
-
 opt_table_alias:
           /* empty */        {
             fun tid ->
@@ -897,7 +960,6 @@ opt_table_alias:
                     )
             }
         ;
-
 opt_all:
           /* empty */   { "" }
         | KEY_ALL       { "all" }
@@ -911,17 +973,18 @@ opt_key_or_index:
           /* empty */   { "" }
         | key_or_index  { $1 }
         ;
-
 keys_or_index:
           KEY_KEYS      { "keys" }
         | KEY_INDEX     { "index" }
         | KEY_INDEXES   { "indexes" }
         ;
-
 opt_unique:
           /* empty */  { "" }
         | KEY_UNIQUE   { "unique" }
         ;
+/* End of SELECT statement */
+/* Start of INSERT statement */
+/* End of INSERT statement */
 /*
         Types
 */

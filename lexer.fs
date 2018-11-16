@@ -37,7 +37,11 @@ let lex inStr =
             | "right" -> Parser.token.OP_RIGHT
             | "on" -> Parser.token.OP_ON
             | "group" -> Parser.token.OP_GROUP
+            | "order" -> Parser.token.KEY_ORDER
+            | "limit" -> Parser.token.KEY_LIMIT
             | "by" -> Parser.token.KEY_BY
+            | "desc" -> Parser.token.KEY_DESC
+            | "asc" -> Parser.token.KEY_ASC
             | "using" -> Parser.token.OP_USING
             | "outfile" -> Parser.token.KEY_OUTFILE
             | "force" -> Parser.token.KEY_FORCE
@@ -51,6 +55,8 @@ let lex inStr =
             | "ordinality" -> Parser.token.NOKEY_ORDINALITY
             | "nested" -> Parser.token.NOKEY_NESTED
             | "path" -> Parser.token.NOKEY_PATH
+            | "union" -> Parser.token.OP_UNION
+            | "offset" -> Parser.token.KEY_OFFSET
             | id -> Parser.token.VAL_ID id
         (idStr,t2type)
     let addToken_delim t =
