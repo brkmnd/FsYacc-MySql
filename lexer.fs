@@ -9,6 +9,7 @@ let lex inStr =
             match idStr.ToLower() with
             | "select" -> Parser.token.KEY_SELECT
             | "from" -> Parser.token.KEY_FROM
+            | "where" -> Parser.token.KEY_WHERE
             | "as" -> Parser.token.KEY_AS
             | "is" -> Parser.token.KEY_IS
             | "null" -> Parser.token.VAL_NULL
@@ -35,8 +36,9 @@ let lex inStr =
             | "left" -> Parser.token.OP_LEFT
             | "right" -> Parser.token.OP_RIGHT
             | "on" -> Parser.token.OP_ON
+            | "group" -> Parser.token.OP_GROUP
+            | "by" -> Parser.token.KEY_BY
             | "using" -> Parser.token.OP_USING
-            | "into" -> Parser.token.OP_INTO
             | "outfile" -> Parser.token.KEY_OUTFILE
             | "force" -> Parser.token.KEY_FORCE
             | "ignore" -> Parser.token.KEY_IGNORE
@@ -44,7 +46,7 @@ let lex inStr =
             | "keys" -> Parser.token.KEY_KEYS
             | "unique" -> Parser.token.KEY_UNIQUE
             | "json_table" -> Parser.token.OP_JSON_TABLE
-            | "columns" -> Parser.token.KEY_COLUMN
+            | "columns" -> Parser.token.KEY_COLUMNS
             | "for" -> Parser.token.KEY_FOR
             | "ordinality" -> Parser.token.NOKEY_ORDINALITY
             | "nested" -> Parser.token.NOKEY_NESTED
@@ -82,6 +84,10 @@ let lex inStr =
             | ">" -> Parser.token.OP_GT
             | "<=" -> Parser.token.OP_GEQ
             | ">=" -> Parser.token.OP_LEQ
+            | "(" -> Parser.token.PAR_LPAR
+            | ")" -> Parser.token.PAR_RPAR
+            | "{" -> Parser.token.PAR_LBRACE
+            | "}" -> Parser.token.PAR_RBRACE
             | t ->
                 printfn "token_added(op): %s" t
                 Parser.token.OP_DOT
@@ -116,7 +122,7 @@ let lex inStr =
         "'([^\']*)'|"+
         "([0-9]+)|"+
         "(;|,)|"+
-        "(\\|\\|\\||\\+|-|\\*|\\/|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!)|"+
+        "(\\|\\|\\||\\+|-|\\*|\\/|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!|\\(|\\)|\\{|\\}|\\[|\\])|"+
         //ignore
         " +|\\n+"
     let matchF (m : Match) =

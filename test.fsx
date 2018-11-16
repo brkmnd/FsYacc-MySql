@@ -15,7 +15,17 @@ let parseString (s : string) =
         try (Lexer.lex s,"") with
         | Failure error_t ->
             ([||],syntax_error_at error_t)
-    //printfn "tokens: %A" tokens
+    let print_tokens () =
+        printfn "tokens:"
+        for t in tokens do
+            printfn "%A" (snd t)
+        printfn "end tokens-------------"
+        printfn ""
+    
+    
+    print_tokens()
+    
+    
     if msg <> "" then
         [Parser.AbSyn.Qs.Error msg]
     else
@@ -31,5 +41,5 @@ let testPrg prg =
 //parseString "noget"
 printfn "\ntests-----------"
 let prg1 = "select 'test' as d, 2 + 3i * 4 - 5 / 6  as c"
-let prg2 = "select 1 = 2 is true as a, 'test' as b"
+let prg2 = "select 1 = 2 is true as a, 'test' as b from (t1,t2) join t3 on t1.noget = t2.noget where id = 200"
 printfn "test1:\n%s" (testPrg prg2)

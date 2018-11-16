@@ -17,6 +17,13 @@ type token =
   | NOKEY_NESTED
   | NOKEY_PATH
   | NOKEY_ORDINALITY
+  | KEY_SQL_NO_CACHE
+  | KEY_ROLLUP
+  | KEY_SQL_CALC_FOUND_ROWS
+  | KEY_SQL_BUFFER_RESULT
+  | KEY_SQL_BIG_RESULT
+  | KEY_SQL_SMALL_RESULT
+  | KEY_HIGH_PRIORITY
   | KEY_PRIMARY
   | KEY_USE
   | KEY_BY
@@ -25,7 +32,7 @@ type token =
   | KEY_EXISTS
   | KEY_DISTINCT
   | KEY_PARTITION
-  | KEY_ON
+  | KEY_WHERE
   | KEY_FOR
   | KEY_COLUMNS
   | KEY_UNIQUE
@@ -92,7 +99,7 @@ type token =
   | OP_INTO
   | PAR_LPAR
   | PAR_RPAR
-  | PAR_LRBACE
+  | PAR_LBRACE
   | PAR_RBRACE
   | DELIM_SCOLON
   | DELIM_COMMA
@@ -114,6 +121,13 @@ type tokenId =
     | TOKEN_NOKEY_NESTED
     | TOKEN_NOKEY_PATH
     | TOKEN_NOKEY_ORDINALITY
+    | TOKEN_KEY_SQL_NO_CACHE
+    | TOKEN_KEY_ROLLUP
+    | TOKEN_KEY_SQL_CALC_FOUND_ROWS
+    | TOKEN_KEY_SQL_BUFFER_RESULT
+    | TOKEN_KEY_SQL_BIG_RESULT
+    | TOKEN_KEY_SQL_SMALL_RESULT
+    | TOKEN_KEY_HIGH_PRIORITY
     | TOKEN_KEY_PRIMARY
     | TOKEN_KEY_USE
     | TOKEN_KEY_BY
@@ -122,7 +136,7 @@ type tokenId =
     | TOKEN_KEY_EXISTS
     | TOKEN_KEY_DISTINCT
     | TOKEN_KEY_PARTITION
-    | TOKEN_KEY_ON
+    | TOKEN_KEY_WHERE
     | TOKEN_KEY_FOR
     | TOKEN_KEY_COLUMNS
     | TOKEN_KEY_UNIQUE
@@ -189,7 +203,7 @@ type tokenId =
     | TOKEN_OP_INTO
     | TOKEN_PAR_LPAR
     | TOKEN_PAR_RPAR
-    | TOKEN_PAR_LRBACE
+    | TOKEN_PAR_LBRACE
     | TOKEN_PAR_RBRACE
     | TOKEN_DELIM_SCOLON
     | TOKEN_DELIM_COMMA
@@ -214,6 +228,9 @@ type nonTerminalId =
     | NONTERM_query_primary
     | NONTERM_query_specification
     | NONTERM_select_options
+    | NONTERM_select_option_list
+    | NONTERM_select_option
+    | NONTERM_query_spec_option
     | NONTERM_select_item_list
     | NONTERM_select_item
     | NONTERM_select_alias
@@ -254,7 +271,12 @@ type nonTerminalId =
     | NONTERM_index_hint_definition
     | NONTERM_index_hints_list
     | NONTERM_opt_index_hints_list
+    | NONTERM_opt_where_clause
+    | NONTERM_opt_where_clause_expr
     | NONTERM_opt_key_definition
+    | NONTERM_opt_group_clause
+    | NONTERM_group_list
+    | NONTERM_olap_opt
     | NONTERM_opt_key_usage_list
     | NONTERM_key_usage_element
     | NONTERM_key_usage_list
