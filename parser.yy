@@ -8,7 +8,7 @@ module AbSyn =
         | NodeTyped of string * string
         | ExprList of Expr list
         | ExprListTyped of string * (Expr list)
-        | Function of string * (Expr list)
+        | Function of Expr * Expr
         | Null
         | Temp
     type Q_Select =
@@ -100,12 +100,15 @@ module AbSyn =
 %token KEY_ROLLUP
 %token KEY_HAVING
 %token KEY_WINDOW
+%token KEY_DATE
 //might be deprecated
 %token KEY_SQL_NO_CACHE
 //nokeys are not reserverd keywords. these can be used for idents 
 %token NOKEY_ORDINALITY
 %token NOKEY_PATH
 %token NOKEY_NESTED
+//not in lexer yet
+%token NOKEY_NOW
 //values
 %token<string>VAL_ID
 %token<string>VAL_NUM
@@ -559,9 +562,9 @@ select_item:
 select_alias:
           /* empty */       { AbSyn.Expr.Null }
         | KEY_AS ident      { $2 }
-        | KEY_AS VAL_STRING { AbSyn.Expr.Temp }
+        | KEY_AS VAL_STRING { AbSyn.Expr.NodeTyped ("id",$2) }
         | ident             { $1 }
-        | VAL_STRING        { AbSyn.Expr.Temp }
+        | VAL_STRING        { AbSyn.Expr.NodeTyped ("id",$1) }
         ;
 /* Start of into clause */
 into_clause:
@@ -1161,9 +1164,9 @@ all_or_any:
 
 simple_expr:
           simple_ident                  { $1 }
-        //| function_call_keyword     {}
-        //| function_call_nonkeyword  {}
-        //| function_call_generic     {}
+        | function_call_keyword         { $1 }
+        | function_call_nonkeyword      { $1 }
+        | function_call_generic         { $1 }
         //| function_call_conflict    {}
         //| simple_expr KEY_COLLATE ident_or_text %prec OP_NEG {}
         | literal                       { $1 }
@@ -1250,8 +1253,54 @@ num_literal:
         //| FLOAT_NUM {}
         ;
 /*
+        Functions
+*/
+function_call_keyword:
+          KEY_DATE PAR_LPAR expr_list PAR_RPAR {
+            let id = AbSyn.Expr.NodeTyped ("id","date")
+            AbSyn.Expr.Function (id,$3)
+            }
+        ;
+function_call_nonkeyword:
+          NOKEY_NOW PAR_LPAR expr PAR_RPAR {
+            let id = AbSyn.Expr.NodeTyped ("id","now")
+            AbSyn.Expr.Function (id,$3)
+            }
+        ;
+function_call_generic:
+          ident_sys PAR_LPAR opt_udf_expr_list PAR_RPAR {
+            AbSyn.Expr.Function ($1,$3)
+            }
+        | ident OP_DOT ident PAR_LPAR opt_expr_list PAR_RPAR {
+            let id_list = AbSyn.Expr.ExprListTyped ("id",[$1;$3])
+            AbSyn.Expr.Function (id_list,$5)
+            }
+        ;
+opt_expr_list:
+          /* empty */   { AbSyn.Expr.Null }
+        | expr_list     { $1 }
+        ;
+opt_udf_expr_list:
+        /* empty */     { AbSyn.Expr.Null }
+        | udf_expr_list { AbSyn.Expr.ExprList $1 }
+        ;
+udf_expr_list:
+          udf_expr                              { [$1] }
+        | udf_expr_list DELIM_COMMA udf_expr    { $1 @ [$3] }
+        ;
+
+udf_expr:
+          expr select_alias     { AbSyn.Expr.Binary ("as",$1,$2) }
+        ;
+/*
         Identifiers
 */
+ident_sys:
+        /* originally this has a IDENT_QUOTED. */
+          VAL_ID        { AbSyn.Expr.NodeTyped ("id",$1) }
+        | VAL_STRING    { AbSyn.Expr.NodeTyped ("id",$1) }
+        ;
+
 ident:
     VAL_ID {
         AbSyn.Expr.NodeTyped ("id",$1)

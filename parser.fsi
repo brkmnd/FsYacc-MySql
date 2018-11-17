@@ -14,10 +14,12 @@ type token =
   | VAL_HEX of (string)
   | VAL_NUM of (string)
   | VAL_ID of (string)
+  | NOKEY_NOW
   | NOKEY_NESTED
   | NOKEY_PATH
   | NOKEY_ORDINALITY
   | KEY_SQL_NO_CACHE
+  | KEY_DATE
   | KEY_WINDOW
   | KEY_HAVING
   | KEY_ROLLUP
@@ -125,10 +127,12 @@ type tokenId =
     | TOKEN_VAL_HEX
     | TOKEN_VAL_NUM
     | TOKEN_VAL_ID
+    | TOKEN_NOKEY_NOW
     | TOKEN_NOKEY_NESTED
     | TOKEN_NOKEY_PATH
     | TOKEN_NOKEY_ORDINALITY
     | TOKEN_KEY_SQL_NO_CACHE
+    | TOKEN_KEY_DATE
     | TOKEN_KEY_WINDOW
     | TOKEN_KEY_HAVING
     | TOKEN_KEY_ROLLUP
@@ -339,6 +343,14 @@ type nonTerminalId =
     | NONTERM_text_literal
     | NONTERM_text_string_sys
     | NONTERM_num_literal
+    | NONTERM_function_call_keyword
+    | NONTERM_function_call_nonkeyword
+    | NONTERM_function_call_generic
+    | NONTERM_opt_expr_list
+    | NONTERM_opt_udf_expr_list
+    | NONTERM_udf_expr_list
+    | NONTERM_udf_expr
+    | NONTERM_ident_sys
     | NONTERM_ident
     | NONTERM_simple_ident
     | NONTERM_simple_ident_nospvar
