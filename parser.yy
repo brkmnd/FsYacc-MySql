@@ -1,39 +1,5 @@
-%{
-//AbSyn
-module AbSyn =
-    type Expr =
-        | Binary of string * Expr * Expr
-        | Unary of string * Expr
-        | Node of string
-        | NodeTyped of string * string
-        | ExprList of Expr list
-        | ExprListTyped of string * (Expr list)
-        | Function of Expr * Expr
-        | Null
-        | Temp
-    type Q_Select =
-        | SelectNull
-        | SelectOptions of Expr list
-        | SelectItems of (Expr * Expr) list
-        | SelectInto of Expr
-        | SelectFrom of Expr list
-        | SelectWhere of Expr
-        | SelectGroup of Expr
-        | SelectHaving of Expr
-        | SelectWindow of Expr
-        | SelectOrder of Expr
-        | SelectLimit of Expr
-    type Qs_Option =
-        | OptOrder of Expr
-        | OptLimit of Expr
-        | OptLocking of Expr
-    type Qs =
-        | Select of Q_Select list
-        | Options of Qs * (Qs_Option list)
-        | Union of string * Qs * Qs
-        | Error of string
-        | Null
-%}
+%{%}
+
 /*
     Tokens
         I have tried to differ the keywords on key and nokey
@@ -287,17 +253,13 @@ select_stmt:
         //| select_stmt_with_into {}
         ;
 row_subquery:
-          subquery          { AbSyn.Qs.Null }
+          subquery      { $1 }
         ;
-
 table_subquery:
-          subquery          { AbSyn.Qs.Null }
+          subquery      { $1 }
         ;
-
 subquery:
-          query_expression_parens %prec PREC_SUBQUERY_AS_EXPR {
-            AbSyn.Qs.Null
-            }
+          query_expression_parens %prec PREC_SUBQUERY_AS_EXPR   { $1 }
         ;
 query_expression:
           query_expression_body
@@ -546,17 +508,17 @@ select_item_list:
             [$1]
             }
         | OP_TIMES {
-            [(AbSyn.Expr.Node "*",AbSyn.Expr.Null)]
+            [AbSyn.Expr.Binary ("as",AbSyn.Expr.Node "*",AbSyn.Expr.Null)]
             }
         ;
 
 select_item:
           table_wild {
-            ($1,AbSyn.Expr.Null)
+            AbSyn.Expr.Binary ("as",$1,AbSyn.Expr.Null)
             }
         | expr select_alias {
             //$$= NEW_PTN PTI_expr_with_alias(@$, $1, @1.cpp, $2);
-            ($1,$2)
+            AbSyn.Expr.Binary ("as",$1,$2)
             }
         ;
 select_alias:
@@ -997,8 +959,8 @@ set_type:
         Expressions
 */
 expr_list:
-          expr                          { $1 }
-        | expr_list DELIM_COMMA expr    { $3 }
+          expr                          { [$1] }
+        | expr_list DELIM_COMMA expr    { $1 @ [$3] }
         ;
 expr:
           expr op_or expr %prec OP_OR {
@@ -1057,8 +1019,12 @@ bool_pri:
             }
         ;
 predicate:
-        //  bit_expr OP_IN table_subquery {}
-        //| bit_expr op_not OP_IN table_subquery {}
+          bit_expr OP_IN table_subquery {
+            AbSyn.Expr.Binary ("in",$1,AbSyn.Expr.SubQ $3)
+            }
+        | bit_expr op_not OP_IN table_subquery {
+            AbSyn.Expr.Binary ("in",$1,AbSyn.Expr.SubQ $4)
+            }
         | bit_expr OP_IN PAR_LPAR expr PAR_RPAR {
             AbSyn.Expr.Binary ("in",$1,$4)
             }
@@ -1187,9 +1153,15 @@ simple_expr:
         | OP_BANG simple_expr %prec OP_NEG {
             AbSyn.Expr.Unary ("!",$2)
             }
-        //| row_subquery {}
-        //| PAR_LPAR expr PAR_RPAR { $$= $2; }
-        //| PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
+        | row_subquery {
+            AbSyn.Expr.SubQ $1
+            }
+        | PAR_LPAR expr PAR_RPAR {
+            $2
+            }
+        | PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
+            AbSyn.Expr.ExprList ([$2] @ $4)
+            }
         //| ROW_SYM PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
         //| OP_EXISTS table_subquery {}
         //| PAR_LBRACE ident expr PAR_RBRACE {}
@@ -1258,7 +1230,7 @@ num_literal:
 function_call_keyword:
           KEY_DATE PAR_LPAR expr_list PAR_RPAR {
             let id = AbSyn.Expr.NodeTyped ("id","date")
-            AbSyn.Expr.Function (id,$3)
+            AbSyn.Expr.Function (id,AbSyn.Expr.ExprList $3)
             }
         ;
 function_call_nonkeyword:
@@ -1278,7 +1250,7 @@ function_call_generic:
         ;
 opt_expr_list:
           /* empty */   { AbSyn.Expr.Null }
-        | expr_list     { $1 }
+        | expr_list     { AbSyn.Expr.ExprList $1 }
         ;
 opt_udf_expr_list:
         /* empty */     { AbSyn.Expr.Null }

@@ -2,6 +2,7 @@
 open Microsoft.FSharp.Text.Lexing
 open System
 
+#load "absyn.fs"
 #load "parser.fs"
 #load "lexer.fs"
 
@@ -27,16 +28,16 @@ let parseString (s : string) =
     
     
     if msg <> "" then
-        [Parser.AbSyn.Qs.Error msg]
+        [AbSyn.Qs.Error msg]
     else
         try Parser.start_entry (Lexer.getNextToken tokens) lexbuf with
         | _ ->
             let msg = syntax_error_at (Lexer.getPrevTokenVal tokens)
-            [Parser.AbSyn.Qs.Error msg]
+            [AbSyn.Qs.Error msg]
 
 let testPrg prg =
     match parseString prg with
-    | [Parser.AbSyn.Qs.Error msg] -> msg
+    | [AbSyn.Qs.Error msg] -> msg
     | l -> sprintf "success: %A" l
 //parseString "noget"
 printfn "\ntests-----------"
@@ -47,6 +48,9 @@ let prg3 =
     "select id from a join b on a.t = b.t"+
     " union "+
     "select id from c join d on c.t = d.some"+
-    " order by id desc"
+    " order by id desc"+
+    " /* here's a comment */ "
+let prg4 = "select * from t1"
 //
-printfn "test1:\n%s" (testPrg prg3)
+//printfn "test1:\n%s" (testPrg inj2)
+AbSyn.traverse (fun x -> x) (parseString prg4)

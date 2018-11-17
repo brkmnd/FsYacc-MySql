@@ -121,6 +121,8 @@ let lex inStr =
         if tGroup.[8].Value <> "" then
             tokens.Add(addToken_op tGroup.[8].Value)
     let regToken =
+        //comments
+        "-- [^\\n]*|\\#[^\\n]*|\\/\\*[^\\*]*\\*\\/|"+
         "x'([^']+)'|"+
         "0x([a-zA-Z0-9]+)|"+
         "([a-zA-Z_][a-zA-Z0-9_]*)|"+
