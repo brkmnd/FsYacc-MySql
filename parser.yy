@@ -617,17 +617,15 @@ inner_join_type:
         | OP_INNER OP_JOIN                  { "inner join" }
         | OP_CROSS OP_JOIN                  { "cross join" }
         | OP_STRAIGHT_JOIN                  { "straight_join" }
-
+        ;
 outer_join_type:
           OP_LEFT opt_outer OP_JOIN         { "left"+$2+" join" }
         | OP_RIGHT opt_outer OP_JOIN        { "right"+$2+" join" }
         ;
-
 opt_inner:
           /* empty */   { "" }
         | OP_INNER      { " inner" }
         ;
-
 opt_outer:
           /* empty */   { "" }
         | OP_OUTER      { " outer" }
@@ -637,14 +635,12 @@ opt_outer:
   a new rule for partition_list.
 */
 opt_use_partition:
-          /* empty */       { AbSyn.Expr.Temp }
-        | use_partition     { AbSyn.Expr.Temp }
+          /* empty */       { AbSyn.Expr.Null }
+        | use_partition     { AbSyn.Expr.Null }
         ;
 
 use_partition:
-          KEY_PARTITION PAR_LPAR using_list PAR_RPAR {
-            $3
-            }
+          KEY_PARTITION PAR_LPAR using_list PAR_RPAR { $3 }
         ;
 
 /**
@@ -691,19 +687,16 @@ single_table_parens:
           PAR_LPAR single_table_parens PAR_RPAR { $2 }
         | PAR_LPAR single_table PAR_RPAR        { $2 }
         ;
-
 single_table:
           table_ident opt_use_partition opt_table_alias opt_key_definition {
             //$3 is ExprId -> ExpExprAlias 
             AbSyn.Expr.ExprListTyped ("id",[$1|>$3;$4])
             }
         ;
-
 joined_table_parens:
           PAR_LPAR joined_table_parens PAR_RPAR { $2 }
         | PAR_LPAR joined_table PAR_RPAR        { $2 }
         ;
-
 derived_table:
           table_subquery opt_table_alias opt_derived_column_list {
             AbSyn.Expr.Temp
@@ -711,7 +704,7 @@ derived_table:
         ;
 opt_derived_column_list:
           /* empty */ {
-            AbSyn.Expr.Temp
+            AbSyn.Expr.Null
             }
         | PAR_LPAR simple_ident_list PAR_RPAR {
             AbSyn.Expr.Temp
@@ -730,16 +723,13 @@ table_function:
             AbSyn.Expr.Temp
             }
         ;
-
 columns_clause:
           KEY_COLUMNS PAR_LPAR columns_list PAR_RPAR { $3 }
         ;
-
 columns_list:
           jt_column                             { [$1] }
         | columns_list DELIM_COMMA jt_column    { $1 @ [$3] }
         ;
-
 jt_column:
           ident KEY_FOR NOKEY_ORDINALITY {
             AbSyn.Expr.Temp
@@ -752,12 +742,10 @@ jt_column:
             AbSyn.Expr.Temp
             }
         ;
-
 jt_column_type:
           /* empty */   { AbSyn.Expr.Temp }
         | KEY_EXISTS    { AbSyn.Expr.Temp }
         ;
-
 opt_on_empty_or_error:
           /* empty */               { AbSyn.Expr.Temp }
         | opt_on_empty              { AbSyn.Expr.Temp }
@@ -765,7 +753,6 @@ opt_on_empty_or_error:
         | opt_on_empty opt_on_error { AbSyn.Expr.Temp }
         | opt_on_error opt_on_empty { AbSyn.Expr.Temp }
         ;
-
 opt_on_empty:
           jt_on_response OP_ON VAL_EMPTY       { AbSyn.Expr.Temp }
         ;
@@ -778,7 +765,7 @@ jt_on_response:
         | KEY_DEFAULT text_string_sys   { AbSyn.Expr.Temp }
         ;
 index_hint_clause:
-          /* empty */               { AbSyn.Expr.Temp }
+          /* empty */               { AbSyn.Expr.Null }
         | KEY_FOR OP_JOIN           { AbSyn.Expr.Temp }
         | KEY_FOR KEY_ORDER KEY_BY  { AbSyn.Expr.Temp }
         | KEY_FOR OP_GROUP KEY_BY   { AbSyn.Expr.Temp }
@@ -804,8 +791,8 @@ index_hints_list:
             }
         ;
 opt_index_hints_list:
-          /* empty */           { [] }
-        | index_hints_list      { $1 }
+          /* empty */           { AbSyn.Expr.Null }
+        | index_hints_list      { AbSyn.Expr.ExprList $1 }
         ;
 /* End of from clause */
 
@@ -819,7 +806,7 @@ opt_where_clause_expr:
         ;
 /* End of where clause */
 opt_key_definition:
-          opt_index_hints_list  { AbSyn.Expr.Temp }
+          opt_index_hints_list  { $1 }
         ;
 /* Start of group clause */
 /*

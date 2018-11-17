@@ -31,22 +31,30 @@ and Qs =
     | Error of string
     | Null
 
-let add2path p = p + "  "
+let depth2spaces d =
+    let space = "  "
+    let rec exec acc = function
+        | n when n <= 0 -> acc
+        | n -> exec (acc + space) (n - 1)
+    match d with
+    | 0 -> ""
+    | 1 -> space
+    | 2 -> space + space
+    | 3 -> space + space + space
+    | 4 -> space + space + space + space
+    | n -> exec "" n
 let rec traverse f = function
     | [] -> ()
-    | x::xs ->
-        let path = ""
-        traverse_qs path f x; traverse f xs
-and traverse_qs path f = function
+    | x::xs -> traverse_qs 0 f x; traverse f xs
+and traverse_qs depth f = function
     | Select s ->
-        printfn "%sselect" path
-        let path = add2path path
-        traverse_q_select path f s
+        printfn "%sselect" (depth2spaces depth)
+        traverse_q_select (depth + 1) f s
     | Options (op_q,op_list) ->
-        traverse_qs path f op_q
-    | _ -> printfn "hertil-qs"
-and traverse_q_select path f = function
-    | [SelectNull] -> printfn "hertil-select"
+        traverse_qs depth f op_q
+    | _ -> printfn "rest of traverse_qs"
+and traverse_q_select depth f = function
+    | [SelectNull] -> printfn "%snull" (depth2spaces depth) 
     | [ SelectOptions opt_c
         SelectItems items_c
         SelectInto into_c
@@ -55,9 +63,33 @@ and traverse_q_select path f = function
         SelectGroup group_c
         SelectHaving having_c
         SelectWindow window_c ] ->
-            printfn "%sitems: %A" path (traverse_exp_list path f items_c)
-    | _ -> printfn "heritl"
-and traverse_exp_list path f = function
-    | i -> printf "%A" i
-and traverse_exp path f = function
-    | _ -> printfn "test"
+            printfn "%sitems:" (depth2spaces depth)
+            traverse_exp_list (depth + 1) f items_c
+            printfn "%sfrom:" (depth2spaces depth)
+            traverse_exp_list (depth + 1) f from_c
+            printfn "%swhere:" (depth2spaces depth)
+            traverse_exp (depth + 1) f where_c
+    | _ -> printfn "rest of traverse_q_select"
+and traverse_exp_list depth f = function
+    | [] -> ()
+    | expr::exprs ->
+        traverse_exp depth f  expr
+        traverse_exp_list depth f  exprs
+and traverse_exp depth f = function
+    | Expr.Null -> printfn "%snull" (depth2spaces depth)
+    | Node v -> printfn "%snode(%s)" (depth2spaces depth) v
+    | NodeTyped (t,v) -> printfn "%snode<%s>(%s)" (depth2spaces depth) t v
+    | Binary (op,l,r) ->
+        printfn "%s%s:" (depth2spaces depth) op
+        traverse_exp (depth + 1) f l
+        traverse_exp (depth + 1) f r
+    | ExprList elist ->
+        printfn "%slist:" (depth2spaces depth)
+        traverse_exp_list (depth + 1) f elist
+    | ExprListTyped (t,elist) ->
+        printfn "%slist<%s>:" (depth2spaces depth) t
+        traverse_exp_list (depth + 1) f elist
+    | SubQ q ->
+        printfn "%ssubq:" (depth2spaces depth)
+        traverse_qs (depth + 1) f q
+    | expr -> printfn "%s%A" (depth2spaces depth) expr

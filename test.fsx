@@ -6,6 +6,12 @@ open System
 #load "parser.fs"
 #load "lexer.fs"
 
+let fopen name =
+    let l = System.IO.File.ReadAllLines (name)
+    Array.fold
+        (fun acc line -> acc + line + "\n")
+        ""
+        l
 
 let syntax_error_at at =
     sprintf "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '%s' at line 1" at
@@ -50,7 +56,8 @@ let prg3 =
     "select id from c join d on c.t = d.some"+
     " order by id desc"+
     " /* here's a comment */ "
-let prg4 = "select * from t1"
-//
+let prg4 = "select 1 as a"
+
+
 //printfn "test1:\n%s" (testPrg inj2)
 AbSyn.traverse (fun x -> x) (parseString prg4)
