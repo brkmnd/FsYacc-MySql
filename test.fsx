@@ -6,6 +6,9 @@ open System
 #load "parser.fs"
 #load "lexer.fs"
 
+
+open MbSql
+
 let fopen name =
     let l = System.IO.File.ReadAllLines (name)
     Array.fold
@@ -30,7 +33,7 @@ let parseString (s : string) =
         printfn ""
     
     
-    print_tokens()
+    //print_tokens()
     
     
     if msg <> "" then
@@ -41,11 +44,34 @@ let parseString (s : string) =
             let msg = syntax_error_at (Lexer.getPrevTokenVal tokens)
             [AbSyn.Qs.Error msg]
 
+let d2s d =
+    let s = "  "
+    let rec exec acc = function
+        | n when n <= 0 -> acc
+        | n -> exec (acc + s) (n - 1)
+    match d with
+    | 0  -> ""
+    | 1  -> s
+    | 2  -> s+s
+    | 3  -> s+s+s
+    | 4  -> s+s+s+s
+    | 5  -> s+s+s+s+s
+    | 6  -> s+s+s+s+s+s
+    | 7  -> s+s+s+s+s+s+s
+    | 8  -> s+s+s+s+s+s+s+s
+    | 9  -> s+s+s+s+s+s+s+s+s
+    | 10 -> s+s+s+s+s+s+s+s+s+s
+    | n -> exec "" n
 let testPrg prg =
+    let travF depth acc (x : Traverse.TreeVal<string>) =
+        printfn "%s%s" (d2s depth) x.vname
+        acc + "d"
     match parseString prg with
     | [AbSyn.Qs.Error msg] ->
         printfn "%s" msg
-    | l -> AbSyn.traverse (fun x -> x) l
+    | l ->
+        //printfn "success: %s" (Traverse.traverse travF "" l)
+        printfn "success:%s" (Traverse.Go<string>.gen (travF,"",l))
 //parseString "noget"
 printfn "\ntests-----------"
 //select tests
@@ -59,7 +85,6 @@ let prg3 =
     " /* here's a comment */ "
 let prg4 = "select 1 as a"
 
+
 testPrg prg4
 
-
-//printfn "test removeComm: %s" (fst (Lexer.removeMultComment inj2))

@@ -5,7 +5,7 @@ open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
 # 1 "parser.yy"
 
-
+    open MbSql
 
 # 10 "parser.fs"
 // This type is the type of tokens accepted by the parser
