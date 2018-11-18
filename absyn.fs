@@ -6,7 +6,8 @@ type Expr =
     | NodeTyped of string * string
     | ExprList of Expr list
     | ExprListTyped of string * (Expr list)
-    | Function of Expr * Expr
+    | FunctionCall of Expr * Expr
+    | FunctionCreate of Expr * Expr
     | SubQ of Qs
     | Null
     | Temp
@@ -32,16 +33,22 @@ and Qs =
     | Null
 
 let depth2spaces d =
-    let space = "  "
+    let s = "  "
     let rec exec acc = function
         | n when n <= 0 -> acc
-        | n -> exec (acc + space) (n - 1)
+        | n -> exec (acc + s) (n - 1)
     match d with
-    | 0 -> ""
-    | 1 -> space
-    | 2 -> space + space
-    | 3 -> space + space + space
-    | 4 -> space + space + space + space
+    | 0  -> ""
+    | 1  -> s
+    | 2  -> s+s
+    | 3  -> s+s+s
+    | 4  -> s+s+s+s
+    | 5  -> s+s+s+s+s
+    | 6  -> s+s+s+s+s+s
+    | 7  -> s+s+s+s+s+s+s
+    | 8  -> s+s+s+s+s+s+s+s
+    | 9  -> s+s+s+s+s+s+s+s+s
+    | 10 -> s+s+s+s+s+s+s+s+s+s
     | n -> exec "" n
 let rec traverse f = function
     | [] -> ()
@@ -52,6 +59,10 @@ and traverse_qs depth f = function
         traverse_q_select (depth + 1) f s
     | Options (op_q,op_list) ->
         traverse_qs depth f op_q
+    | Union (t,q1,q2) ->
+        printfn "%sunion %s" (depth2spaces depth) t
+        traverse_qs (depth + 1) f q1
+        traverse_qs (depth + 1) f q2
     | _ -> printfn "rest of traverse_qs"
 and traverse_q_select depth f = function
     | [SelectNull] -> printfn "%snull" (depth2spaces depth) 
@@ -92,4 +103,9 @@ and traverse_exp depth f = function
     | SubQ q ->
         printfn "%ssubq:" (depth2spaces depth)
         traverse_qs (depth + 1) f q
+    | FunctionCall (id,args) ->
+        printfn "%s%s" (depth2spaces depth) "(call)"
+        traverse_exp (depth + 1) f id
+        printfn "%s%s" (depth2spaces depth) "(args)"
+        traverse_exp (depth + 1) f args
     | expr -> printfn "%s%A" (depth2spaces depth) expr

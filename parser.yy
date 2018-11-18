@@ -1,4 +1,6 @@
-%{%}
+%{
+
+%}
 
 /*
     Tokens
@@ -77,6 +79,7 @@
 %token NOKEY_NOW
 //values
 %token<string>VAL_ID
+%token<string>VAL_FLOAT
 %token<string>VAL_NUM
 %token<string>VAL_HEX
 %token<string>VAL_BIN
@@ -699,7 +702,12 @@ joined_table_parens:
         ;
 derived_table:
           table_subquery opt_table_alias opt_derived_column_list {
-            AbSyn.Expr.Temp
+            let subq = AbSyn.Expr.SubQ $1
+            let collist = $3
+            let subname = AbSyn.Expr.Null|>$2
+            let subalias1 = AbSyn.Expr.Binary ("col_list",subname,collist)
+            let subalias2 = AbSyn.Expr.Binary ("as",subq,subalias1)
+            subalias2
             }
         ;
 opt_derived_column_list:
@@ -707,7 +715,7 @@ opt_derived_column_list:
             AbSyn.Expr.Null
             }
         | PAR_LPAR simple_ident_list PAR_RPAR {
-            AbSyn.Expr.Temp
+            AbSyn.Expr.ExprList $2
             }
         ;
 simple_ident_list:
@@ -1209,7 +1217,7 @@ num_literal:
         //| LONG_NUM {}
         //| ULONGLONG_NUM {}
         //| DECIMAL_NUM {}
-        //| FLOAT_NUM {}
+        | VAL_FLOAT         { AbSyn.Expr.NodeTyped ("float",$1)}
         ;
 /*
         Functions
@@ -1217,22 +1225,22 @@ num_literal:
 function_call_keyword:
           KEY_DATE PAR_LPAR expr_list PAR_RPAR {
             let id = AbSyn.Expr.NodeTyped ("id","date")
-            AbSyn.Expr.Function (id,AbSyn.Expr.ExprList $3)
+            AbSyn.Expr.FunctionCall (id,AbSyn.Expr.ExprList $3)
             }
         ;
 function_call_nonkeyword:
           NOKEY_NOW PAR_LPAR expr PAR_RPAR {
             let id = AbSyn.Expr.NodeTyped ("id","now")
-            AbSyn.Expr.Function (id,$3)
+            AbSyn.Expr.FunctionCall (id,$3)
             }
         ;
 function_call_generic:
           ident_sys PAR_LPAR opt_udf_expr_list PAR_RPAR {
-            AbSyn.Expr.Function ($1,$3)
+            AbSyn.Expr.FunctionCall ($1,$3)
             }
         | ident OP_DOT ident PAR_LPAR opt_expr_list PAR_RPAR {
             let id_list = AbSyn.Expr.ExprListTyped ("id",[$1;$3])
-            AbSyn.Expr.Function (id_list,$5)
+            AbSyn.Expr.FunctionCall (id_list,$5)
             }
         ;
 opt_expr_list:

@@ -2,6 +2,22 @@ module Lexer
 open System.Collections.Generic
 open System.Text.RegularExpressions
 let mutable getToken_i = 0
+let removeMultComment =
+    let (|Sub|Sub2|Empty|) str =
+        if str = "" then Empty
+        elif str.Length = 1 then Sub (string str.[0],str.Substring(1))
+        else Sub2 (string str.[0],str.[0 .. 1],str.Substring(1))
+    let rec exec acc commOn = function
+        //return acc, comment_ended
+        | Empty -> (acc,not commOn)
+        | Sub (c,rest) -> exec (acc + c) commOn rest
+        | Sub2 (c,s2,rest) when commOn ->
+            if s2 = "*/" then exec acc false (rest.Substring(1))
+            else exec acc true rest
+        | Sub2 (c,s2,rest) ->
+            if s2 = "/*" then exec acc true (rest.Substring(1))
+            else exec (acc + c) false rest
+    exec "" false
 let lex inStr =
     let tokens = new List<string * Parser.token>()
     let addToken_id (idStr : string) =
@@ -99,27 +115,39 @@ let lex inStr =
                 Parser.token.OP_DOT
         (t,t2type)
     let addToken xIndex (tGroup : GroupCollection) =
-        if tGroup.[1].Value <> "" then
-            let v = tGroup.[1].Value
+        let i = 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
             tokens.Add(v,Parser.token.VAL_HEX v)
-        if tGroup.[2].Value <> "" then
-            let v = tGroup.[2].Value
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
             tokens.Add(v,Parser.token.VAL_HEX v)
-        if tGroup.[3].Value <> "" then
-            tokens.Add(addToken_id tGroup.[3].Value)
-        if tGroup.[4].Value <> "" then
-            let v = tGroup.[4].Value
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            tokens.Add(addToken_id tGroup.[i].Value)
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
             tokens.Add(v,Parser.token.VAL_STRING v)
-        if tGroup.[5].Value <> "" then
-            let v = tGroup.[5].Value
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
             tokens.Add(v,Parser.token.VAL_STRING v)
-        if tGroup.[6].Value <> "" then
-            let v = tGroup.[6].Value
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
+            tokens.Add(v,Parser.token.VAL_FLOAT v)
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            let v = tGroup.[i].Value
             tokens.Add(v,Parser.token.VAL_NUM v)
-        if tGroup.[7].Value <> "" then
-            tokens.Add(addToken_delim tGroup.[7].Value)
-        if tGroup.[8].Value <> "" then
-            tokens.Add(addToken_op tGroup.[8].Value)
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            tokens.Add(addToken_delim tGroup.[i].Value)
+        let i = i + 1
+        if tGroup.[i].Value <> "" then
+            tokens.Add(addToken_op tGroup.[i].Value)
     let regToken =
         //comments
         "-- [^\\n]*|\\#[^\\n]*|\\/\\*[^\\*]*\\*\\/|"+
@@ -128,6 +156,7 @@ let lex inStr =
         "([a-zA-Z_][a-zA-Z0-9_]*)|"+
         "\"([^\"]*)\"|"+
         "'([^\']*)'|"+
+        "([0-9]*\\.[0-9]+)|"+
         "([0-9]+)|"+
         "(;|,)|"+
         "(\\|\\|\\||\\+|-|\\*|\\/|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!|\\(|\\)|\\{|\\}|\\[|\\])|"+
@@ -143,7 +172,7 @@ let lex inStr =
     if residueStr <> "" then
         let len = tokens.Count
         if len = 0 then
-            failwith "start of input"
+            failwith "soi" //start of input
         else failwith (fst tokens.[len - 1])
     else
         tokens.Add("eoi",Parser.token.END_OF_INPUT)

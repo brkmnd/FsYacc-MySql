@@ -43,8 +43,9 @@ let parseString (s : string) =
 
 let testPrg prg =
     match parseString prg with
-    | [AbSyn.Qs.Error msg] -> msg
-    | l -> sprintf "success: %A" l
+    | [AbSyn.Qs.Error msg] ->
+        printfn "%s" msg
+    | l -> AbSyn.traverse (fun x -> x) l
 //parseString "noget"
 printfn "\ntests-----------"
 //select tests
@@ -58,6 +59,7 @@ let prg3 =
     " /* here's a comment */ "
 let prg4 = "select 1 as a"
 
+testPrg prg4
 
-//printfn "test1:\n%s" (testPrg inj2)
-AbSyn.traverse (fun x -> x) (parseString prg4)
+
+//printfn "test removeComm: %s" (fst (Lexer.removeMultComment inj2))

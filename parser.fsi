@@ -13,6 +13,7 @@ type token =
   | VAL_BIN of (string)
   | VAL_HEX of (string)
   | VAL_NUM of (string)
+  | VAL_FLOAT of (string)
   | VAL_ID of (string)
   | NOKEY_NOW
   | NOKEY_NESTED
@@ -126,6 +127,7 @@ type tokenId =
     | TOKEN_VAL_BIN
     | TOKEN_VAL_HEX
     | TOKEN_VAL_NUM
+    | TOKEN_VAL_FLOAT
     | TOKEN_VAL_ID
     | TOKEN_NOKEY_NOW
     | TOKEN_NOKEY_NESTED
