@@ -1,2 +1,2 @@
-mono ../FsLexYacc.7.0.6/build/fsyacc.exe --module "Parser" parser.yy
+mono ../FsLexYacc.7.0.6/build/fsyacc.exe --module "MbSqlParser" parser.yy
 fsharpi test.fsx
