@@ -2131,7 +2131,7 @@ let _fsyacc_reductions ()  =    [|
                    (
 # 557 "parser.yy"
                                                                           
-                                 [AbSyn.Expr.Null]
+                                 AbSyn.Expr.Null
                                  
                    )
 # 557 "parser.yy"
@@ -2168,7 +2168,7 @@ let _fsyacc_reductions ()  =    [|
 # 569 "parser.yy"
                                          
                                  //dual is dummy for no table
-                                 [AbSyn.Expr.Null]
+                                 AbSyn.Expr.Null
                                  
                    )
 # 569 "parser.yy"
@@ -2180,7 +2180,7 @@ let _fsyacc_reductions ()  =    [|
                 (
                    (
 # 573 "parser.yy"
-                                                      _1 
+                                                      AbSyn.ExprListTyped ("from-ids",_1) 
                    )
 # 573 "parser.yy"
                  : 'from_tables));

@@ -555,7 +555,7 @@ into_destination:
 /* Start of from clause - this contains join as well and is quite extensive */
 opt_from_clause:
           /* Empty. */ %prec PREC_EMPTY_FROM_CLAUSE {
-            [AbSyn.Expr.Null]
+            AbSyn.Expr.Null
             }
         | from_clause {
             $1
@@ -568,9 +568,9 @@ from_clause:
 from_tables:
           VAL_DUAL {
             //dual is dummy for no table
-            [AbSyn.Expr.Null]
+            AbSyn.Expr.Null
             }
-        | table_reference_list { $1 }
+        | table_reference_list { AbSyn.ExprListTyped ("from-ids",$1) }
         ;
 
 table_reference_list:

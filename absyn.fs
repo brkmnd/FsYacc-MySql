@@ -17,7 +17,7 @@ module AbSyn =
         | SelectOptions of Expr list
         | SelectItems of Expr list
         | SelectInto of Expr
-        | SelectFrom of Expr list
+        | SelectFrom of Expr
         | SelectWhere of Expr
         | SelectGroup of Expr
         | SelectHaving of Expr
@@ -34,52 +34,51 @@ module AbSyn =
         | Null
 module Traverse =
     open AbSyn
-    type TreeVal<'T> = {vname:string;vtype:string;args:'T list}
-    //type TreeFun<'T> = int -> 'T -> TreeVal -> 'T
-    let rec traverse f acc (v_n,v_nt,v_nta) = function
+    type TreeVal<'T> = {vname:string;vtype:string;vval:string;vargs:'T []}
+    let rec traverse f acc vfs = function
         | [] -> acc
         | x::xs ->
-            let acc1 = traverse_qs 0 f acc (v_n,v_nt,v_nta) x
-            let acc2 = traverse f acc1 (v_n,v_nt,v_nta) xs
+            let acc1 = traverse_qs 0 f acc vfs x
+            let acc2 = traverse f acc1 vfs xs
             acc2
-    and traverse_qs depth f acc (v_n,v_nt,v_nta) = function
+    and traverse_qs depth f acc vfs q =
+        let (v_n,v_nt,v_nta,v_ntv,v_ntva) = vfs
+        match q with
         | Select s ->
-            //printfn "%sselect" (depth2spaces depth)
-            let acc0 = f depth acc (v_n "select")
-            traverse_q_select (depth + 1) f acc0 (v_n,v_nt,v_nta) s
+            traverse_q_select (depth + 1) f acc vfs s
         | Options (op_q,op_list) ->
             //take care of op-list (order and so on)
-            let fs = (v_n,v_nt,v_nta)
-            let acc0 = f depth acc (v_n "options")
-            let acc1 = traverse_qs depth f acc0 (v_n,v_nt,v_nta) op_q
-            let acc2 =
+            let acc0 = traverse_qs depth f acc vfs op_q
+            let args =
                 List.fold
-                    (fun acc x ->
+                    (fun acc_args x ->
                         match x with
                         | OptOrder expr ->
-                            let v = v_n "order"
-                            f depth (traverse_exp (depth+1) f acc fs expr) v
+                            let arg = v_nta "order" "qoption" [|traverse_exp (depth+1) f acc vfs expr|]
+                            acc_args @ [f (depth) acc arg]
                         | OptLimit expr ->
-                            let v = v_n "limit"
-                            f depth (traverse_exp (depth+1) f acc fs expr) v
+                            let arg = v_nta "limit" "qoption" [|traverse_exp (depth+1) f acc vfs expr|]
+                            acc_args @ [f (depth) acc arg]
                         | OptLocking expr ->
-                            let v = v_n "locking"
-                            f depth (traverse_exp (depth+1) f acc fs expr) v
+                            let arg = v_nta "locking" "qoption" [|traverse_exp (depth+1) f acc vfs expr|]
+                            acc_args @ [f (depth) acc arg]
                         )
-                    acc1
+                    [acc0]
                     op_list
+            let acc2 = f depth acc (v_nta "options" "query" (List.toArray args))
             acc2
         | Union (t,q1,q2) ->
-            let acc0 = f depth acc (v_n "union")
-            let acc1 = traverse_qs (depth + 1) f acc0 (v_n,v_nt,v_nta) q1
-            let acc2 = traverse_qs (depth + 1) f acc1 (v_n,v_nt,v_nta) q2
-            acc
+            let acc0 = traverse_qs (depth + 1) f acc vfs q1
+            let acc1 = traverse_qs (depth + 1) f acc vfs q2
+            let acc2 = f depth acc (v_nta "union" "query" [|acc0;acc1|])
+            acc2
         | _ ->
             printfn "not-imp-yet traverse_qs"
             acc
-    and traverse_q_select depth f acc (v_n,v_nt,v_nta) = function
+    and traverse_q_select depth f acc vfs = function
         | [SelectNull] ->
             //printfn "%snull" (depth2spaces depth)
+            let (v_n,_,_,_,_) = vfs
             f depth acc (v_n "null")
         | [ SelectOptions opt_c
             SelectItems items_c
@@ -89,67 +88,79 @@ module Traverse =
             SelectGroup group_c
             SelectHaving having_c
             SelectWindow window_c ] ->
-                //printfn "%sitems:" (depth2spaces depth)
-                let acc0 = f depth acc (v_n "items")
-                let acc1 = traverse_exp_list (depth + 1) f acc0 (v_n,v_nt,v_nta) items_c
-                //printfn "%sfrom:" (depth2spaces depth)
-                let acc2 = f depth acc1 (v_n "from")
-                let acc3 = traverse_exp_list (depth + 1) f acc2 (v_n,v_nt,v_nta) from_c
-                //printfn "%swhere:" (depth2spaces depth)
-                let acc4 = f depth acc3 (v_n "where")
-                let acc5 = traverse_exp (depth + 1) f acc4 (v_n,v_nt,v_nta) where_c
-                acc5
+                let (v_n,v_nt,v_nta,v_ntv,v_ntva) = vfs
+                let acc0 = traverse_exp (depth + 1) f acc vfs (ExprList opt_c)
+                let acc1 = traverse_exp (depth + 1) f acc vfs (ExprList items_c)
+                let acc2 = traverse_exp (depth + 1) f acc vfs into_c
+                let acc3 = traverse_exp (depth + 1) f acc vfs from_c
+                let acc4 = traverse_exp (depth + 1) f acc vfs where_c
+                let acc5 = traverse_exp (depth + 1) f acc vfs group_c
+                let acc6 = traverse_exp (depth + 1) f acc vfs having_c
+                let acc7 = traverse_exp (depth + 1) f acc vfs window_c
+                let acc8 = f depth acc (v_nta "select" "query" [|acc0;acc1;acc2;acc3;acc4;acc5;acc6;acc7|])
+                acc8
         | _ ->
             printfn "not imp yet - traverse_q_select"
             acc
-    and traverse_exp_list depth f acc (v_n,v_nt,v_nta) = function
-        | [] -> acc
-        | expr::exprs ->
-            let acc0 = traverse_exp depth f acc (v_n,v_nt,v_nta) expr
-            let acc1 = traverse_exp_list depth f acc0 (v_n,v_nt,v_nta) exprs
-            acc1
-    and traverse_exp depth f acc (v_n,v_nt,v_nta) = function
-        | Expr.Null -> f depth acc (v_n "null")
-            //printfn "%snull" (depth2spaces depth)
-        | Node v -> f depth acc (v_n "node")
-        | NodeTyped (t,v) -> f depth acc (v_n "node")
+    and traverse_exp_list depth f acc vfs l =
+        List.map (traverse_exp depth f acc vfs) l
+    and traverse_exp depth f acc vfs expr =
+        let (v_n,v_nt,v_nta,v_ntv,v_ntva) = vfs
+        match expr with
+        | Expr.Null ->
+            f depth acc (v_ntv "node" "" "null")
+        | Node v ->
+            f depth acc (v_ntv "node" "" v)
+        | NodeTyped (t,v) ->
+            f depth acc (v_ntv "node" t v)
+        | Unary (op,operand) ->
+            let acco = traverse_exp (depth+1) f acc vfs operand
+            let acc0 = f depth acc (v_nta op "unary" [|acco|])
+            acc0
         | Binary (op,l,r) ->
-            //printfn "%s%s:" (depth2spaces depth) op
-            let accl = traverse_exp depth f acc (v_n,v_nt,v_nta) l
-            let accr = traverse_exp depth f accl (v_n,v_nt,v_nta) r
-            let acc0 = f depth acc (v_nta op "binary" [acc])
-            //let acc1 = traverse_exp (depth + 1) f acc0 l
-            //let acc2 = traverse_exp (depth + 1) f acc1 r
-            acc
+            let accl = traverse_exp (depth+1) f acc vfs l
+            let accr = traverse_exp (depth+1) f acc vfs r
+            let acc0 = f depth acc (v_nta op "binary" [|accl;accr|])
+            acc0
         | ExprList elist ->
-            //printfn "%slist:" (depth2spaces depth)
-            //let acc0 = f depth acc (val_name "list")
-            //let acc1 = traverse_exp_list (depth + 1) f acc0 elist
-            acc
+            let acc_list = traverse_exp_list (depth + 1) f acc vfs elist
+            let acc1 = f depth acc (v_nta "list" "" (List.toArray acc_list))
+            acc1
         | ExprListTyped (t,elist) ->
-            //printfn "%slist<%s>:" (depth2spaces depth) t
-            //let acc0 = f depth acc (val_name_type "list" t)
-            //let acc1 = traverse_exp_list (depth + 1) f acc0 elist
-            acc
+            let acc_list = traverse_exp_list (depth + 1) f acc vfs elist
+            let acc1 = f depth acc (v_nta "list" t (List.toArray acc_list))
+            acc1
         | SubQ q ->
-            //printfn "%ssubq:" (depth2spaces depth)
-            //let acc0 = f depth acc (val_name "sub-q")
-            //let acc1 = traverse_qs (depth + 1) f acc0 q
-            acc
+            let acc0 = traverse_qs (depth + 1) f acc vfs q
+            let acc1 = f depth acc (v_nta "subq" "unary" [|acc0|])
+            acc1
         | FunctionCall (id,args) ->
-            //printfn "%s%s" (depth2spaces depth) "(call)"
-            //let acc_id = traverse_exp (depth + 1) f acc id
-            //let acc_args = traverse_exp (depth + 1) f acc args
-            //let acc0 = f depth acc (val_name_type_v "call" "" acc_id acc_args)
-            //printfn "%s%s" (depth2spaces depth) "(args)"
-            //traverse_exp (depth + 1) f args
-            acc
+            let acc_id = traverse_exp (depth + 1) f acc vfs id
+            let acc_args = traverse_exp (depth + 1) f acc vfs args
+            let acc0 = f depth acc (v_nta "fun" "call" [|acc_id;acc_args|])
+            acc0
+
+        | Temp ->
+            f depth acc (v_nt "node" "temp")
         | expr ->
+            printfn "hertil:%A" expr
             acc
     type Go<'T> =
         static member gen (f,acc,l) =
-            let val_name n = {vname=n;vtype="";args=[]} : TreeVal<'T>
-            let val_name_type n t = {vname=n;vtype=t;args=[]} : TreeVal<'T>
-            let val_name_type_args n t args = {vname=n;vtype=t;args=args} : TreeVal<'T>
-            let fs = (val_name,val_name_type,val_name_type_args)
+            let val_name n = {vname=n;vtype="";vval="";vargs=[||]} : TreeVal<'T>
+            let val_name_type n t = {vname=n;vtype=t;vval="";vargs=[||]} : TreeVal<'T>
+            let val_name_type_args n t args = {vname=n;vtype=t;vval="";vargs=args} : TreeVal<'T>
+            let val_name_type_v n t v = {
+                vname = n
+                vtype = t
+                vval = v
+                vargs = [||]
+                }
+            let val_name_type_v_args n t v args = {
+                vname = n
+                vtype = t
+                vval = v
+                vargs = args
+                }
+            let fs = (val_name,val_name_type,val_name_type_args,val_name_type_v,val_name_type_v_args)
             traverse f acc fs l
