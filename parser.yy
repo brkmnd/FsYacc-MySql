@@ -1,5 +1,4 @@
 %{
-    open MbSql
 %}
 
 /*
@@ -118,11 +117,11 @@
 %right OP_INTO
 
 %start start_entry
-%type<AbSyn.Qs list> start_entry
+%type<MbSqlAbSyn.Qs list> start_entry
 
 %%
 /*
-    Parses to a structure of types given in AbSyn.
+    Parses to a structure of types given in MbSqlAbSyn.
     The parser can be stopped with failwith "whatever"
     - most likely "syntax error". Then a syntax error
     will be returned as given in mysql.fs 
@@ -270,11 +269,11 @@ query_expression:
           opt_limit_clause
           opt_locking_clause_list {
           let options = [
-            AbSyn.Qs_Option.OptOrder $2
-            AbSyn.Qs_Option.OptLimit $3
-            AbSyn.Qs_Option.OptLocking $4
+            MbSqlAbSyn.Qs_Option.OptOrder $2
+            MbSqlAbSyn.Qs_Option.OptLimit $3
+            MbSqlAbSyn.Qs_Option.OptLocking $4
             ]
-          AbSyn.Qs.Options ($1,options)
+          MbSqlAbSyn.Qs.Options ($1,options)
           }
         /*
         | with_clause
@@ -327,8 +326,8 @@ query_expression:
         ;
 /* order, limit, locking */
 opt_order_clause:
-          /* empty */                           { AbSyn.Expr.Null }
-        | order_clause                          { AbSyn.Expr.ExprList $1 }
+          /* empty */                           { MbSqlAbSyn.Expr.Null }
+        | order_clause                          { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 order_clause:
           KEY_ORDER KEY_BY order_list           { $3 }
@@ -339,7 +338,7 @@ order_list:
         ;
 order_expr:
           expr opt_ordering_direction {
-            AbSyn.Expr.Unary ($2,$1)
+            MbSqlAbSyn.Expr.Unary ($2,$1)
             }
         ;
 opt_ordering_direction:
@@ -351,8 +350,8 @@ ordering_direction:
         | KEY_DESC              { "desc" }
         ;
 opt_limit_clause:
-          /* empty */               { AbSyn.Expr.Null }
-        | limit_clause              { AbSyn.Expr.ExprList $1 }
+          /* empty */               { MbSqlAbSyn.Expr.Null }
+        | limit_clause              { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 limit_clause:
           KEY_LIMIT limit_options   { $2 }
@@ -367,15 +366,15 @@ limit_option:
         //| param_marker      {}
         //| ULONGLONG_NUM     {}
         //| LONG_NUM          {}
-        | VAL_NUM           { AbSyn.Expr.NodeTyped ("num",$1) }
+        | VAL_NUM           { MbSqlAbSyn.Expr.NodeTyped ("num",$1) }
         ;
 opt_simple_limit:
-          /* empty */               { AbSyn.Expr.Temp }
-        | KEY_LIMIT limit_option    { AbSyn.Expr.Temp }
+          /* empty */               { MbSqlAbSyn.Expr.Temp }
+        | KEY_LIMIT limit_option    { MbSqlAbSyn.Expr.Temp }
         ;
 opt_locking_clause_list:
-          /* Empty */           { AbSyn.Expr.Null }
-        | locking_clause_list   { AbSyn.Expr.ExprList $1 }
+          /* Empty */           { MbSqlAbSyn.Expr.Null }
+        | locking_clause_list   { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 
 locking_clause_list:
@@ -384,7 +383,7 @@ locking_clause_list:
         ;
 
 locking_clause:
-           KEY_FOR { AbSyn.Expr.Temp }
+           KEY_FOR { MbSqlAbSyn.Expr.Temp }
         //  KEY_FOR lock_strength opt_locked_row_action
         //| KEY_FOR lock_strength table_locking_list opt_locked_row_action
         //| LOCK_SYM IN_SYM SHARE_SYM MODE_SYM
@@ -393,18 +392,18 @@ locking_clause:
 query_expression_body:
           query_primary { $1 }
         | query_expression_body OP_UNION union_option query_primary {
-            AbSyn.Qs.Union ($3,$1,$4)
+            MbSqlAbSyn.Qs.Union ($3,$1,$4)
             }
         | query_expression_parens OP_UNION union_option query_primary {
-            AbSyn.Qs.Union ($3,$1,$4)
+            MbSqlAbSyn.Qs.Union ($3,$1,$4)
             }
         | query_expression_body OP_UNION union_option 
           query_expression_parens {
-            AbSyn.Qs.Union ($3,$1,$4)
+            MbSqlAbSyn.Qs.Union ($3,$1,$4)
             }
         | query_expression_parens OP_UNION union_option 
           query_expression_parens {
-            AbSyn.Qs.Union ($3,$1,$4)
+            MbSqlAbSyn.Qs.Union ($3,$1,$4)
             }
         ;
 union_option:
@@ -430,15 +429,15 @@ query_specification:
           opt_group_clause
           opt_having_clause
           opt_window_clause {
-            AbSyn.Qs.Select [
-                AbSyn.Q_Select.SelectOptions $2
-                AbSyn.Q_Select.SelectItems $3
-                AbSyn.Q_Select.SelectInto $4
-                AbSyn.Q_Select.SelectFrom $5
-                AbSyn.Q_Select.SelectWhere $6
-                AbSyn.Q_Select.SelectGroup $7
-                AbSyn.Q_Select.SelectHaving $8
-                AbSyn.Q_Select.SelectWindow $9
+            MbSqlAbSyn.Qs.Select [
+                MbSqlAbSyn.Q_Select.SelectOptions $2
+                MbSqlAbSyn.Q_Select.SelectItems $3
+                MbSqlAbSyn.Q_Select.SelectInto $4
+                MbSqlAbSyn.Q_Select.SelectFrom $5
+                MbSqlAbSyn.Q_Select.SelectWhere $6
+                MbSqlAbSyn.Q_Select.SelectGroup $7
+                MbSqlAbSyn.Q_Select.SelectHaving $8
+                MbSqlAbSyn.Q_Select.SelectWindow $9
                 ]
             }
         | KEY_SELECT
@@ -450,15 +449,15 @@ query_specification:
           opt_having_clause
           opt_window_clause {
             //same as above but no into
-            AbSyn.Qs.Select [
-                AbSyn.Q_Select.SelectOptions $2
-                AbSyn.Q_Select.SelectItems $3
-                AbSyn.Q_Select.SelectInto (AbSyn.Expr.Null)
-                AbSyn.Q_Select.SelectFrom $4
-                AbSyn.Q_Select.SelectWhere $5
-                AbSyn.Q_Select.SelectGroup $6
-                AbSyn.Q_Select.SelectHaving $7
-                AbSyn.Q_Select.SelectWindow $8
+            MbSqlAbSyn.Qs.Select [
+                MbSqlAbSyn.Q_Select.SelectOptions $2
+                MbSqlAbSyn.Q_Select.SelectItems $3
+                MbSqlAbSyn.Q_Select.SelectInto (MbSqlAbSyn.Expr.Null)
+                MbSqlAbSyn.Q_Select.SelectFrom $4
+                MbSqlAbSyn.Q_Select.SelectWhere $5
+                MbSqlAbSyn.Q_Select.SelectGroup $6
+                MbSqlAbSyn.Q_Select.SelectHaving $7
+                MbSqlAbSyn.Q_Select.SelectWindow $8
                 ]
             }
         ;
@@ -474,33 +473,33 @@ select_option:
           query_spec_option    { $1 }
         | KEY_SQL_NO_CACHE {
             //might be deprecated
-            AbSyn.Expr.NodeTyped ("option","sql no cache")
+            MbSqlAbSyn.Expr.NodeTyped ("option","sql no cache")
             }
         ;
 query_spec_option:
           OP_STRAIGHT_JOIN {
-            AbSyn.Expr.NodeTyped ("option","straight join")
+            MbSqlAbSyn.Expr.NodeTyped ("option","straight join")
             }
         | KEY_HIGH_PRIORITY {
-            AbSyn.Expr.NodeTyped ("option","high priority")
+            MbSqlAbSyn.Expr.NodeTyped ("option","high priority")
             }
         | KEY_DISTINCT {
-            AbSyn.Expr.NodeTyped ("option","distinct")
+            MbSqlAbSyn.Expr.NodeTyped ("option","distinct")
             }
         | KEY_SQL_SMALL_RESULT {
-            AbSyn.Expr.NodeTyped ("option","small result")
+            MbSqlAbSyn.Expr.NodeTyped ("option","small result")
             }
         | KEY_SQL_BIG_RESULT {
-            AbSyn.Expr.NodeTyped ("option","big result")
+            MbSqlAbSyn.Expr.NodeTyped ("option","big result")
             }
         | KEY_SQL_BUFFER_RESULT {
-            AbSyn.Expr.NodeTyped ("option","buffer result")
+            MbSqlAbSyn.Expr.NodeTyped ("option","buffer result")
             }
         | KEY_SQL_CALC_FOUND_ROWS {
-            AbSyn.Expr.NodeTyped ("option","calc found rows")
+            MbSqlAbSyn.Expr.NodeTyped ("option","calc found rows")
             }
         | KEY_ALL {
-            AbSyn.Expr.NodeTyped ("option","all")
+            MbSqlAbSyn.Expr.NodeTyped ("option","all")
             }
         ;
 select_item_list:
@@ -511,32 +510,32 @@ select_item_list:
             [$1]
             }
         | OP_TIMES {
-            [AbSyn.Expr.Binary ("as",AbSyn.Expr.Node "*",AbSyn.Expr.Null)]
+            [MbSqlAbSyn.Expr.Binary ("as",MbSqlAbSyn.Expr.Node "*",MbSqlAbSyn.Expr.Null)]
             }
         ;
 
 select_item:
           table_wild {
-            AbSyn.Expr.Binary ("as",$1,AbSyn.Expr.Null)
+            MbSqlAbSyn.Expr.Binary ("as",$1,MbSqlAbSyn.Expr.Null)
             }
         | expr select_alias {
             //$$= NEW_PTN PTI_expr_with_alias(@$, $1, @1.cpp, $2);
-            AbSyn.Expr.Binary ("as",$1,$2)
+            MbSqlAbSyn.Expr.Binary ("as",$1,$2)
             }
         ;
 select_alias:
-          /* empty */       { AbSyn.Expr.Null }
+          /* empty */       { MbSqlAbSyn.Expr.Null }
         | KEY_AS ident      { $2 }
-        | KEY_AS VAL_STRING { AbSyn.Expr.NodeTyped ("id",$2) }
+        | KEY_AS VAL_STRING { MbSqlAbSyn.Expr.NodeTyped ("id",$2) }
         | ident             { $1 }
-        | VAL_STRING        { AbSyn.Expr.NodeTyped ("id",$1) }
+        | VAL_STRING        { MbSqlAbSyn.Expr.NodeTyped ("id",$1) }
         ;
 /* Start of into clause */
 into_clause:
           OP_INTO into_destination { $2 }
         ;
 into_destination:
-        KEY_OUTFILE { AbSyn.Expr.Temp }
+        KEY_OUTFILE { MbSqlAbSyn.Expr.Temp }
         /*
           KEY_OUTFILE TEXT_STRING_filesystem
           opt_load_data_charset
@@ -555,7 +554,7 @@ into_destination:
 /* Start of from clause - this contains join as well and is quite extensive */
 opt_from_clause:
           /* Empty. */ %prec PREC_EMPTY_FROM_CLAUSE {
-            AbSyn.Expr.Null
+            MbSqlAbSyn.Expr.Null
             }
         | from_clause {
             $1
@@ -568,9 +567,9 @@ from_clause:
 from_tables:
           VAL_DUAL {
             //dual is dummy for no table
-            AbSyn.Expr.Null
+            MbSqlAbSyn.Expr.Null
             }
-        | table_reference_list { AbSyn.ExprListTyped ("from-ids",$1) }
+        | table_reference_list { MbSqlAbSyn.ExprListTyped ("from-ids",$1) }
         ;
 
 table_reference_list:
@@ -588,25 +587,25 @@ table_reference:
         ;
 joined_table:
           table_reference inner_join_type table_reference OP_ON expr {
-            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("on",$3,$5))
+            MbSqlAbSyn.Expr.Binary ($2,$1,MbSqlAbSyn.Expr.Binary("on",$3,$5))
             }
         | table_reference inner_join_type table_reference OP_USING
           PAR_LPAR using_list PAR_RPAR {
-            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("using",$3,$6))
+            MbSqlAbSyn.Expr.Binary ($2,$1,MbSqlAbSyn.Expr.Binary("using",$3,$6))
             }
         | table_reference outer_join_type table_reference OP_ON expr {
-            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("on",$3,$5))
+            MbSqlAbSyn.Expr.Binary ($2,$1,MbSqlAbSyn.Expr.Binary("on",$3,$5))
             }
         | table_reference outer_join_type table_reference OP_USING
           PAR_LPAR using_list PAR_RPAR {
-            AbSyn.Expr.Binary ($2,$1,AbSyn.Expr.Binary("using",$3,$6))
+            MbSqlAbSyn.Expr.Binary ($2,$1,MbSqlAbSyn.Expr.Binary("using",$3,$6))
             }
         | table_reference inner_join_type table_reference
           %prec PREC_CONDITIONLESS_JOIN {
-            AbSyn.Expr.Binary ($2,$1,$3)
+            MbSqlAbSyn.Expr.Binary ($2,$1,$3)
             }
         | table_reference natural_join_type table_factor {
-            AbSyn.Expr.Binary ($2,$1,$3)
+            MbSqlAbSyn.Expr.Binary ($2,$1,$3)
             }
         ;
 /* opts below return join-types to concat with above in expression names */
@@ -638,8 +637,8 @@ opt_outer:
   a new rule for partition_list.
 */
 opt_use_partition:
-          /* empty */       { AbSyn.Expr.Null }
-        | use_partition     { AbSyn.Expr.Null }
+          /* empty */       { MbSqlAbSyn.Expr.Null }
+        | use_partition     { MbSqlAbSyn.Expr.Null }
         ;
 
 use_partition:
@@ -675,7 +674,7 @@ table_factor:
         | single_table_parens           { $1 }
         | derived_table                 { $1 }
         | joined_table_parens           { $1 }
-        | table_reference_list_parens   { AbSyn.Expr.ExprList $1 }
+        | table_reference_list_parens   { MbSqlAbSyn.Expr.ExprList $1 }
         | table_function                { $1 }
         ;
 table_reference_list_parens:
@@ -693,7 +692,7 @@ single_table_parens:
 single_table:
           table_ident opt_use_partition opt_table_alias opt_key_definition {
             //$3 is ExprId -> ExpExprAlias 
-            AbSyn.Expr.ExprListTyped ("id",[$1|>$3;$4])
+            MbSqlAbSyn.Expr.ExprListTyped ("id",[$1|>$3;$4])
             }
         ;
 joined_table_parens:
@@ -702,20 +701,20 @@ joined_table_parens:
         ;
 derived_table:
           table_subquery opt_table_alias opt_derived_column_list {
-            let subq = AbSyn.Expr.SubQ $1
+            let subq = MbSqlAbSyn.Expr.SubQ $1
             let collist = $3
-            let subname = AbSyn.Expr.Null|>$2
-            let subalias1 = AbSyn.Expr.Binary ("col_list",subname,collist)
-            let subalias2 = AbSyn.Expr.Binary ("as",subq,subalias1)
+            let subname = MbSqlAbSyn.Expr.Null|>$2
+            let subalias1 = MbSqlAbSyn.Expr.Binary ("col_list",subname,collist)
+            let subalias2 = MbSqlAbSyn.Expr.Binary ("as",subq,subalias1)
             subalias2
             }
         ;
 opt_derived_column_list:
           /* empty */ {
-            AbSyn.Expr.Null
+            MbSqlAbSyn.Expr.Null
             }
         | PAR_LPAR simple_ident_list PAR_RPAR {
-            AbSyn.Expr.ExprList $2
+            MbSqlAbSyn.Expr.ExprList $2
             }
         ;
 simple_ident_list:
@@ -728,7 +727,7 @@ table_function:
           opt_table_alias {
             // Alias isn't optional, follow derived's behavior
             //Not sure what this is, so leave as temp for now
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         ;
 columns_clause:
@@ -740,43 +739,43 @@ columns_list:
         ;
 jt_column:
           ident KEY_FOR NOKEY_ORDINALITY {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | ident set_type jt_column_type NOKEY_PATH text_string_sys
           opt_on_empty_or_error {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | NOKEY_NESTED NOKEY_PATH text_string_sys columns_clause {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         ;
 jt_column_type:
-          /* empty */   { AbSyn.Expr.Temp }
-        | KEY_EXISTS    { AbSyn.Expr.Temp }
+          /* empty */   { MbSqlAbSyn.Expr.Temp }
+        | KEY_EXISTS    { MbSqlAbSyn.Expr.Temp }
         ;
 opt_on_empty_or_error:
-          /* empty */               { AbSyn.Expr.Temp }
-        | opt_on_empty              { AbSyn.Expr.Temp }
-        | opt_on_error              { AbSyn.Expr.Temp }
-        | opt_on_empty opt_on_error { AbSyn.Expr.Temp }
-        | opt_on_error opt_on_empty { AbSyn.Expr.Temp }
+          /* empty */               { MbSqlAbSyn.Expr.Temp }
+        | opt_on_empty              { MbSqlAbSyn.Expr.Temp }
+        | opt_on_error              { MbSqlAbSyn.Expr.Temp }
+        | opt_on_empty opt_on_error { MbSqlAbSyn.Expr.Temp }
+        | opt_on_error opt_on_empty { MbSqlAbSyn.Expr.Temp }
         ;
 opt_on_empty:
-          jt_on_response OP_ON VAL_EMPTY       { AbSyn.Expr.Temp }
+          jt_on_response OP_ON VAL_EMPTY       { MbSqlAbSyn.Expr.Temp }
         ;
 opt_on_error:
-          jt_on_response OP_ON VAL_ERROR       { AbSyn.Expr.Temp }
+          jt_on_response OP_ON VAL_ERROR       { MbSqlAbSyn.Expr.Temp }
         ;
 jt_on_response:
-          VAL_ERROR                     { AbSyn.Expr.Temp }
-        | VAL_NULL                      { AbSyn.Expr.Temp }
-        | KEY_DEFAULT text_string_sys   { AbSyn.Expr.Temp }
+          VAL_ERROR                     { MbSqlAbSyn.Expr.Temp }
+        | VAL_NULL                      { MbSqlAbSyn.Expr.Temp }
+        | KEY_DEFAULT text_string_sys   { MbSqlAbSyn.Expr.Temp }
         ;
 index_hint_clause:
-          /* empty */               { AbSyn.Expr.Null }
-        | KEY_FOR OP_JOIN           { AbSyn.Expr.Temp }
-        | KEY_FOR KEY_ORDER KEY_BY  { AbSyn.Expr.Temp }
-        | KEY_FOR OP_GROUP KEY_BY   { AbSyn.Expr.Temp }
+          /* empty */               { MbSqlAbSyn.Expr.Null }
+        | KEY_FOR OP_JOIN           { MbSqlAbSyn.Expr.Temp }
+        | KEY_FOR KEY_ORDER KEY_BY  { MbSqlAbSyn.Expr.Temp }
+        | KEY_FOR OP_GROUP KEY_BY   { MbSqlAbSyn.Expr.Temp }
         ;
 index_hint_type:
           KEY_FORCE  { "force" }
@@ -785,11 +784,11 @@ index_hint_type:
 index_hint_definition:
           index_hint_type key_or_index index_hint_clause
           PAR_LPAR key_usage_list PAR_RPAR {
-            AbSyn.Expr.Temp 
+            MbSqlAbSyn.Expr.Temp 
             }
         | KEY_USE key_or_index index_hint_clause
           PAR_LPAR opt_key_usage_list PAR_RPAR {
-            AbSyn.Expr.Temp 
+            MbSqlAbSyn.Expr.Temp 
             }
        ;
 index_hints_list:
@@ -799,8 +798,8 @@ index_hints_list:
             }
         ;
 opt_index_hints_list:
-          /* empty */           { AbSyn.Expr.Null }
-        | index_hints_list      { AbSyn.Expr.ExprList $1 }
+          /* empty */           { MbSqlAbSyn.Expr.Null }
+        | index_hints_list      { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 /* End of from clause */
 
@@ -809,7 +808,7 @@ opt_where_clause:
         opt_where_clause_expr { $1 }
         ;
 opt_where_clause_expr:
-        /* empty */  { AbSyn.Expr.Null }
+        /* empty */  { MbSqlAbSyn.Expr.Null }
         | KEY_WHERE expr { $2 }
         ;
 /* End of where clause */
@@ -822,9 +821,9 @@ grouping_expr was present to return a different type,
 but the production was just an expression. Has been skipped.
 */
 opt_group_clause:
-          /* empty */                           { AbSyn.Expr.Null }
+          /* empty */                           { MbSqlAbSyn.Expr.Null }
         | OP_GROUP KEY_BY group_list olap_opt   {
-            AbSyn.Expr.ExprListTyped ($4,$3)
+            MbSqlAbSyn.Expr.ExprListTyped ($4,$3)
             }
         ;
 group_list:
@@ -846,14 +845,14 @@ olap_opt:
 /* End of group clause */
 /* Start of having clause */
 opt_having_clause:
-          /* empty */       { AbSyn.Expr.Null }
+          /* empty */       { MbSqlAbSyn.Expr.Null }
         | KEY_HAVING expr   { $2 }
         ;
 /* End of having clause */
 /* Start of window clause */
 opt_window_clause:
-          /* Nothing */                     { AbSyn.Expr.Null }
-        | KEY_WINDOW window_definition_list { AbSyn.Expr.ExprList $2 }
+          /* Nothing */                     { MbSqlAbSyn.Expr.Null }
+        | KEY_WINDOW window_definition_list { MbSqlAbSyn.Expr.ExprList $2 }
         ;
 
 window_definition_list:
@@ -863,7 +862,7 @@ window_definition_list:
 
 window_definition:
           window_name KEY_AS window_spec {
-            AbSyn.Expr.Binary ("as",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("as",$1,$3)
             }
         ;
 window_name:
@@ -871,26 +870,26 @@ window_name:
         ;
 window_spec:
           /* spec is left as. not completed */
-          PAR_LPAR /* window_spec_details */ PAR_RPAR { AbSyn.Expr.Null }
+          PAR_LPAR /* window_spec_details */ PAR_RPAR { MbSqlAbSyn.Expr.Null }
         ;
 /* End of window clause */
 opt_key_usage_list:
-          /* empty */       { AbSyn.Expr.Temp }
-        | key_usage_list    { AbSyn.Expr.Temp }
+          /* empty */       { MbSqlAbSyn.Expr.Temp }
+        | key_usage_list    { MbSqlAbSyn.Expr.Temp }
         ;
 
 key_usage_element:
-          ident             { AbSyn.Expr.Temp }
-        | KEY_PRIMARY       { AbSyn.Expr.Temp }
+          ident             { MbSqlAbSyn.Expr.Temp }
+        | KEY_PRIMARY       { MbSqlAbSyn.Expr.Temp }
         ;
 
 key_usage_list:
-          key_usage_element                             { AbSyn.Expr.Temp }
-        | key_usage_list DELIM_COMMA key_usage_element  { AbSyn.Expr.Temp }
+          key_usage_element                             { MbSqlAbSyn.Expr.Temp }
+        | key_usage_list DELIM_COMMA key_usage_element  { MbSqlAbSyn.Expr.Temp }
         ;
 
 using_list:
-          ident_string_list { AbSyn.Expr.ExprListTyped ("id",$1) }
+          ident_string_list { MbSqlAbSyn.Expr.ExprListTyped ("id",$1) }
         ;
 
 ident_string_list:
@@ -905,15 +904,15 @@ opt_as_or_eq:
 opt_table_alias:
           /* empty */        {
             fun tid ->
-                AbSyn.Expr.Binary (
+                MbSqlAbSyn.Expr.Binary (
                     "as",
                     tid,
-                    AbSyn.Expr.Null
+                    MbSqlAbSyn.Expr.Null
                     )
             }
         | opt_as_or_eq ident {
             fun tid ->
-                AbSyn.Expr.Binary (
+                MbSqlAbSyn.Expr.Binary (
                     $1,
                     tid,
                     $2
@@ -949,7 +948,7 @@ opt_unique:
         Types
 */
 set_type:
-        VAL_BOOL        { AbSyn.Expr.Temp }
+        VAL_BOOL        { MbSqlAbSyn.Expr.Temp }
 /*
         Expressions
 */
@@ -959,39 +958,39 @@ expr_list:
         ;
 expr:
           expr op_or expr %prec OP_OR {
-            AbSyn.Expr.Binary ("or",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("or",$1,$3)
             }
         | expr OP_XOR expr %prec OP_XOR {
-            AbSyn.Expr.Binary ("xor",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("xor",$1,$3)
             }
         | expr op_and expr %prec OP_AND {
-            AbSyn.Expr.Binary ("and",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("and",$1,$3)
             }
         | OP_NOT expr %prec OP_NOT {
-            AbSyn.Expr.Unary ("not",$2)
+            MbSqlAbSyn.Expr.Unary ("not",$2)
             }
         | bool_pri KEY_IS VAL_TRUE %prec KEY_IS {
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("bool","true"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("bool","true"))
             }
         | bool_pri KEY_IS op_not VAL_TRUE %prec KEY_IS {
             //Do it non reversible - that is cannot map back since 
             //not true == false
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("bool","false"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("bool","false"))
             }
         | bool_pri KEY_IS VAL_FALSE %prec KEY_IS {
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("bool","false"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("bool","false"))
             }
         | bool_pri KEY_IS op_not VAL_FALSE %prec KEY_IS {
             //Do it non reversible - that is cannot map back. As above
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("bool","true"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("bool","true"))
             }
         | bool_pri KEY_IS VAL_UNKNOWN %prec KEY_IS {
             //I cant quite figure what unknown is. So treat as key
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("key","unknown"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("key","unknown"))
             }
         | bool_pri KEY_IS op_not VAL_UNKNOWN %prec KEY_IS {
             //The negation of unknown here just become known
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("key","known"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("key","known"))
             }
         | bool_pri {
             $1
@@ -999,14 +998,14 @@ expr:
         ;
 bool_pri:
           bool_pri KEY_IS VAL_NULL %prec KEY_IS {
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.NodeTyped ("key","null"))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.NodeTyped ("key","null"))
             }
         | bool_pri KEY_IS op_not VAL_NULL %prec KEY_IS {
             //Done the long way
-            AbSyn.Expr.Binary ("is",$1,AbSyn.Expr.Unary ("not",AbSyn.Expr.NodeTyped("key","null")))
+            MbSqlAbSyn.Expr.Binary ("is",$1,MbSqlAbSyn.Expr.Unary ("not",MbSqlAbSyn.Expr.NodeTyped("key","null")))
           }
         | bool_pri comp_op predicate {
-            AbSyn.Expr.Binary ($2,$1,$3)
+            MbSqlAbSyn.Expr.Binary ($2,$1,$3)
             }
         //| bool_pri comp_op all_or_any table_subquery %prec OP_EQ {}
         | predicate {
@@ -1015,31 +1014,31 @@ bool_pri:
         ;
 predicate:
           bit_expr OP_IN table_subquery {
-            AbSyn.Expr.Binary ("in",$1,AbSyn.Expr.SubQ $3)
+            MbSqlAbSyn.Expr.Binary ("in",$1,MbSqlAbSyn.Expr.SubQ $3)
             }
         | bit_expr op_not OP_IN table_subquery {
-            AbSyn.Expr.Binary ("in",$1,AbSyn.Expr.SubQ $4)
+            MbSqlAbSyn.Expr.Binary ("in",$1,MbSqlAbSyn.Expr.SubQ $4)
             }
         | bit_expr OP_IN PAR_LPAR expr PAR_RPAR {
-            AbSyn.Expr.Binary ("in",$1,$4)
+            MbSqlAbSyn.Expr.Binary ("in",$1,$4)
             }
         | bit_expr OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | bit_expr op_not OP_IN PAR_LPAR expr PAR_RPAR {
-            AbSyn.Expr.Unary ("not",AbSyn.Expr.Binary ("in",$1,$5))
+            MbSqlAbSyn.Expr.Unary ("not",MbSqlAbSyn.Expr.Binary ("in",$1,$5))
             }
         | bit_expr op_not OP_IN PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | bit_expr OP_BETWEEN bit_expr OP_AND predicate {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | bit_expr op_not OP_BETWEEN bit_expr OP_AND predicate {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | bit_expr OP_SOUNDS OP_LIKE bit_expr {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         //| bit_expr OP_LIKE simple_expr opt_escape {}
         //| bit_expr op_not OP_LIKE simple_expr opt_escape {}
@@ -1052,42 +1051,42 @@ predicate:
 
 bit_expr:
           bit_expr OP_BOR bit_expr %prec OP_BOR {
-            AbSyn.Expr.Binary ("|",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("|",$1,$3)
             }
         | bit_expr OP_BAND bit_expr %prec OP_BAND {
-           AbSyn.Expr.Binary ("&",$1,$3)
+           MbSqlAbSyn.Expr.Binary ("&",$1,$3)
             }
         | bit_expr OP_SHIFT_LEFT bit_expr %prec OP_SHIFT_LEFT {
-           AbSyn.Expr.Binary ("<<",$1,$3)
+           MbSqlAbSyn.Expr.Binary ("<<",$1,$3)
             }
         | bit_expr OP_SHIFT_RIGHT bit_expr %prec OP_SHIFT_RIGHT {
-           AbSyn.Expr.Binary (">>",$1,$3)
+           MbSqlAbSyn.Expr.Binary (">>",$1,$3)
             }
         | bit_expr OP_PLUS bit_expr %prec OP_PLUS {
-            AbSyn.Expr.Binary ("+",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("+",$1,$3)
             }
         | bit_expr OP_MINUS bit_expr %prec OP_MINUS {
-            AbSyn.Expr.Binary ("-",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("-",$1,$3)
             }
         //| bit_expr OP_PLUS INTERVAL_SYM expr interval %prec OP_PLUS {}
         //| bit_expr OP_MINUS INTERVAL_SYM expr interval %prec OP_MINUS {}
         | bit_expr OP_TIMES bit_expr %prec OP_TIMES {
-            AbSyn.Expr.Binary ("*",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("*",$1,$3)
             }
         | bit_expr OP_DIV bit_expr %prec OP_DIV {
-            AbSyn.Expr.Binary ("/",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("/",$1,$3)
             }
         | bit_expr OP_PERC bit_expr %prec OP_PERC {
-            AbSyn.Expr.Binary ("%",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("%",$1,$3)
             }
         | bit_expr OP_DIV_TXT bit_expr %prec OP_DIV_TXT {
-            AbSyn.Expr.Binary ("/",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("/",$1,$3)
             }
         | bit_expr OP_MOD_TXT bit_expr %prec OP_MOD {
-            AbSyn.Expr.Binary ("%",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("%",$1,$3)
             }
         | bit_expr OP_UP bit_expr {
-            AbSyn.Expr.Binary ("^",$1,$3)
+            MbSqlAbSyn.Expr.Binary ("^",$1,$3)
             }
         | simple_expr {
             $1
@@ -1137,25 +1136,25 @@ simple_expr:
         //| window_func_call
         //| simple_expr OP_OR simple_expr {}
         | OP_PLUS simple_expr %prec OP_NEG {
-            AbSyn.Expr.Unary ("+",$2)
+            MbSqlAbSyn.Expr.Unary ("+",$2)
             }
         | OP_MINUS simple_expr %prec OP_NEG {
-            AbSyn.Expr.Unary ("-",$2)
+            MbSqlAbSyn.Expr.Unary ("-",$2)
             }
         | OP_TILDE simple_expr %prec OP_NEG {
-            AbSyn.Expr.Unary ("~",$2)
+            MbSqlAbSyn.Expr.Unary ("~",$2)
             }
         | OP_BANG simple_expr %prec OP_NEG {
-            AbSyn.Expr.Unary ("!",$2)
+            MbSqlAbSyn.Expr.Unary ("!",$2)
             }
         | row_subquery {
-            AbSyn.Expr.SubQ $1
+            MbSqlAbSyn.Expr.SubQ $1
             }
         | PAR_LPAR expr PAR_RPAR {
             $2
             }
         | PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {
-            AbSyn.Expr.ExprList ([$2] @ $4)
+            MbSqlAbSyn.Expr.ExprList ([$2] @ $4)
             }
         //| ROW_SYM PAR_LPAR expr DELIM_COMMA expr_list PAR_RPAR {}
         //| OP_EXISTS table_subquery {}
@@ -1177,19 +1176,19 @@ literal:
         | num_literal           { $1 }
         //| temporal_literal
         | VAL_NULL {
-            AbSyn.Expr.NodeTyped ("keyword","null")
+            MbSqlAbSyn.Expr.NodeTyped ("keyword","null")
             }
         | VAL_FALSE     {
-            AbSyn.Expr.NodeTyped ("keyword","false")
+            MbSqlAbSyn.Expr.NodeTyped ("keyword","false")
             }
         | VAL_TRUE {
-            AbSyn.Expr.NodeTyped ("keyword","true")
+            MbSqlAbSyn.Expr.NodeTyped ("keyword","true")
             }
         | VAL_HEX {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         | VAL_BIN {
-            AbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.Temp
             }
         //| UNDERSCORE_CHARSET HEX_NUM {}
         //| UNDERSCORE_CHARSET BIN_NUM {}
@@ -1197,7 +1196,7 @@ literal:
 
 text_literal:
           VAL_STRING {
-            AbSyn.Expr.NodeTyped ("string",$1)
+            MbSqlAbSyn.Expr.NodeTyped ("string",$1)
             }
         //| NCHAR_STRING {}
         //| UNDERSCORE_CHARSET TEXT_STRING {}
@@ -1213,43 +1212,43 @@ text_string_sys:
             }
         ;
 num_literal:
-          VAL_NUM           { AbSyn.Expr.NodeTyped ("num",$1) }
+          VAL_NUM           { MbSqlAbSyn.Expr.NodeTyped ("num",$1) }
         //| LONG_NUM {}
         //| ULONGLONG_NUM {}
         //| DECIMAL_NUM {}
-        | VAL_FLOAT         { AbSyn.Expr.NodeTyped ("float",$1)}
+        | VAL_FLOAT         { MbSqlAbSyn.Expr.NodeTyped ("float",$1)}
         ;
 /*
         Functions
 */
 function_call_keyword:
           KEY_DATE PAR_LPAR expr_list PAR_RPAR {
-            let id = AbSyn.Expr.NodeTyped ("id","date")
-            AbSyn.Expr.FunctionCall (id,AbSyn.Expr.ExprList $3)
+            let id = MbSqlAbSyn.Expr.NodeTyped ("id","date")
+            MbSqlAbSyn.Expr.FunctionCall (id,MbSqlAbSyn.Expr.ExprList $3)
             }
         ;
 function_call_nonkeyword:
           NOKEY_NOW PAR_LPAR expr PAR_RPAR {
-            let id = AbSyn.Expr.NodeTyped ("id","now")
-            AbSyn.Expr.FunctionCall (id,$3)
+            let id = MbSqlAbSyn.Expr.NodeTyped ("id","now")
+            MbSqlAbSyn.Expr.FunctionCall (id,$3)
             }
         ;
 function_call_generic:
           ident_sys PAR_LPAR opt_udf_expr_list PAR_RPAR {
-            AbSyn.Expr.FunctionCall ($1,$3)
+            MbSqlAbSyn.Expr.FunctionCall ($1,$3)
             }
         | ident OP_DOT ident PAR_LPAR opt_expr_list PAR_RPAR {
-            let id_list = AbSyn.Expr.ExprListTyped ("id",[$1;$3])
-            AbSyn.Expr.FunctionCall (id_list,$5)
+            let id_list = MbSqlAbSyn.Expr.ExprListTyped ("id",[$1;$3])
+            MbSqlAbSyn.Expr.FunctionCall (id_list,$5)
             }
         ;
 opt_expr_list:
-          /* empty */   { AbSyn.Expr.Null }
-        | expr_list     { AbSyn.Expr.ExprList $1 }
+          /* empty */   { MbSqlAbSyn.Expr.Null }
+        | expr_list     { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 opt_udf_expr_list:
-        /* empty */     { AbSyn.Expr.Null }
-        | udf_expr_list { AbSyn.Expr.ExprList $1 }
+        /* empty */     { MbSqlAbSyn.Expr.Null }
+        | udf_expr_list { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 udf_expr_list:
           udf_expr                              { [$1] }
@@ -1257,55 +1256,55 @@ udf_expr_list:
         ;
 
 udf_expr:
-          expr select_alias     { AbSyn.Expr.Binary ("as",$1,$2) }
+          expr select_alias     { MbSqlAbSyn.Expr.Binary ("as",$1,$2) }
         ;
 /*
         Identifiers
 */
 ident_sys:
         /* originally this has a IDENT_QUOTED. */
-          VAL_ID        { AbSyn.Expr.NodeTyped ("id",$1) }
-        | VAL_STRING    { AbSyn.Expr.NodeTyped ("id",$1) }
+          VAL_ID        { MbSqlAbSyn.Expr.NodeTyped ("id",$1) }
+        | VAL_STRING    { MbSqlAbSyn.Expr.NodeTyped ("id",$1) }
         ;
 
 ident:
     VAL_ID {
-        AbSyn.Expr.NodeTyped ("id",$1)
+        MbSqlAbSyn.Expr.NodeTyped ("id",$1)
         }
 simple_ident:
           ident             { $1 }
         | simple_ident_q    { $1 }
         ;
 simple_ident_nospvar:
-          ident             { AbSyn.Expr.Temp }
-        | simple_ident_q    { AbSyn.Expr.Temp }
+          ident             { MbSqlAbSyn.Expr.Temp }
+        | simple_ident_q    { MbSqlAbSyn.Expr.Temp }
         ;
 simple_ident_q:
           ident OP_DOT ident {
-            AbSyn.Expr.ExprList [$1;$3]
+            MbSqlAbSyn.Expr.ExprList [$1;$3]
             }
         | ident OP_DOT ident OP_DOT ident {
-            AbSyn.Expr.ExprList [$1;$3;$5]
+            MbSqlAbSyn.Expr.ExprList [$1;$3;$5]
             }
         ;
 table_ident:
-          ident                 { AbSyn.Expr.ExprList [$1] }
-        | ident OP_DOT ident    { AbSyn.Expr.ExprList [$1;$3] }
+          ident                 { MbSqlAbSyn.Expr.ExprList [$1] }
+        | ident OP_DOT ident    { MbSqlAbSyn.Expr.ExprList [$1;$3] }
         ;
 table_ident_opt_wild:
-          ident opt_wild                { AbSyn.Expr.ExprList ([$1] @ $2) }
-        | ident OP_DOT ident opt_wild   { AbSyn.Expr.ExprList ([$1;$3] @ $4)}
+          ident opt_wild                { MbSqlAbSyn.Expr.ExprList ([$1] @ $2) }
+        | ident OP_DOT ident opt_wild   { MbSqlAbSyn.Expr.ExprList ([$1;$3] @ $4)}
         ;
 opt_wild:
           /* empty */       { [] }
-        | OP_DOT OP_TIMES   { [AbSyn.Expr.NodeTyped ("id","*")] }
+        | OP_DOT OP_TIMES   { [MbSqlAbSyn.Expr.NodeTyped ("id","*")] }
         ;
 table_wild:
           ident OP_DOT OP_TIMES {
-            AbSyn.Expr.ExprList [$1;AbSyn.Expr.NodeTyped ("id","*")]
+            MbSqlAbSyn.Expr.ExprList [$1;MbSqlAbSyn.Expr.NodeTyped ("id","*")]
             }
         | ident OP_DOT ident OP_DOT OP_TIMES {
-            AbSyn.Expr.ExprList [$1;$3;AbSyn.Expr.NodeTyped ("id","*")]
+            MbSqlAbSyn.Expr.ExprList [$1;$3;MbSqlAbSyn.Expr.NodeTyped ("id","*")]
             }
         ;
 %%      

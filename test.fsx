@@ -3,6 +3,7 @@ open Microsoft.FSharp.Text.Lexing
 open System
 
 #load "absyn.fs"
+#load "traverse.fs"
 #load "parser.fs"
 #load "lexer.fs"
 
