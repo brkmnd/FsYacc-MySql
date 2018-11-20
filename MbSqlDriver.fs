@@ -48,6 +48,13 @@ type Traverse<'T> =
         let val_name_type_v_args n t v args = {vname=n;vtype=t;vval=v;vargs=args} : MbSqlTraverse.TreeVal<'T>
         let fs = (val_name,val_name_type,val_name_type_args,val_name_type_v,val_name_type_v_args)
         MbSqlTraverse.traverse f acc fs l
+    static member dotnet (f : System.Func<int,'T,MbSqlTraverse.TreeVal<'T>,'T>,acc,q) =
+        let travF d a x = f.Invoke(d,a,x)
+        let (l,status) =
+            match parse_string q with
+            | [MbSqlAbSyn.Qs.Error msg] -> ([],msg)
+            | l -> (l,"")
+        (status,Traverse<'T>.gen (travF,acc,l))
 let query2absyn_string (q) =
     let travF depth acc (x : MbSqlTraverse.TreeVal<string>) =
         let d0 = d2s depth
