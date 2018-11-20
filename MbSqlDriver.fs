@@ -9,12 +9,6 @@ module Main =
             try (MbSqlLexer.lex s,"") with
             | Failure error_t ->
                 ([||],syntax_error_at error_t)
-        let print_tokens () =
-            printfn "tokens:"
-            for t in tokens do
-                printfn "%A" (snd t)
-            printfn "end tokens-------------"
-            printfn ""
         if msg <> "" then
             [MbSqlAbSyn.Qs.Error msg]
         else

@@ -39,11 +39,9 @@ and traverse_qs depth f acc vfs q =
         let acc2 = f depth acc (v_nta "union" "query" [|acc0;acc1|])
         acc2
     | _ ->
-        printfn "not-imp-yet traverse_qs"
         acc
 and traverse_q_select depth f acc vfs = function
     | [SelectNull] ->
-        //printfn "%snull" (depth2spaces depth)
         let (v_n,_,_,_,_) = vfs
         f depth acc (v_n "null")
     | [ SelectOptions opt_c
@@ -65,9 +63,7 @@ and traverse_q_select depth f acc vfs = function
             let acc7 = traverse_exp (depth + 1) f acc vfs window_c
             let acc8 = f depth acc (v_nta "select" "query" [|acc0;acc1;acc2;acc3;acc4;acc5;acc6;acc7|])
             acc8
-    | _ ->
-        printfn "not imp yet - traverse_q_select"
-        acc
+    | _ -> acc
 and traverse_exp_list depth f acc vfs l =
     List.map (traverse_exp depth f acc vfs) l
 and traverse_exp depth f acc vfs expr =
@@ -108,6 +104,4 @@ and traverse_exp depth f acc vfs expr =
 
     | Temp ->
         f depth acc (v_nt "node" "temp")
-    | expr ->
-        printfn "hertil:%A" expr
-        acc
+    | expr -> acc

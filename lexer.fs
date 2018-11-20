@@ -81,7 +81,6 @@ let lex inStr =
             | ";" -> MbSqlParser.token.DELIM_SCOLON
             | "," -> MbSqlParser.token.DELIM_COMMA
             | t ->
-                printfn "token_added(delim): %s" t
                 MbSqlParser.token.DELIM_COMMA
         (t,t2type)
     let addToken_op t =
@@ -111,7 +110,6 @@ let lex inStr =
             | "{" -> MbSqlParser.token.PAR_LBRACE
             | "}" -> MbSqlParser.token.PAR_RBRACE
             | t ->
-                printfn "token_added(op): %s" t
                 MbSqlParser.token.OP_DOT
         (t,t2type)
     let addToken xIndex (tGroup : GroupCollection) =
