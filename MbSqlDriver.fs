@@ -2,19 +2,6 @@ module MbSqlDriver
 open Microsoft.FSharp.Text.Lexing
 let private syntax_error_at at =
     sprintf "You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '%s' at line 1" at
-let private parse_string (s : string) =
-    let lexbuf = LexBuffer<char>.FromString s
-    let (tokens,msg) =
-        try (MbSqlLexer.lex s,"") with
-        | Failure error_t ->
-            ([||],syntax_error_at error_t)
-    if msg <> "" then
-        [MbSqlAbSyn.Qs.Error msg]
-    else
-        try MbSqlParser.start_entry (MbSqlLexer.getNextToken tokens) lexbuf with
-        | _ ->
-            let msg = syntax_error_at (MbSqlLexer.getPrevTokenVal tokens)
-            [MbSqlAbSyn.Qs.Error msg]
 let private d2s d =
     let s = "  "
     let rec exec acc = function
@@ -39,6 +26,19 @@ let private d2s d =
     | 15 -> s+s+s+s+s+s+s+s+s+s+s+s+s+s+s
     | 16 -> s+s+s+s+s+s+s+s+s+s+s+s+s+s+s+s
     | n -> exec "" n
+let private parse_string (s : string) =
+    let lexbuf = LexBuffer<char>.FromString s
+    let (tokens,msg) =
+        try (MbSqlLexer.lex s,"") with
+        | Failure error_t ->
+            ([||],syntax_error_at error_t)
+    if msg <> "" then
+        [MbSqlAbSyn.Qs.Error msg]
+    else
+        try MbSqlParser.start_entry (MbSqlLexer.getNextToken tokens) lexbuf with
+        | _ ->
+            let msg = syntax_error_at (MbSqlLexer.getPrevTokenVal tokens)
+            [MbSqlAbSyn.Qs.Error msg]
 type Traverse<'T> =
     static member gen (f,acc,l) =
         let val_name n = {vname=n;vtype="";vval="";vargs=[||]} : MbSqlTraverse.TreeVal<'T>
@@ -55,6 +55,10 @@ type Traverse<'T> =
             | [MbSqlAbSyn.Qs.Error msg] -> ([],msg)
             | l -> (l,"")
         (status,Traverse<'T>.gen (travF,acc,l))
+let query2absyn_tree (q) =
+    match parse_string q with
+    | [MbSqlAbSyn.Qs.Error msg] -> ([],msg)
+    | l -> (l,"")
 let query2absyn_string (q) =
     let travF depth acc (x : MbSqlTraverse.TreeVal<string>) =
         let d0 = d2s depth
