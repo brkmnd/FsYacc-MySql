@@ -475,7 +475,7 @@ query_specification:
             MbSqlAbSyn.Qs.Select [
                 MbSqlAbSyn.Q_Select.SelectOptions $2
                 MbSqlAbSyn.Q_Select.SelectItems $3
-                MbSqlAbSyn.Q_Select.SelectInto (MbSqlAbSyn.Expr.Null)
+                MbSqlAbSyn.Q_Select.SelectInto (MbSqlAbSyn.Expr.Null )
                 MbSqlAbSyn.Q_Select.SelectFrom $4
                 MbSqlAbSyn.Q_Select.SelectWhere $5
                 MbSqlAbSyn.Q_Select.SelectGroup $6
@@ -586,7 +586,6 @@ opt_from_clause:
 from_clause:
           KEY_FROM from_tables { $2 }
         ;
-
 from_tables:
           VAL_DUAL {
             //dual is dummy for no table
@@ -594,7 +593,6 @@ from_tables:
             }
         | table_reference_list { MbSqlAbSyn.ExprListTyped ("from-ids",$1) }
         ;
-
 table_reference_list:
           table_reference {
             [$1]
@@ -715,7 +713,7 @@ single_table_parens:
 single_table:
           table_ident opt_use_partition opt_table_alias opt_key_definition {
             //$3 is ExprId -> ExpExprAlias 
-            MbSqlAbSyn.Expr.ExprListTyped ("id",[$1|>$3;$4])
+            MbSqlAbSyn.Expr.ExprListTyped ("single-table-id",[$1|>$3;$4])
             }
         ;
 joined_table_parens:
@@ -734,7 +732,7 @@ derived_table:
         ;
 opt_derived_column_list:
           /* empty */ {
-            MbSqlAbSyn.Expr.Null
+            MbSqlAbSyn.Expr.Empty
             }
         | PAR_LPAR simple_ident_list PAR_RPAR {
             MbSqlAbSyn.Expr.ExprList $2
@@ -795,7 +793,7 @@ jt_on_response:
         | KEY_DEFAULT text_string_sys   { MbSqlAbSyn.Expr.Temp }
         ;
 index_hint_clause:
-          /* empty */               { MbSqlAbSyn.Expr.Null }
+          /* empty */               { MbSqlAbSyn.Expr.Empty}
         | KEY_FOR OP_JOIN           { MbSqlAbSyn.Expr.Temp }
         | KEY_FOR KEY_ORDER KEY_BY  { MbSqlAbSyn.Expr.Temp }
         | KEY_FOR OP_GROUP KEY_BY   { MbSqlAbSyn.Expr.Temp }
@@ -821,7 +819,7 @@ index_hints_list:
             }
         ;
 opt_index_hints_list:
-          /* empty */           { MbSqlAbSyn.Expr.Null }
+          /* empty */           { MbSqlAbSyn.Expr.Empty }
         | index_hints_list      { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 /* End of from clause */
@@ -927,11 +925,10 @@ opt_as_or_eq:
 opt_table_alias:
           /* empty */        {
             fun tid ->
-                MbSqlAbSyn.Expr.Binary (
-                    "as",
-                    tid,
-                    MbSqlAbSyn.Expr.Null
-                    )
+                match tid with
+                | MbSqlAbSyn.Expr.ExprListTyped (t,l) -> l.[0]
+                | MbSqlAbSyn.Expr.ExprList l -> l.[0]
+                | _ -> tid
             }
         | opt_as_or_eq ident {
             fun tid ->
@@ -1266,7 +1263,7 @@ function_call_generic:
             }
         ;
 opt_expr_list:
-          /* empty */   { MbSqlAbSyn.Expr.Null }
+          /* empty */   { MbSqlAbSyn.Expr.Empty }
         | expr_list     { MbSqlAbSyn.Expr.ExprList $1 }
         ;
 opt_udf_expr_list:
@@ -1291,6 +1288,7 @@ ident_sys:
         ;
 
 ident:
+    //add all nonkeys here
     VAL_ID {
         MbSqlAbSyn.Expr.NodeTyped ("id",$1)
         }

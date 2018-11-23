@@ -30,9 +30,12 @@ let prg6 = "select 2 * (3 + 4) - -2 * 2 as i1, i2, true as i3 from t1 join t2"
 let prg7 = "select i1 from t2"
 let prg8 = "select 1 + 2 + 3"
 let prg9 = "select 2 * (3 + 4) - -2 * 2 as i1, i2, true as i3 from t1"
+let prg10 = "select 2 * (3 + 4) - -2 * 2 as i1, id, true as i3 from users,blogaden"
 
 //errors
 let err1 = "select 1 from t1 join 'test'"
 
-printfn "%s" (MbSqlDriver.query2absyn_string(prg9))
+let q = prg10
+printfn "q:%s" q
+printfn "%s" (MbSqlDriver.query2absyn_string(q))
 

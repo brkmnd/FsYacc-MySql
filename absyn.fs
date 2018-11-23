@@ -9,6 +9,7 @@ type Expr =
     | FunctionCall of Expr * Expr
     | FunctionCreate of Expr * Expr
     | SubQ of Qs
+    | Empty
     | Null
     | Temp
 and Q_Select =

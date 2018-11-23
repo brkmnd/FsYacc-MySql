@@ -47,7 +47,9 @@ type Traverse<'T> =
         let val_name_type_v n t v = {vname=n;vtype=t;vval=v;vargs=[||]} : MbSqlTraverse.TreeVal<'T>
         let val_name_type_v_args n t v args = {vname=n;vtype=t;vval=v;vargs=args} : MbSqlTraverse.TreeVal<'T>
         let fs = (val_name,val_name_type,val_name_type_args,val_name_type_v,val_name_type_v_args)
-        MbSqlTraverse.traverse f acc fs l
+        match MbSqlTraverse.traverse f fs (Some acc) l with
+        | Some res -> res
+        | _ -> acc
     static member dotnet (f : System.Func<int,'T,MbSqlTraverse.TreeVal<'T>,'T>,acc,q) =
         let travF d a x = f.Invoke(d,a,x)
         let (l,status) =
@@ -99,7 +101,7 @@ let query2absyn_string (q) =
             let s_args = x.vargs.[1]
             s1 + s_id + s_args
         elif x.vname = "list" then
-            let s1 = sprintf "%slist<%s>\n" (d2s depth) x.vtype
+            let s1 = sprintf "%slist<%s>(%d)\n" (d2s depth) x.vtype (Array.length x.vargs)
             let s2 = Array.fold (fun acc x -> acc + x) s1 x.vargs
             s2
         elif x.vname = "node" && x.vtype <> "" then

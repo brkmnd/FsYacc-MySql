@@ -3,7 +3,7 @@ module MbSqlParser
 #nowarn "64";; // turn off warnings that type variables used in production annotations are instantiated to concrete type
 open Microsoft.FSharp.Text.Lexing
 open Microsoft.FSharp.Text.Parsing.ParseHelpers
-# 1 "parser.yy"
+# 24 "parser.yy"
 
 
 # 9 "parser.fs"
@@ -1186,20 +1186,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 130 "parser.yy"
+# 153 "parser.yy"
                                                _1 
                    )
-# 130 "parser.yy"
+# 153 "parser.yy"
                  : MbSqlAbSyn.Qs list));
 # 1194 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 135 "parser.yy"
+# 158 "parser.yy"
                                               [] 
                    )
-# 135 "parser.yy"
+# 158 "parser.yy"
                  : 'sql_statement));
 # 1204 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1208,7 +1208,7 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 136 "parser.yy"
+# 159 "parser.yy"
                                                                                         
                                  //we found a wellformed query...
                                  //join the queries parser-wise instead of inside the action
@@ -1216,7 +1216,7 @@ let _fsyacc_reductions ()  =    [|
                                  [_1] @ _3
                                  
                    )
-# 136 "parser.yy"
+# 159 "parser.yy"
                  : 'sql_statement));
 # 1221 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1224,23 +1224,23 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 142 "parser.yy"
+# 165 "parser.yy"
                                                                        
                                  //single query, not terminated.
                                  [_1]
                                  
                    )
-# 142 "parser.yy"
+# 165 "parser.yy"
                  : 'sql_statement));
 # 1235 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 148 "parser.yy"
+# 171 "parser.yy"
                                                    [] 
                    )
-# 148 "parser.yy"
+# 171 "parser.yy"
                  : 'opt_end_of_input));
 # 1245 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1248,10 +1248,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 149 "parser.yy"
+# 172 "parser.yy"
                                                    _1 
                    )
-# 149 "parser.yy"
+# 172 "parser.yy"
                  : 'opt_end_of_input));
 # 1256 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1259,10 +1259,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 152 "parser.yy"
+# 175 "parser.yy"
                                                    _1 
                    )
-# 152 "parser.yy"
+# 175 "parser.yy"
                  : 'simple_statement_or_begin));
 # 1267 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1270,10 +1270,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 232 "parser.yy"
+# 255 "parser.yy"
                                                                _1 
                    )
-# 232 "parser.yy"
+# 255 "parser.yy"
                  : 'simple_statement));
 # 1278 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1281,10 +1281,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 253 "parser.yy"
+# 276 "parser.yy"
                                                            _1 
                    )
-# 253 "parser.yy"
+# 276 "parser.yy"
                  : 'select_stmt));
 # 1289 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1292,10 +1292,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 254 "parser.yy"
+# 277 "parser.yy"
                                                            _1 
                    )
-# 254 "parser.yy"
+# 277 "parser.yy"
                  : 'select_stmt));
 # 1300 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1303,10 +1303,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 258 "parser.yy"
+# 281 "parser.yy"
                                                _1 
                    )
-# 258 "parser.yy"
+# 281 "parser.yy"
                  : 'row_subquery));
 # 1311 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1314,10 +1314,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 261 "parser.yy"
+# 284 "parser.yy"
                                                _1 
                    )
-# 261 "parser.yy"
+# 284 "parser.yy"
                  : 'table_subquery));
 # 1322 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1325,10 +1325,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 264 "parser.yy"
+# 287 "parser.yy"
                                                                                        _1 
                    )
-# 264 "parser.yy"
+# 287 "parser.yy"
                  : 'subquery));
 # 1333 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1339,7 +1339,7 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 270 "parser.yy"
+# 293 "parser.yy"
                                                         
                                let options = [
                                  MbSqlAbSyn.Qs_Option.OptOrder _2
@@ -1349,17 +1349,17 @@ let _fsyacc_reductions ()  =    [|
                                MbSqlAbSyn.Qs.Options (_1,options)
                                
                    )
-# 270 "parser.yy"
+# 293 "parser.yy"
                  : 'query_expression));
 # 1354 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 329 "parser.yy"
+# 352 "parser.yy"
                                                                        MbSqlAbSyn.Expr.Null 
                    )
-# 329 "parser.yy"
+# 352 "parser.yy"
                  : 'opt_order_clause));
 # 1364 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1367,10 +1367,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 330 "parser.yy"
+# 353 "parser.yy"
                                                                        MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 330 "parser.yy"
+# 353 "parser.yy"
                  : 'opt_order_clause));
 # 1375 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1378,10 +1378,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 333 "parser.yy"
+# 356 "parser.yy"
                                                                        _3 
                    )
-# 333 "parser.yy"
+# 356 "parser.yy"
                  : 'order_clause));
 # 1386 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1390,10 +1390,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 336 "parser.yy"
+# 359 "parser.yy"
                                                                        _1 @ [_3] 
                    )
-# 336 "parser.yy"
+# 359 "parser.yy"
                  : 'order_list));
 # 1398 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1401,10 +1401,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 337 "parser.yy"
+# 360 "parser.yy"
                                                                        [_1] 
                    )
-# 337 "parser.yy"
+# 360 "parser.yy"
                  : 'order_list));
 # 1409 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1413,22 +1413,22 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 340 "parser.yy"
+# 363 "parser.yy"
                                                             
                                  MbSqlAbSyn.Expr.Unary (_2,_1)
                                  
                    )
-# 340 "parser.yy"
+# 363 "parser.yy"
                  : 'order_expr));
 # 1423 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 345 "parser.yy"
+# 368 "parser.yy"
                                                        "asc" 
                    )
-# 345 "parser.yy"
+# 368 "parser.yy"
                  : 'opt_ordering_direction));
 # 1433 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1436,40 +1436,40 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 346 "parser.yy"
+# 369 "parser.yy"
                                                        _1 
                    )
-# 346 "parser.yy"
+# 369 "parser.yy"
                  : 'opt_ordering_direction));
 # 1444 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 349 "parser.yy"
+# 372 "parser.yy"
                                                        "asc" 
                    )
-# 349 "parser.yy"
+# 372 "parser.yy"
                  : 'ordering_direction));
 # 1454 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 350 "parser.yy"
+# 373 "parser.yy"
                                                        "desc" 
                    )
-# 350 "parser.yy"
+# 373 "parser.yy"
                  : 'ordering_direction));
 # 1464 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 353 "parser.yy"
+# 376 "parser.yy"
                                                            MbSqlAbSyn.Expr.Null 
                    )
-# 353 "parser.yy"
+# 376 "parser.yy"
                  : 'opt_limit_clause));
 # 1474 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1477,10 +1477,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 354 "parser.yy"
+# 377 "parser.yy"
                                                            MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 354 "parser.yy"
+# 377 "parser.yy"
                  : 'opt_limit_clause));
 # 1485 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1488,10 +1488,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 357 "parser.yy"
+# 380 "parser.yy"
                                                            _2 
                    )
-# 357 "parser.yy"
+# 380 "parser.yy"
                  : 'limit_clause));
 # 1496 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1499,10 +1499,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 360 "parser.yy"
+# 383 "parser.yy"
                                                                        [_1] 
                    )
-# 360 "parser.yy"
+# 383 "parser.yy"
                  : 'limit_options));
 # 1507 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1511,10 +1511,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 361 "parser.yy"
+# 384 "parser.yy"
                                                                        [_1;_3] 
                    )
-# 361 "parser.yy"
+# 384 "parser.yy"
                  : 'limit_options));
 # 1519 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1523,10 +1523,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 362 "parser.yy"
+# 385 "parser.yy"
                                                                        [_1;_3] 
                    )
-# 362 "parser.yy"
+# 385 "parser.yy"
                  : 'limit_options));
 # 1531 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1534,10 +1534,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 365 "parser.yy"
+# 388 "parser.yy"
                                                    _1 
                    )
-# 365 "parser.yy"
+# 388 "parser.yy"
                  : 'limit_option));
 # 1542 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1545,20 +1545,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 369 "parser.yy"
+# 392 "parser.yy"
                                                    MbSqlAbSyn.Expr.NodeTyped ("num",_1) 
                    )
-# 369 "parser.yy"
+# 392 "parser.yy"
                  : 'limit_option));
 # 1553 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 372 "parser.yy"
+# 395 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 372 "parser.yy"
+# 395 "parser.yy"
                  : 'opt_simple_limit));
 # 1563 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1566,20 +1566,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 373 "parser.yy"
+# 396 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 373 "parser.yy"
+# 396 "parser.yy"
                  : 'opt_simple_limit));
 # 1574 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 376 "parser.yy"
+# 399 "parser.yy"
                                                        MbSqlAbSyn.Expr.Null 
                    )
-# 376 "parser.yy"
+# 399 "parser.yy"
                  : 'opt_locking_clause_list));
 # 1584 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1587,10 +1587,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 377 "parser.yy"
+# 400 "parser.yy"
                                                        MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 377 "parser.yy"
+# 400 "parser.yy"
                  : 'opt_locking_clause_list));
 # 1595 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1599,10 +1599,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 381 "parser.yy"
+# 404 "parser.yy"
                                                                        _1 @ [_2] 
                    )
-# 381 "parser.yy"
+# 404 "parser.yy"
                  : 'locking_clause_list));
 # 1607 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1610,20 +1610,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 382 "parser.yy"
+# 405 "parser.yy"
                                                                        [_1] 
                    )
-# 382 "parser.yy"
+# 405 "parser.yy"
                  : 'locking_clause_list));
 # 1618 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 386 "parser.yy"
+# 409 "parser.yy"
                                           MbSqlAbSyn.Expr.Temp 
                    )
-# 386 "parser.yy"
+# 409 "parser.yy"
                  : 'locking_clause));
 # 1628 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1631,10 +1631,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 393 "parser.yy"
+# 416 "parser.yy"
                                                _1 
                    )
-# 393 "parser.yy"
+# 416 "parser.yy"
                  : 'query_expression_body));
 # 1639 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1644,12 +1644,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 394 "parser.yy"
+# 417 "parser.yy"
                                                                                           
                                  MbSqlAbSyn.Qs.Union (_3,_1,_4)
                                  
                    )
-# 394 "parser.yy"
+# 417 "parser.yy"
                  : 'query_expression_body));
 # 1654 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1659,12 +1659,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 397 "parser.yy"
+# 420 "parser.yy"
                                                                                             
                                  MbSqlAbSyn.Qs.Union (_3,_1,_4)
                                  
                    )
-# 397 "parser.yy"
+# 420 "parser.yy"
                  : 'query_expression_body));
 # 1669 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1674,12 +1674,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 401 "parser.yy"
+# 424 "parser.yy"
                                                         
                                  MbSqlAbSyn.Qs.Union (_3,_1,_4)
                                  
                    )
-# 401 "parser.yy"
+# 424 "parser.yy"
                  : 'query_expression_body));
 # 1684 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1689,42 +1689,42 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 405 "parser.yy"
+# 428 "parser.yy"
                                                         
                                  MbSqlAbSyn.Qs.Union (_3,_1,_4)
                                  
                    )
-# 405 "parser.yy"
+# 428 "parser.yy"
                  : 'query_expression_body));
 # 1699 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 410 "parser.yy"
+# 433 "parser.yy"
                                                    "none" 
                    )
-# 410 "parser.yy"
+# 433 "parser.yy"
                  : 'union_option));
 # 1709 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 411 "parser.yy"
+# 434 "parser.yy"
                                                    "distinct" 
                    )
-# 411 "parser.yy"
+# 434 "parser.yy"
                  : 'union_option));
 # 1719 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 412 "parser.yy"
+# 435 "parser.yy"
                                                    "all" 
                    )
-# 412 "parser.yy"
+# 435 "parser.yy"
                  : 'union_option));
 # 1729 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1732,10 +1732,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 415 "parser.yy"
+# 438 "parser.yy"
                                                                            _2 
                    )
-# 415 "parser.yy"
+# 438 "parser.yy"
                  : 'query_expression_parens));
 # 1740 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1743,10 +1743,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 416 "parser.yy"
+# 439 "parser.yy"
                                                                            _2 
                    )
-# 416 "parser.yy"
+# 439 "parser.yy"
                  : 'query_expression_parens));
 # 1751 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1754,10 +1754,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 419 "parser.yy"
+# 442 "parser.yy"
                                                                            _1 
                    )
-# 419 "parser.yy"
+# 442 "parser.yy"
                  : 'query_primary));
 # 1762 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1772,7 +1772,7 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 431 "parser.yy"
+# 454 "parser.yy"
                                                   
                                  MbSqlAbSyn.Qs.Select [
                                      MbSqlAbSyn.Q_Select.SelectOptions _2
@@ -1786,7 +1786,7 @@ let _fsyacc_reductions ()  =    [|
                                      ]
                                  
                    )
-# 431 "parser.yy"
+# 454 "parser.yy"
                  : 'query_specification));
 # 1791 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1800,13 +1800,13 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 450 "parser.yy"
+# 473 "parser.yy"
                                                   
                                  //same as above but no into
                                  MbSqlAbSyn.Qs.Select [
                                      MbSqlAbSyn.Q_Select.SelectOptions _2
                                      MbSqlAbSyn.Q_Select.SelectItems _3
-                                     MbSqlAbSyn.Q_Select.SelectInto (MbSqlAbSyn.Expr.Null)
+                                     MbSqlAbSyn.Q_Select.SelectInto (MbSqlAbSyn.Expr.Null )
                                      MbSqlAbSyn.Q_Select.SelectFrom _4
                                      MbSqlAbSyn.Q_Select.SelectWhere _5
                                      MbSqlAbSyn.Q_Select.SelectGroup _6
@@ -1815,17 +1815,17 @@ let _fsyacc_reductions ()  =    [|
                                      ]
                                  
                    )
-# 450 "parser.yy"
+# 473 "parser.yy"
                  : 'query_specification));
 # 1820 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 465 "parser.yy"
+# 488 "parser.yy"
                                                        [] 
                    )
-# 465 "parser.yy"
+# 488 "parser.yy"
                  : 'select_options));
 # 1830 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1833,10 +1833,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 466 "parser.yy"
+# 489 "parser.yy"
                                                        _1 
                    )
-# 466 "parser.yy"
+# 489 "parser.yy"
                  : 'select_options));
 # 1841 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1845,10 +1845,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 469 "parser.yy"
+# 492 "parser.yy"
                                                                    _1 @ [_2]
                    )
-# 469 "parser.yy"
+# 492 "parser.yy"
                  : 'select_option_list));
 # 1853 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1856,10 +1856,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 470 "parser.yy"
+# 493 "parser.yy"
                                                                    [_1] 
                    )
-# 470 "parser.yy"
+# 493 "parser.yy"
                  : 'select_option_list));
 # 1864 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1867,119 +1867,119 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 473 "parser.yy"
+# 496 "parser.yy"
                                                       _1 
                    )
-# 473 "parser.yy"
+# 496 "parser.yy"
                  : 'select_option));
 # 1875 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 474 "parser.yy"
+# 497 "parser.yy"
                                                  
                                  //might be deprecated
                                  MbSqlAbSyn.Expr.NodeTyped ("option","sql no cache")
                                  
                    )
-# 474 "parser.yy"
+# 497 "parser.yy"
                  : 'select_option));
 # 1888 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 480 "parser.yy"
+# 503 "parser.yy"
                                                  
                                  MbSqlAbSyn.Expr.NodeTyped ("option","straight join")
                                  
                    )
-# 480 "parser.yy"
+# 503 "parser.yy"
                  : 'query_spec_option));
 # 1900 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 483 "parser.yy"
+# 506 "parser.yy"
                                                   
                                  MbSqlAbSyn.Expr.NodeTyped ("option","high priority")
                                  
                    )
-# 483 "parser.yy"
+# 506 "parser.yy"
                  : 'query_spec_option));
 # 1912 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 486 "parser.yy"
+# 509 "parser.yy"
                                              
                                  MbSqlAbSyn.Expr.NodeTyped ("option","distinct")
                                  
                    )
-# 486 "parser.yy"
+# 509 "parser.yy"
                  : 'query_spec_option));
 # 1924 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 489 "parser.yy"
+# 512 "parser.yy"
                                                      
                                  MbSqlAbSyn.Expr.NodeTyped ("option","small result")
                                  
                    )
-# 489 "parser.yy"
+# 512 "parser.yy"
                  : 'query_spec_option));
 # 1936 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 492 "parser.yy"
+# 515 "parser.yy"
                                                    
                                  MbSqlAbSyn.Expr.NodeTyped ("option","big result")
                                  
                    )
-# 492 "parser.yy"
+# 515 "parser.yy"
                  : 'query_spec_option));
 # 1948 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 495 "parser.yy"
+# 518 "parser.yy"
                                                       
                                  MbSqlAbSyn.Expr.NodeTyped ("option","buffer result")
                                  
                    )
-# 495 "parser.yy"
+# 518 "parser.yy"
                  : 'query_spec_option));
 # 1960 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 498 "parser.yy"
+# 521 "parser.yy"
                                                         
                                  MbSqlAbSyn.Expr.NodeTyped ("option","calc found rows")
                                  
                    )
-# 498 "parser.yy"
+# 521 "parser.yy"
                  : 'query_spec_option));
 # 1972 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 501 "parser.yy"
+# 524 "parser.yy"
                                         
                                  MbSqlAbSyn.Expr.NodeTyped ("option","all")
                                  
                    )
-# 501 "parser.yy"
+# 524 "parser.yy"
                  : 'query_spec_option));
 # 1984 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -1988,12 +1988,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 506 "parser.yy"
+# 529 "parser.yy"
                                                                          
                                  _1 @ [_3]
                                  
                    )
-# 506 "parser.yy"
+# 529 "parser.yy"
                  : 'select_item_list));
 # 1998 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2001,24 +2001,24 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 509 "parser.yy"
+# 532 "parser.yy"
                                             
                                  [_1]
                                  
                    )
-# 509 "parser.yy"
+# 532 "parser.yy"
                  : 'select_item_list));
 # 2011 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 512 "parser.yy"
+# 535 "parser.yy"
                                          
                                  [MbSqlAbSyn.Expr.Binary ("as",MbSqlAbSyn.Expr.Node "*",MbSqlAbSyn.Expr.Null)]
                                  
                    )
-# 512 "parser.yy"
+# 535 "parser.yy"
                  : 'select_item_list));
 # 2023 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2026,12 +2026,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 518 "parser.yy"
+# 541 "parser.yy"
                                            
                                  MbSqlAbSyn.Expr.Binary ("as",_1,MbSqlAbSyn.Expr.Null)
                                  
                    )
-# 518 "parser.yy"
+# 541 "parser.yy"
                  : 'select_item));
 # 2036 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2040,23 +2040,23 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 521 "parser.yy"
+# 544 "parser.yy"
                                                   
                                  //$$= NEW_PTN PTI_expr_with_alias(@$, _1, @1.cpp, _2);
                                  MbSqlAbSyn.Expr.Binary ("as",_1,_2)
                                  
                    )
-# 521 "parser.yy"
+# 544 "parser.yy"
                  : 'select_item));
 # 2051 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 527 "parser.yy"
+# 550 "parser.yy"
                                                    MbSqlAbSyn.Expr.Null 
                    )
-# 527 "parser.yy"
+# 550 "parser.yy"
                  : 'select_alias));
 # 2061 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2064,10 +2064,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 528 "parser.yy"
+# 551 "parser.yy"
                                                    _2 
                    )
-# 528 "parser.yy"
+# 551 "parser.yy"
                  : 'select_alias));
 # 2072 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2075,10 +2075,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 529 "parser.yy"
+# 552 "parser.yy"
                                                    MbSqlAbSyn.Expr.NodeTyped ("id",_2) 
                    )
-# 529 "parser.yy"
+# 552 "parser.yy"
                  : 'select_alias));
 # 2083 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2086,10 +2086,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 530 "parser.yy"
+# 553 "parser.yy"
                                                    _1 
                    )
-# 530 "parser.yy"
+# 553 "parser.yy"
                  : 'select_alias));
 # 2094 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2097,10 +2097,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 531 "parser.yy"
+# 554 "parser.yy"
                                                    MbSqlAbSyn.Expr.NodeTyped ("id",_1) 
                    )
-# 531 "parser.yy"
+# 554 "parser.yy"
                  : 'select_alias));
 # 2105 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2108,32 +2108,32 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 535 "parser.yy"
+# 558 "parser.yy"
                                                           _2 
                    )
-# 535 "parser.yy"
+# 558 "parser.yy"
                  : 'into_clause));
 # 2116 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 538 "parser.yy"
+# 561 "parser.yy"
                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 538 "parser.yy"
+# 561 "parser.yy"
                  : 'into_destination));
 # 2126 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 556 "parser.yy"
+# 579 "parser.yy"
                                                                           
                                  MbSqlAbSyn.Expr.Null
                                  
                    )
-# 556 "parser.yy"
+# 579 "parser.yy"
                  : 'opt_from_clause));
 # 2138 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2141,12 +2141,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 559 "parser.yy"
+# 582 "parser.yy"
                                             
                                  _1
                                  
                    )
-# 559 "parser.yy"
+# 582 "parser.yy"
                  : 'opt_from_clause));
 # 2151 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2154,23 +2154,23 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 564 "parser.yy"
+# 587 "parser.yy"
                                                       _2 
                    )
-# 564 "parser.yy"
+# 587 "parser.yy"
                  : 'from_clause));
 # 2162 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 568 "parser.yy"
+# 590 "parser.yy"
                                          
                                  //dual is dummy for no table
                                  MbSqlAbSyn.Expr.Null
                                  
                    )
-# 568 "parser.yy"
+# 590 "parser.yy"
                  : 'from_tables));
 # 2175 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2178,10 +2178,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 572 "parser.yy"
+# 594 "parser.yy"
                                                       MbSqlAbSyn.ExprListTyped ("from-ids",_1) 
                    )
-# 572 "parser.yy"
+# 594 "parser.yy"
                  : 'from_tables));
 # 2186 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2189,12 +2189,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 576 "parser.yy"
+# 597 "parser.yy"
                                                 
                                  [_1]
                                  
                    )
-# 576 "parser.yy"
+# 597 "parser.yy"
                  : 'table_reference_list));
 # 2199 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2203,12 +2203,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 579 "parser.yy"
+# 600 "parser.yy"
                                                                                  
                                  _1 @ [_3]
                                  
                    )
-# 579 "parser.yy"
+# 600 "parser.yy"
                  : 'table_reference_list));
 # 2213 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2216,10 +2216,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 584 "parser.yy"
+# 605 "parser.yy"
                                               _1 
                    )
-# 584 "parser.yy"
+# 605 "parser.yy"
                  : 'table_reference));
 # 2224 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2227,10 +2227,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 585 "parser.yy"
+# 606 "parser.yy"
                                               _1 
                    )
-# 585 "parser.yy"
+# 606 "parser.yy"
                  : 'table_reference));
 # 2235 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2241,12 +2241,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 589 "parser.yy"
+# 610 "parser.yy"
                                                                                            
                                  MbSqlAbSyn.Expr.Binary (_2,_1,MbSqlAbSyn.Expr.Binary("on",_3,_5))
                                  
                    )
-# 589 "parser.yy"
+# 610 "parser.yy"
                  : 'joined_table));
 # 2251 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2257,12 +2257,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 593 "parser.yy"
+# 614 "parser.yy"
                                                              
                                  MbSqlAbSyn.Expr.Binary (_2,_1,MbSqlAbSyn.Expr.Binary("using",_3,_6))
                                  
                    )
-# 593 "parser.yy"
+# 614 "parser.yy"
                  : 'joined_table));
 # 2267 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2273,12 +2273,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 596 "parser.yy"
+# 617 "parser.yy"
                                                                                            
                                  MbSqlAbSyn.Expr.Binary (_2,_1,MbSqlAbSyn.Expr.Binary("on",_3,_5))
                                  
                    )
-# 596 "parser.yy"
+# 617 "parser.yy"
                  : 'joined_table));
 # 2283 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2289,12 +2289,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 600 "parser.yy"
+# 621 "parser.yy"
                                                              
                                  MbSqlAbSyn.Expr.Binary (_2,_1,MbSqlAbSyn.Expr.Binary("using",_3,_6))
                                  
                    )
-# 600 "parser.yy"
+# 621 "parser.yy"
                  : 'joined_table));
 # 2299 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2304,12 +2304,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 604 "parser.yy"
+# 625 "parser.yy"
                                                               
                                  MbSqlAbSyn.Expr.Binary (_2,_1,_3)
                                  
                    )
-# 604 "parser.yy"
+# 625 "parser.yy"
                  : 'joined_table));
 # 2314 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2319,12 +2319,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 607 "parser.yy"
+# 628 "parser.yy"
                                                                                
                                  MbSqlAbSyn.Expr.Binary (_2,_1,_3)
                                  
                    )
-# 607 "parser.yy"
+# 628 "parser.yy"
                  : 'joined_table));
 # 2329 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2332,10 +2332,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 613 "parser.yy"
+# 634 "parser.yy"
                                                                        "natural"+_2+" join" 
                    )
-# 613 "parser.yy"
+# 634 "parser.yy"
                  : 'natural_join_type));
 # 2340 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2343,10 +2343,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 614 "parser.yy"
+# 635 "parser.yy"
                                                                        "natural right"+_3+" join"
                    )
-# 614 "parser.yy"
+# 635 "parser.yy"
                  : 'natural_join_type));
 # 2351 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2354,50 +2354,50 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 615 "parser.yy"
+# 636 "parser.yy"
                                                                        "natural left"+_3+" join"
                    )
-# 615 "parser.yy"
+# 636 "parser.yy"
                  : 'natural_join_type));
 # 2362 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 618 "parser.yy"
+# 639 "parser.yy"
                                                                    "join" 
                    )
-# 618 "parser.yy"
+# 639 "parser.yy"
                  : 'inner_join_type));
 # 2372 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 619 "parser.yy"
+# 640 "parser.yy"
                                                                    "inner join" 
                    )
-# 619 "parser.yy"
+# 640 "parser.yy"
                  : 'inner_join_type));
 # 2382 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 620 "parser.yy"
+# 641 "parser.yy"
                                                                    "cross join" 
                    )
-# 620 "parser.yy"
+# 641 "parser.yy"
                  : 'inner_join_type));
 # 2392 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 621 "parser.yy"
+# 642 "parser.yy"
                                                                    "straight_join" 
                    )
-# 621 "parser.yy"
+# 642 "parser.yy"
                  : 'inner_join_type));
 # 2402 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2405,10 +2405,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 624 "parser.yy"
+# 645 "parser.yy"
                                                                    "left"+_2+" join" 
                    )
-# 624 "parser.yy"
+# 645 "parser.yy"
                  : 'outer_join_type));
 # 2413 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2416,60 +2416,60 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 625 "parser.yy"
+# 646 "parser.yy"
                                                                    "right"+_2+" join" 
                    )
-# 625 "parser.yy"
+# 646 "parser.yy"
                  : 'outer_join_type));
 # 2424 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 628 "parser.yy"
+# 649 "parser.yy"
                                                "" 
                    )
-# 628 "parser.yy"
+# 649 "parser.yy"
                  : 'opt_inner));
 # 2434 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 629 "parser.yy"
+# 650 "parser.yy"
                                                " inner" 
                    )
-# 629 "parser.yy"
+# 650 "parser.yy"
                  : 'opt_inner));
 # 2444 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 632 "parser.yy"
+# 653 "parser.yy"
                                                "" 
                    )
-# 632 "parser.yy"
+# 653 "parser.yy"
                  : 'opt_outer));
 # 2454 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 633 "parser.yy"
+# 654 "parser.yy"
                                                " outer" 
                    )
-# 633 "parser.yy"
+# 654 "parser.yy"
                  : 'opt_outer));
 # 2464 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 640 "parser.yy"
+# 661 "parser.yy"
                                                    MbSqlAbSyn.Expr.Null 
                    )
-# 640 "parser.yy"
+# 661 "parser.yy"
                  : 'opt_use_partition));
 # 2474 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2477,10 +2477,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 641 "parser.yy"
+# 662 "parser.yy"
                                                    MbSqlAbSyn.Expr.Null 
                    )
-# 641 "parser.yy"
+# 662 "parser.yy"
                  : 'opt_use_partition));
 # 2485 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2488,10 +2488,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 645 "parser.yy"
+# 666 "parser.yy"
                                                                             _3 
                    )
-# 645 "parser.yy"
+# 666 "parser.yy"
                  : 'use_partition));
 # 2496 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2499,10 +2499,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 673 "parser.yy"
+# 694 "parser.yy"
                                                                _1 
                    )
-# 673 "parser.yy"
+# 694 "parser.yy"
                  : 'table_factor));
 # 2507 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2510,10 +2510,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 674 "parser.yy"
+# 695 "parser.yy"
                                                                _1 
                    )
-# 674 "parser.yy"
+# 695 "parser.yy"
                  : 'table_factor));
 # 2518 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2521,10 +2521,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 675 "parser.yy"
+# 696 "parser.yy"
                                                                _1 
                    )
-# 675 "parser.yy"
+# 696 "parser.yy"
                  : 'table_factor));
 # 2529 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2532,10 +2532,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 676 "parser.yy"
+# 697 "parser.yy"
                                                                _1 
                    )
-# 676 "parser.yy"
+# 697 "parser.yy"
                  : 'table_factor));
 # 2540 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2543,10 +2543,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 677 "parser.yy"
+# 698 "parser.yy"
                                                                MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 677 "parser.yy"
+# 698 "parser.yy"
                  : 'table_factor));
 # 2551 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2554,10 +2554,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 678 "parser.yy"
+# 699 "parser.yy"
                                                                _1 
                    )
-# 678 "parser.yy"
+# 699 "parser.yy"
                  : 'table_factor));
 # 2562 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2565,12 +2565,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 681 "parser.yy"
+# 702 "parser.yy"
                                                                               
                                  _2
                                  
                    )
-# 681 "parser.yy"
+# 702 "parser.yy"
                  : 'table_reference_list_parens));
 # 2575 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2579,12 +2579,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 684 "parser.yy"
+# 705 "parser.yy"
                                                                                                    
                                  _2 @ [_4]
                                  
                    )
-# 684 "parser.yy"
+# 705 "parser.yy"
                  : 'table_reference_list_parens));
 # 2589 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2592,10 +2592,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 689 "parser.yy"
+# 710 "parser.yy"
                                                                        _2 
                    )
-# 689 "parser.yy"
+# 710 "parser.yy"
                  : 'single_table_parens));
 # 2600 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2603,10 +2603,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 690 "parser.yy"
+# 711 "parser.yy"
                                                                        _2 
                    )
-# 690 "parser.yy"
+# 711 "parser.yy"
                  : 'single_table_parens));
 # 2611 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2617,13 +2617,13 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 693 "parser.yy"
+# 714 "parser.yy"
                                                                                                  
                                  //_3 is ExprId -> ExpExprAlias 
-                                 MbSqlAbSyn.Expr.ExprListTyped ("id",[_1|>_3;_4])
+                                 MbSqlAbSyn.Expr.ExprListTyped ("single-table-id",[_1|>_3;_4])
                                  
                    )
-# 693 "parser.yy"
+# 714 "parser.yy"
                  : 'single_table));
 # 2628 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2631,10 +2631,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 699 "parser.yy"
+# 720 "parser.yy"
                                                                        _2 
                    )
-# 699 "parser.yy"
+# 720 "parser.yy"
                  : 'joined_table_parens));
 # 2639 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2642,10 +2642,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 700 "parser.yy"
+# 721 "parser.yy"
                                                                        _2 
                    )
-# 700 "parser.yy"
+# 721 "parser.yy"
                  : 'joined_table_parens));
 # 2650 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2655,7 +2655,7 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 703 "parser.yy"
+# 724 "parser.yy"
                                                                                        
                                  let subq = MbSqlAbSyn.Expr.SubQ _1
                                  let collist = _3
@@ -2665,19 +2665,19 @@ let _fsyacc_reductions ()  =    [|
                                  subalias2
                                  
                    )
-# 703 "parser.yy"
+# 724 "parser.yy"
                  : 'derived_table));
 # 2670 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 713 "parser.yy"
+# 734 "parser.yy"
                                             
-                                 MbSqlAbSyn.Expr.Null
+                                 MbSqlAbSyn.Expr.Empty
                                  
                    )
-# 713 "parser.yy"
+# 734 "parser.yy"
                  : 'opt_derived_column_list));
 # 2682 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2685,12 +2685,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 716 "parser.yy"
+# 737 "parser.yy"
                                                                     
                                  MbSqlAbSyn.Expr.ExprList _2
                                  
                    )
-# 716 "parser.yy"
+# 737 "parser.yy"
                  : 'opt_derived_column_list));
 # 2695 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2698,10 +2698,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 721 "parser.yy"
+# 742 "parser.yy"
                                                                        [_1] 
                    )
-# 721 "parser.yy"
+# 742 "parser.yy"
                  : 'simple_ident_list));
 # 2706 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2710,10 +2710,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 722 "parser.yy"
+# 743 "parser.yy"
                                                                        _1 @ [_3] 
                    )
-# 722 "parser.yy"
+# 743 "parser.yy"
                  : 'simple_ident_list));
 # 2718 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2724,14 +2724,14 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 727 "parser.yy"
+# 748 "parser.yy"
                                                 
                                  // Alias isn't optional, follow derived's behavior
                                  //Not sure what this is, so leave as temp for now
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 727 "parser.yy"
+# 748 "parser.yy"
                  : 'table_function));
 # 2736 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2739,10 +2739,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 734 "parser.yy"
+# 755 "parser.yy"
                                                                             _3 
                    )
-# 734 "parser.yy"
+# 755 "parser.yy"
                  : 'columns_clause));
 # 2747 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2750,10 +2750,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 737 "parser.yy"
+# 758 "parser.yy"
                                                                        [_1] 
                    )
-# 737 "parser.yy"
+# 758 "parser.yy"
                  : 'columns_list));
 # 2758 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2762,10 +2762,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 738 "parser.yy"
+# 759 "parser.yy"
                                                                        _1 @ [_3] 
                    )
-# 738 "parser.yy"
+# 759 "parser.yy"
                  : 'columns_list));
 # 2770 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2773,12 +2773,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 741 "parser.yy"
+# 762 "parser.yy"
                                                                
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 741 "parser.yy"
+# 762 "parser.yy"
                  : 'jt_column));
 # 2783 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2790,12 +2790,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 745 "parser.yy"
+# 766 "parser.yy"
                                                       
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 745 "parser.yy"
+# 766 "parser.yy"
                  : 'jt_column));
 # 2800 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2804,42 +2804,42 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 748 "parser.yy"
+# 769 "parser.yy"
                                                                                        
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 748 "parser.yy"
+# 769 "parser.yy"
                  : 'jt_column));
 # 2814 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 753 "parser.yy"
+# 774 "parser.yy"
                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 753 "parser.yy"
+# 774 "parser.yy"
                  : 'jt_column_type));
 # 2824 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 754 "parser.yy"
+# 775 "parser.yy"
                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 754 "parser.yy"
+# 775 "parser.yy"
                  : 'jt_column_type));
 # 2834 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 757 "parser.yy"
+# 778 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 757 "parser.yy"
+# 778 "parser.yy"
                  : 'opt_on_empty_or_error));
 # 2844 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2847,10 +2847,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 758 "parser.yy"
+# 779 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 758 "parser.yy"
+# 779 "parser.yy"
                  : 'opt_on_empty_or_error));
 # 2855 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2858,10 +2858,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 759 "parser.yy"
+# 780 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 759 "parser.yy"
+# 780 "parser.yy"
                  : 'opt_on_empty_or_error));
 # 2866 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2870,10 +2870,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 760 "parser.yy"
+# 781 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 760 "parser.yy"
+# 781 "parser.yy"
                  : 'opt_on_empty_or_error));
 # 2878 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2882,10 +2882,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 761 "parser.yy"
+# 782 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 761 "parser.yy"
+# 782 "parser.yy"
                  : 'opt_on_empty_or_error));
 # 2890 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2893,10 +2893,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 764 "parser.yy"
+# 785 "parser.yy"
                                                                       MbSqlAbSyn.Expr.Temp 
                    )
-# 764 "parser.yy"
+# 785 "parser.yy"
                  : 'opt_on_empty));
 # 2901 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2904,30 +2904,30 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 767 "parser.yy"
+# 788 "parser.yy"
                                                                       MbSqlAbSyn.Expr.Temp 
                    )
-# 767 "parser.yy"
+# 788 "parser.yy"
                  : 'opt_on_error));
 # 2912 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 770 "parser.yy"
+# 791 "parser.yy"
                                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 770 "parser.yy"
+# 791 "parser.yy"
                  : 'jt_on_response));
 # 2922 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 771 "parser.yy"
+# 792 "parser.yy"
                                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 771 "parser.yy"
+# 792 "parser.yy"
                  : 'jt_on_response));
 # 2932 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -2935,70 +2935,70 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 772 "parser.yy"
+# 793 "parser.yy"
                                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 772 "parser.yy"
+# 793 "parser.yy"
                  : 'jt_on_response));
 # 2943 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 775 "parser.yy"
-                                                           MbSqlAbSyn.Expr.Null 
+# 796 "parser.yy"
+                                                           MbSqlAbSyn.Expr.Empty
                    )
-# 775 "parser.yy"
+# 796 "parser.yy"
                  : 'index_hint_clause));
 # 2953 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 776 "parser.yy"
+# 797 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 776 "parser.yy"
+# 797 "parser.yy"
                  : 'index_hint_clause));
 # 2963 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 777 "parser.yy"
+# 798 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 777 "parser.yy"
+# 798 "parser.yy"
                  : 'index_hint_clause));
 # 2973 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 778 "parser.yy"
+# 799 "parser.yy"
                                                            MbSqlAbSyn.Expr.Temp 
                    )
-# 778 "parser.yy"
+# 799 "parser.yy"
                  : 'index_hint_clause));
 # 2983 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 781 "parser.yy"
+# 802 "parser.yy"
                                             "force" 
                    )
-# 781 "parser.yy"
+# 802 "parser.yy"
                  : 'index_hint_type));
 # 2993 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 782 "parser.yy"
+# 803 "parser.yy"
                                             "ignore" 
                    )
-# 782 "parser.yy"
+# 803 "parser.yy"
                  : 'index_hint_type));
 # 3003 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3009,12 +3009,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 786 "parser.yy"
+# 807 "parser.yy"
                                                                  
                                  MbSqlAbSyn.Expr.Temp 
                                  
                    )
-# 786 "parser.yy"
+# 807 "parser.yy"
                  : 'index_hint_definition));
 # 3019 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3024,12 +3024,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 790 "parser.yy"
+# 811 "parser.yy"
                                                                      
                                  MbSqlAbSyn.Expr.Temp 
                                  
                    )
-# 790 "parser.yy"
+# 811 "parser.yy"
                  : 'index_hint_definition));
 # 3034 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3037,10 +3037,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 795 "parser.yy"
+# 816 "parser.yy"
                                                        [] 
                    )
-# 795 "parser.yy"
+# 816 "parser.yy"
                  : 'index_hints_list));
 # 3045 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3049,22 +3049,22 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 796 "parser.yy"
+# 817 "parser.yy"
                                                                        
                                  []
                                  
                    )
-# 796 "parser.yy"
+# 817 "parser.yy"
                  : 'index_hints_list));
 # 3059 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 801 "parser.yy"
-                                                       MbSqlAbSyn.Expr.Null 
+# 822 "parser.yy"
+                                                       MbSqlAbSyn.Expr.Empty 
                    )
-# 801 "parser.yy"
+# 822 "parser.yy"
                  : 'opt_index_hints_list));
 # 3069 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3072,10 +3072,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 802 "parser.yy"
+# 823 "parser.yy"
                                                        MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 802 "parser.yy"
+# 823 "parser.yy"
                  : 'opt_index_hints_list));
 # 3080 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3083,20 +3083,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 808 "parser.yy"
+# 829 "parser.yy"
                                                      _1 
                    )
-# 808 "parser.yy"
+# 829 "parser.yy"
                  : 'opt_where_clause));
 # 3091 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 811 "parser.yy"
+# 832 "parser.yy"
                                             MbSqlAbSyn.Expr.Null 
                    )
-# 811 "parser.yy"
+# 832 "parser.yy"
                  : 'opt_where_clause_expr));
 # 3101 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3104,10 +3104,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 812 "parser.yy"
+# 833 "parser.yy"
                                                 _2 
                    )
-# 812 "parser.yy"
+# 833 "parser.yy"
                  : 'opt_where_clause_expr));
 # 3112 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3115,20 +3115,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 816 "parser.yy"
+# 837 "parser.yy"
                                                        _1 
                    )
-# 816 "parser.yy"
+# 837 "parser.yy"
                  : 'opt_key_definition));
 # 3123 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 824 "parser.yy"
+# 845 "parser.yy"
                                                                        MbSqlAbSyn.Expr.Null 
                    )
-# 824 "parser.yy"
+# 845 "parser.yy"
                  : 'opt_group_clause));
 # 3133 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3137,12 +3137,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 825 "parser.yy"
+# 846 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.ExprListTyped (_4,_3)
                                  
                    )
-# 825 "parser.yy"
+# 846 "parser.yy"
                  : 'opt_group_clause));
 # 3147 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3151,10 +3151,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 830 "parser.yy"
+# 851 "parser.yy"
                                                                    _1 @ [_3] 
                    )
-# 830 "parser.yy"
+# 851 "parser.yy"
                  : 'group_list));
 # 3159 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3162,40 +3162,40 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 831 "parser.yy"
+# 852 "parser.yy"
                                                                    [_1] 
                    )
-# 831 "parser.yy"
+# 852 "parser.yy"
                  : 'group_list));
 # 3170 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 834 "parser.yy"
+# 855 "parser.yy"
                                                "no-rollup" 
                    )
-# 834 "parser.yy"
+# 855 "parser.yy"
                  : 'olap_opt));
 # 3180 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 835 "parser.yy"
+# 856 "parser.yy"
                                                "rollup" 
                    )
-# 835 "parser.yy"
+# 856 "parser.yy"
                  : 'olap_opt));
 # 3190 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 848 "parser.yy"
+# 869 "parser.yy"
                                                    MbSqlAbSyn.Expr.Null 
                    )
-# 848 "parser.yy"
+# 869 "parser.yy"
                  : 'opt_having_clause));
 # 3200 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3203,20 +3203,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 849 "parser.yy"
+# 870 "parser.yy"
                                                    _2 
                    )
-# 849 "parser.yy"
+# 870 "parser.yy"
                  : 'opt_having_clause));
 # 3211 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 854 "parser.yy"
+# 875 "parser.yy"
                                                                    MbSqlAbSyn.Expr.Null 
                    )
-# 854 "parser.yy"
+# 875 "parser.yy"
                  : 'opt_window_clause));
 # 3221 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3224,10 +3224,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 855 "parser.yy"
+# 876 "parser.yy"
                                                                    MbSqlAbSyn.Expr.ExprList _2 
                    )
-# 855 "parser.yy"
+# 876 "parser.yy"
                  : 'opt_window_clause));
 # 3232 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3235,10 +3235,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 859 "parser.yy"
+# 880 "parser.yy"
                                                                                        [_1] 
                    )
-# 859 "parser.yy"
+# 880 "parser.yy"
                  : 'window_definition_list));
 # 3243 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3247,10 +3247,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 860 "parser.yy"
+# 881 "parser.yy"
                                                                                        _1 @ [_3]
                    )
-# 860 "parser.yy"
+# 881 "parser.yy"
                  : 'window_definition_list));
 # 3255 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3259,12 +3259,12 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 864 "parser.yy"
+# 885 "parser.yy"
                                                                
                                  MbSqlAbSyn.Expr.Binary ("as",_1,_3)
                                  
                    )
-# 864 "parser.yy"
+# 885 "parser.yy"
                  : 'window_definition));
 # 3269 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3272,30 +3272,30 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 869 "parser.yy"
+# 890 "parser.yy"
                                                _1 
                    )
-# 869 "parser.yy"
+# 890 "parser.yy"
                  : 'window_name));
 # 3280 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 873 "parser.yy"
+# 894 "parser.yy"
                                                                              MbSqlAbSyn.Expr.Null 
                    )
-# 873 "parser.yy"
+# 894 "parser.yy"
                  : 'window_spec));
 # 3290 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 877 "parser.yy"
+# 898 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 877 "parser.yy"
+# 898 "parser.yy"
                  : 'opt_key_usage_list));
 # 3300 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3303,10 +3303,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 878 "parser.yy"
+# 899 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 878 "parser.yy"
+# 899 "parser.yy"
                  : 'opt_key_usage_list));
 # 3311 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3314,20 +3314,20 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 882 "parser.yy"
+# 903 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 882 "parser.yy"
+# 903 "parser.yy"
                  : 'key_usage_element));
 # 3322 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 883 "parser.yy"
+# 904 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 883 "parser.yy"
+# 904 "parser.yy"
                  : 'key_usage_element));
 # 3332 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3335,10 +3335,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 887 "parser.yy"
+# 908 "parser.yy"
                                                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 887 "parser.yy"
+# 908 "parser.yy"
                  : 'key_usage_list));
 # 3343 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3347,10 +3347,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 888 "parser.yy"
+# 909 "parser.yy"
                                                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 888 "parser.yy"
+# 909 "parser.yy"
                  : 'key_usage_list));
 # 3355 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3358,10 +3358,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 892 "parser.yy"
+# 913 "parser.yy"
                                                    MbSqlAbSyn.Expr.ExprListTyped ("id",_1) 
                    )
-# 892 "parser.yy"
+# 913 "parser.yy"
                  : 'using_list));
 # 3366 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3369,10 +3369,10 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 896 "parser.yy"
+# 917 "parser.yy"
                                                                        [_1] 
                    )
-# 896 "parser.yy"
+# 917 "parser.yy"
                  : 'ident_string_list));
 # 3377 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
@@ -3381,66 +3381,65 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 897 "parser.yy"
+# 918 "parser.yy"
                                                                        _1 @ [_3] 
                    )
-# 897 "parser.yy"
+# 918 "parser.yy"
                  : 'ident_string_list));
 # 3389 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 900 "parser.yy"
+# 921 "parser.yy"
                                                "" 
                    )
-# 900 "parser.yy"
+# 921 "parser.yy"
                  : 'opt_as_or_eq));
 # 3399 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 901 "parser.yy"
+# 922 "parser.yy"
                                                "as" 
                    )
-# 901 "parser.yy"
+# 922 "parser.yy"
                  : 'opt_as_or_eq));
 # 3409 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 902 "parser.yy"
+# 923 "parser.yy"
                                                "eq" 
                    )
-# 902 "parser.yy"
+# 923 "parser.yy"
                  : 'opt_as_or_eq));
 # 3419 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 905 "parser.yy"
+# 926 "parser.yy"
                                                    
                                  fun tid ->
-                                     MbSqlAbSyn.Expr.Binary (
-                                         "as",
-                                         tid,
-                                         MbSqlAbSyn.Expr.Null
-                                         )
+                                     match tid with
+                                     | MbSqlAbSyn.Expr.ExprListTyped (t,l) -> l.[0]
+                                     | MbSqlAbSyn.Expr.ExprList l -> l.[0]
+                                     | _ -> tid
                                  
                    )
-# 905 "parser.yy"
+# 926 "parser.yy"
                  : 'opt_table_alias));
-# 3436 "parser.fs"
+# 3435 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'opt_as_or_eq)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 913 "parser.yy"
+# 933 "parser.yy"
                                                    
                                  fun tid ->
                                      MbSqlAbSyn.Expr.Binary (
@@ -3450,153 +3449,153 @@ let _fsyacc_reductions ()  =    [|
                                          )
                                  
                    )
-# 913 "parser.yy"
+# 933 "parser.yy"
                  : 'opt_table_alias));
-# 3455 "parser.fs"
+# 3454 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 923 "parser.yy"
+# 943 "parser.yy"
                                                "" 
                    )
-# 923 "parser.yy"
+# 943 "parser.yy"
                  : 'opt_all));
-# 3465 "parser.fs"
+# 3464 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 924 "parser.yy"
+# 944 "parser.yy"
                                                "all" 
                    )
-# 924 "parser.yy"
+# 944 "parser.yy"
                  : 'opt_all));
-# 3475 "parser.fs"
+# 3474 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 927 "parser.yy"
+# 947 "parser.yy"
                                            "key" 
                    )
-# 927 "parser.yy"
+# 947 "parser.yy"
                  : 'key_or_index));
-# 3485 "parser.fs"
+# 3484 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 928 "parser.yy"
+# 948 "parser.yy"
                                            "index" 
                    )
-# 928 "parser.yy"
+# 948 "parser.yy"
                  : 'key_or_index));
-# 3495 "parser.fs"
+# 3494 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 932 "parser.yy"
+# 952 "parser.yy"
                                                "" 
                    )
-# 932 "parser.yy"
+# 952 "parser.yy"
                  : 'opt_key_or_index));
-# 3505 "parser.fs"
+# 3504 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'key_or_index)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 933 "parser.yy"
+# 953 "parser.yy"
                                                _1 
                    )
-# 933 "parser.yy"
+# 953 "parser.yy"
                  : 'opt_key_or_index));
-# 3516 "parser.fs"
+# 3515 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 936 "parser.yy"
+# 956 "parser.yy"
                                                "keys" 
                    )
-# 936 "parser.yy"
+# 956 "parser.yy"
                  : 'keys_or_index));
-# 3526 "parser.fs"
+# 3525 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 937 "parser.yy"
+# 957 "parser.yy"
                                                "index" 
                    )
-# 937 "parser.yy"
+# 957 "parser.yy"
                  : 'keys_or_index));
-# 3536 "parser.fs"
+# 3535 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 938 "parser.yy"
+# 958 "parser.yy"
                                                "indexes" 
                    )
-# 938 "parser.yy"
+# 958 "parser.yy"
                  : 'keys_or_index));
-# 3546 "parser.fs"
+# 3545 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 941 "parser.yy"
+# 961 "parser.yy"
                                               "" 
                    )
-# 941 "parser.yy"
+# 961 "parser.yy"
                  : 'opt_unique));
-# 3556 "parser.fs"
+# 3555 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 942 "parser.yy"
+# 962 "parser.yy"
                                               "unique" 
                    )
-# 942 "parser.yy"
+# 962 "parser.yy"
                  : 'opt_unique));
-# 3566 "parser.fs"
+# 3565 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 951 "parser.yy"
+# 971 "parser.yy"
                                                MbSqlAbSyn.Expr.Temp 
                    )
-# 951 "parser.yy"
+# 971 "parser.yy"
                  : 'set_type));
-# 3576 "parser.fs"
+# 3575 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 956 "parser.yy"
+# 976 "parser.yy"
                                                                [_1] 
                    )
-# 956 "parser.yy"
+# 976 "parser.yy"
                  : 'expr_list));
-# 3587 "parser.fs"
+# 3586 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr_list)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 957 "parser.yy"
+# 977 "parser.yy"
                                                                _1 @ [_3] 
                    )
-# 957 "parser.yy"
+# 977 "parser.yy"
                  : 'expr_list));
-# 3599 "parser.fs"
+# 3598 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_or)) in
@@ -3604,28 +3603,28 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 960 "parser.yy"
+# 980 "parser.yy"
                                                             
                                  MbSqlAbSyn.Expr.Binary ("or",_1,_3)
                                  
                    )
-# 960 "parser.yy"
+# 980 "parser.yy"
                  : 'expr));
-# 3614 "parser.fs"
+# 3613 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 963 "parser.yy"
+# 983 "parser.yy"
                                                               
                                  MbSqlAbSyn.Expr.Binary ("xor",_1,_3)
                                  
                    )
-# 963 "parser.yy"
+# 983 "parser.yy"
                  : 'expr));
-# 3628 "parser.fs"
+# 3627 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_and)) in
@@ -3633,154 +3632,154 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 966 "parser.yy"
+# 986 "parser.yy"
                                                               
                                  MbSqlAbSyn.Expr.Binary ("and",_1,_3)
                                  
                    )
-# 966 "parser.yy"
+# 986 "parser.yy"
                  : 'expr));
-# 3643 "parser.fs"
+# 3642 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 969 "parser.yy"
+# 989 "parser.yy"
                                                          
                                  MbSqlAbSyn.Expr.Unary ("not",_2)
                                  
                    )
-# 969 "parser.yy"
+# 989 "parser.yy"
                  : 'expr));
-# 3656 "parser.fs"
+# 3655 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 972 "parser.yy"
+# 992 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("bool","true"))
                                  
                    )
-# 972 "parser.yy"
+# 992 "parser.yy"
                  : 'expr));
-# 3669 "parser.fs"
+# 3668 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 975 "parser.yy"
+# 995 "parser.yy"
                                                                              
                                  //Do it non reversible - that is cannot map back since 
                                  //not true == false
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("bool","false"))
                                  
                    )
-# 975 "parser.yy"
+# 995 "parser.yy"
                  : 'expr));
-# 3685 "parser.fs"
+# 3684 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 980 "parser.yy"
+# 1000 "parser.yy"
                                                                        
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("bool","false"))
                                  
                    )
-# 980 "parser.yy"
+# 1000 "parser.yy"
                  : 'expr));
-# 3698 "parser.fs"
+# 3697 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 983 "parser.yy"
+# 1003 "parser.yy"
                                                                               
                                  //Do it non reversible - that is cannot map back. As above
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("bool","true"))
                                  
                    )
-# 983 "parser.yy"
+# 1003 "parser.yy"
                  : 'expr));
-# 3713 "parser.fs"
+# 3712 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 987 "parser.yy"
+# 1007 "parser.yy"
                                                                          
                                  //I cant quite figure what unknown is. So treat as key
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("key","unknown"))
                                  
                    )
-# 987 "parser.yy"
+# 1007 "parser.yy"
                  : 'expr));
-# 3727 "parser.fs"
+# 3726 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 991 "parser.yy"
+# 1011 "parser.yy"
                                                                                 
                                  //The negation of unknown here just become known
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("key","known"))
                                  
                    )
-# 991 "parser.yy"
+# 1011 "parser.yy"
                  : 'expr));
-# 3742 "parser.fs"
+# 3741 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 995 "parser.yy"
+# 1015 "parser.yy"
                                          
                                  _1
                                  
                    )
-# 995 "parser.yy"
+# 1015 "parser.yy"
                  : 'expr));
-# 3755 "parser.fs"
+# 3754 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1000 "parser.yy"
+# 1020 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.NodeTyped ("key","null"))
                                  
                    )
-# 1000 "parser.yy"
+# 1020 "parser.yy"
                  : 'bool_pri));
-# 3768 "parser.fs"
+# 3767 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1003 "parser.yy"
+# 1023 "parser.yy"
                                                                              
                                  //Done the long way
                                  MbSqlAbSyn.Expr.Binary ("is",_1,MbSqlAbSyn.Expr.Unary ("not",MbSqlAbSyn.Expr.NodeTyped("key","null")))
                                
                    )
-# 1003 "parser.yy"
+# 1023 "parser.yy"
                  : 'bool_pri));
-# 3783 "parser.fs"
+# 3782 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bool_pri)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'comp_op)) in
@@ -3788,41 +3787,41 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1007 "parser.yy"
+# 1027 "parser.yy"
                                                            
                                  MbSqlAbSyn.Expr.Binary (_2,_1,_3)
                                  
                    )
-# 1007 "parser.yy"
+# 1027 "parser.yy"
                  : 'bool_pri));
-# 3798 "parser.fs"
+# 3797 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'predicate)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1011 "parser.yy"
+# 1031 "parser.yy"
                                           
                                  _1
                                  
                    )
-# 1011 "parser.yy"
+# 1031 "parser.yy"
                  : 'bool_pri));
-# 3811 "parser.fs"
+# 3810 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'table_subquery)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1016 "parser.yy"
+# 1036 "parser.yy"
                                                               
                                  MbSqlAbSyn.Expr.Binary ("in",_1,MbSqlAbSyn.Expr.SubQ _3)
                                  
                    )
-# 1016 "parser.yy"
+# 1036 "parser.yy"
                  : 'predicate));
-# 3825 "parser.fs"
+# 3824 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
@@ -3830,28 +3829,28 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1019 "parser.yy"
+# 1039 "parser.yy"
                                                                      
                                  MbSqlAbSyn.Expr.Binary ("in",_1,MbSqlAbSyn.Expr.SubQ _4)
                                  
                    )
-# 1019 "parser.yy"
+# 1039 "parser.yy"
                  : 'predicate));
-# 3840 "parser.fs"
+# 3839 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1022 "parser.yy"
+# 1042 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.Binary ("in",_1,_4)
                                  
                    )
-# 1022 "parser.yy"
+# 1042 "parser.yy"
                  : 'predicate));
-# 3854 "parser.fs"
+# 3853 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
@@ -3859,14 +3858,14 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1025 "parser.yy"
+# 1045 "parser.yy"
                                                                                             
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1025 "parser.yy"
+# 1045 "parser.yy"
                  : 'predicate));
-# 3869 "parser.fs"
+# 3868 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
@@ -3874,14 +3873,14 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1028 "parser.yy"
+# 1048 "parser.yy"
                                                                              
                                  MbSqlAbSyn.Expr.Unary ("not",MbSqlAbSyn.Expr.Binary ("in",_1,_5))
                                  
                    )
-# 1028 "parser.yy"
+# 1048 "parser.yy"
                  : 'predicate));
-# 3884 "parser.fs"
+# 3883 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
@@ -3890,14 +3889,14 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1031 "parser.yy"
+# 1051 "parser.yy"
                                                                                                    
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1031 "parser.yy"
+# 1051 "parser.yy"
                  : 'predicate));
-# 3900 "parser.fs"
+# 3899 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
@@ -3905,14 +3904,14 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1034 "parser.yy"
+# 1054 "parser.yy"
                                                                               
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1034 "parser.yy"
+# 1054 "parser.yy"
                  : 'predicate));
-# 3915 "parser.fs"
+# 3914 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'op_not)) in
@@ -3921,694 +3920,694 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1037 "parser.yy"
+# 1057 "parser.yy"
                                                                                      
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1037 "parser.yy"
+# 1057 "parser.yy"
                  : 'predicate));
-# 3931 "parser.fs"
+# 3930 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1040 "parser.yy"
+# 1060 "parser.yy"
                                                                     
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1040 "parser.yy"
+# 1060 "parser.yy"
                  : 'predicate));
-# 3945 "parser.fs"
+# 3944 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1047 "parser.yy"
+# 1067 "parser.yy"
                                          
                                  _1
                                  
                    )
-# 1047 "parser.yy"
+# 1067 "parser.yy"
                  : 'predicate));
-# 3958 "parser.fs"
+# 3957 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1053 "parser.yy"
+# 1073 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.Binary ("|",_1,_3)
                                  
                    )
-# 1053 "parser.yy"
+# 1073 "parser.yy"
                  : 'bit_expr));
-# 3972 "parser.fs"
+# 3971 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1056 "parser.yy"
+# 1076 "parser.yy"
                                                                         
                                 MbSqlAbSyn.Expr.Binary ("&",_1,_3)
                                  
                    )
-# 1056 "parser.yy"
+# 1076 "parser.yy"
                  : 'bit_expr));
-# 3986 "parser.fs"
+# 3985 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1059 "parser.yy"
+# 1079 "parser.yy"
                                                                                     
                                 MbSqlAbSyn.Expr.Binary ("<<",_1,_3)
                                  
                    )
-# 1059 "parser.yy"
+# 1079 "parser.yy"
                  : 'bit_expr));
-# 4000 "parser.fs"
+# 3999 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1062 "parser.yy"
+# 1082 "parser.yy"
                                                                                       
                                 MbSqlAbSyn.Expr.Binary (">>",_1,_3)
                                  
                    )
-# 1062 "parser.yy"
+# 1082 "parser.yy"
                  : 'bit_expr));
-# 4014 "parser.fs"
+# 4013 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1065 "parser.yy"
+# 1085 "parser.yy"
                                                                         
                                  MbSqlAbSyn.Expr.Binary ("+",_1,_3)
                                  
                    )
-# 1065 "parser.yy"
+# 1085 "parser.yy"
                  : 'bit_expr));
-# 4028 "parser.fs"
+# 4027 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1068 "parser.yy"
+# 1088 "parser.yy"
                                                                           
                                  MbSqlAbSyn.Expr.Binary ("-",_1,_3)
                                  
                    )
-# 1068 "parser.yy"
+# 1088 "parser.yy"
                  : 'bit_expr));
-# 4042 "parser.fs"
+# 4041 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1073 "parser.yy"
+# 1093 "parser.yy"
                                                                           
                                  MbSqlAbSyn.Expr.Binary ("*",_1,_3)
                                  
                    )
-# 1073 "parser.yy"
+# 1093 "parser.yy"
                  : 'bit_expr));
-# 4056 "parser.fs"
+# 4055 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1076 "parser.yy"
+# 1096 "parser.yy"
                                                                       
                                  MbSqlAbSyn.Expr.Binary ("/",_1,_3)
                                  
                    )
-# 1076 "parser.yy"
+# 1096 "parser.yy"
                  : 'bit_expr));
-# 4070 "parser.fs"
+# 4069 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1079 "parser.yy"
+# 1099 "parser.yy"
                                                                         
                                  MbSqlAbSyn.Expr.Binary ("%",_1,_3)
                                  
                    )
-# 1079 "parser.yy"
+# 1099 "parser.yy"
                  : 'bit_expr));
-# 4084 "parser.fs"
+# 4083 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1082 "parser.yy"
+# 1102 "parser.yy"
                                                                               
                                  MbSqlAbSyn.Expr.Binary ("/",_1,_3)
                                  
                    )
-# 1082 "parser.yy"
+# 1102 "parser.yy"
                  : 'bit_expr));
-# 4098 "parser.fs"
+# 4097 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1085 "parser.yy"
+# 1105 "parser.yy"
                                                                           
                                  MbSqlAbSyn.Expr.Binary ("%",_1,_3)
                                  
                    )
-# 1085 "parser.yy"
+# 1105 "parser.yy"
                  : 'bit_expr));
-# 4112 "parser.fs"
+# 4111 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'bit_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1088 "parser.yy"
+# 1108 "parser.yy"
                                                         
                                  MbSqlAbSyn.Expr.Binary ("^",_1,_3)
                                  
                    )
-# 1088 "parser.yy"
+# 1108 "parser.yy"
                  : 'bit_expr));
-# 4126 "parser.fs"
+# 4125 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1091 "parser.yy"
+# 1111 "parser.yy"
                                             
                                  _1
                                  
                    )
-# 1091 "parser.yy"
+# 1111 "parser.yy"
                  : 'bit_expr));
-# 4139 "parser.fs"
+# 4138 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1096 "parser.yy"
+# 1116 "parser.yy"
                                               
                    )
-# 1096 "parser.yy"
+# 1116 "parser.yy"
                  : 'op_or));
-# 4149 "parser.fs"
+# 4148 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1097 "parser.yy"
+# 1117 "parser.yy"
                                               
                    )
-# 1097 "parser.yy"
+# 1117 "parser.yy"
                  : 'op_or));
-# 4159 "parser.fs"
+# 4158 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1101 "parser.yy"
+# 1121 "parser.yy"
                                               
                    )
-# 1101 "parser.yy"
+# 1121 "parser.yy"
                  : 'op_and));
-# 4169 "parser.fs"
+# 4168 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1102 "parser.yy"
+# 1122 "parser.yy"
                                               
                    )
-# 1102 "parser.yy"
+# 1122 "parser.yy"
                  : 'op_and));
-# 4179 "parser.fs"
+# 4178 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1106 "parser.yy"
+# 1126 "parser.yy"
                                               
                    )
-# 1106 "parser.yy"
+# 1126 "parser.yy"
                  : 'op_not));
-# 4189 "parser.fs"
+# 4188 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1107 "parser.yy"
+# 1127 "parser.yy"
                                               
                    )
-# 1107 "parser.yy"
+# 1127 "parser.yy"
                  : 'op_not));
-# 4199 "parser.fs"
+# 4198 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1111 "parser.yy"
+# 1131 "parser.yy"
                                            "eq" 
                    )
-# 1111 "parser.yy"
+# 1131 "parser.yy"
                  : 'comp_op));
-# 4209 "parser.fs"
+# 4208 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1112 "parser.yy"
+# 1132 "parser.yy"
                                            "eq" 
                    )
-# 1112 "parser.yy"
+# 1132 "parser.yy"
                  : 'comp_op));
-# 4219 "parser.fs"
+# 4218 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1113 "parser.yy"
+# 1133 "parser.yy"
                                            "geq" 
                    )
-# 1113 "parser.yy"
+# 1133 "parser.yy"
                  : 'comp_op));
-# 4229 "parser.fs"
+# 4228 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1114 "parser.yy"
+# 1134 "parser.yy"
                                            "gt" 
                    )
-# 1114 "parser.yy"
+# 1134 "parser.yy"
                  : 'comp_op));
-# 4239 "parser.fs"
+# 4238 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1115 "parser.yy"
+# 1135 "parser.yy"
                                            "leq" 
                    )
-# 1115 "parser.yy"
+# 1135 "parser.yy"
                  : 'comp_op));
-# 4249 "parser.fs"
+# 4248 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1116 "parser.yy"
+# 1136 "parser.yy"
                                            "lt" 
                    )
-# 1116 "parser.yy"
+# 1136 "parser.yy"
                  : 'comp_op));
-# 4259 "parser.fs"
+# 4258 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1117 "parser.yy"
+# 1137 "parser.yy"
                                            "neq" 
                    )
-# 1117 "parser.yy"
+# 1137 "parser.yy"
                  : 'comp_op));
-# 4269 "parser.fs"
+# 4268 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1121 "parser.yy"
+# 1141 "parser.yy"
                                            "" 
                    )
-# 1121 "parser.yy"
+# 1141 "parser.yy"
                  : 'all_or_any));
-# 4279 "parser.fs"
+# 4278 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1122 "parser.yy"
+# 1142 "parser.yy"
                                            "" 
                    )
-# 1122 "parser.yy"
+# 1142 "parser.yy"
                  : 'all_or_any));
-# 4289 "parser.fs"
+# 4288 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1126 "parser.yy"
+# 1146 "parser.yy"
                                                                _1 
                    )
-# 1126 "parser.yy"
+# 1146 "parser.yy"
                  : 'simple_expr));
-# 4300 "parser.fs"
+# 4299 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'function_call_keyword)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1127 "parser.yy"
+# 1147 "parser.yy"
                                                                _1 
                    )
-# 1127 "parser.yy"
+# 1147 "parser.yy"
                  : 'simple_expr));
-# 4311 "parser.fs"
+# 4310 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'function_call_nonkeyword)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1128 "parser.yy"
+# 1148 "parser.yy"
                                                                _1 
                    )
-# 1128 "parser.yy"
+# 1148 "parser.yy"
                  : 'simple_expr));
-# 4322 "parser.fs"
+# 4321 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'function_call_generic)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1129 "parser.yy"
+# 1149 "parser.yy"
                                                                _1 
                    )
-# 1129 "parser.yy"
+# 1149 "parser.yy"
                  : 'simple_expr));
-# 4333 "parser.fs"
+# 4332 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'literal)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1132 "parser.yy"
+# 1152 "parser.yy"
                                                                _1 
                    )
-# 1132 "parser.yy"
+# 1152 "parser.yy"
                  : 'simple_expr));
-# 4344 "parser.fs"
+# 4343 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1138 "parser.yy"
+# 1158 "parser.yy"
                                                                  
                                  MbSqlAbSyn.Expr.Unary ("+",_2)
                                  
                    )
-# 1138 "parser.yy"
+# 1158 "parser.yy"
                  : 'simple_expr));
-# 4357 "parser.fs"
+# 4356 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1141 "parser.yy"
+# 1161 "parser.yy"
                                                                   
                                  MbSqlAbSyn.Expr.Unary ("-",_2)
                                  
                    )
-# 1141 "parser.yy"
+# 1161 "parser.yy"
                  : 'simple_expr));
-# 4370 "parser.fs"
+# 4369 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1144 "parser.yy"
+# 1164 "parser.yy"
                                                                   
                                  MbSqlAbSyn.Expr.Unary ("~",_2)
                                  
                    )
-# 1144 "parser.yy"
+# 1164 "parser.yy"
                  : 'simple_expr));
-# 4383 "parser.fs"
+# 4382 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1147 "parser.yy"
+# 1167 "parser.yy"
                                                                  
                                  MbSqlAbSyn.Expr.Unary ("!",_2)
                                  
                    )
-# 1147 "parser.yy"
+# 1167 "parser.yy"
                  : 'simple_expr));
-# 4396 "parser.fs"
+# 4395 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'row_subquery)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1150 "parser.yy"
+# 1170 "parser.yy"
                                              
                                  MbSqlAbSyn.Expr.SubQ _1
                                  
                    )
-# 1150 "parser.yy"
+# 1170 "parser.yy"
                  : 'simple_expr));
-# 4409 "parser.fs"
+# 4408 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1153 "parser.yy"
+# 1173 "parser.yy"
                                                        
                                  _2
                                  
                    )
-# 1153 "parser.yy"
+# 1173 "parser.yy"
                  : 'simple_expr));
-# 4422 "parser.fs"
+# 4421 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             let _4 = (let data = parseState.GetInput(4) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr_list)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1156 "parser.yy"
+# 1176 "parser.yy"
                                                                              
                                  MbSqlAbSyn.Expr.ExprList ([_2] @ _4)
                                  
                    )
-# 1156 "parser.yy"
+# 1176 "parser.yy"
                  : 'simple_expr));
-# 4436 "parser.fs"
+# 4435 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'text_literal)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1175 "parser.yy"
+# 1195 "parser.yy"
                                                        _1 
                    )
-# 1175 "parser.yy"
+# 1195 "parser.yy"
                  : 'literal));
-# 4447 "parser.fs"
+# 4446 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'num_literal)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1176 "parser.yy"
+# 1196 "parser.yy"
                                                        _1 
                    )
-# 1176 "parser.yy"
+# 1196 "parser.yy"
                  : 'literal));
-# 4458 "parser.fs"
+# 4457 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1178 "parser.yy"
+# 1198 "parser.yy"
                                          
                                  MbSqlAbSyn.Expr.NodeTyped ("keyword","null")
                                  
                    )
-# 1178 "parser.yy"
+# 1198 "parser.yy"
                  : 'literal));
-# 4470 "parser.fs"
+# 4469 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1181 "parser.yy"
+# 1201 "parser.yy"
                                               
                                  MbSqlAbSyn.Expr.NodeTyped ("keyword","false")
                                  
                    )
-# 1181 "parser.yy"
+# 1201 "parser.yy"
                  : 'literal));
-# 4482 "parser.fs"
+# 4481 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1184 "parser.yy"
+# 1204 "parser.yy"
                                          
                                  MbSqlAbSyn.Expr.NodeTyped ("keyword","true")
                                  
                    )
-# 1184 "parser.yy"
+# 1204 "parser.yy"
                  : 'literal));
-# 4494 "parser.fs"
+# 4493 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1187 "parser.yy"
+# 1207 "parser.yy"
                                         
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1187 "parser.yy"
+# 1207 "parser.yy"
                  : 'literal));
-# 4507 "parser.fs"
+# 4506 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1190 "parser.yy"
+# 1210 "parser.yy"
                                         
                                  MbSqlAbSyn.Expr.Temp
                                  
                    )
-# 1190 "parser.yy"
+# 1210 "parser.yy"
                  : 'literal));
-# 4520 "parser.fs"
+# 4519 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1198 "parser.yy"
+# 1218 "parser.yy"
                                            
                                  MbSqlAbSyn.Expr.NodeTyped ("string",_1)
                                  
                    )
-# 1198 "parser.yy"
+# 1218 "parser.yy"
                  : 'text_literal));
-# 4533 "parser.fs"
+# 4532 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1209 "parser.yy"
+# 1229 "parser.yy"
                                            
                                  //check format!
                                  _1
                                  
                    )
-# 1209 "parser.yy"
+# 1229 "parser.yy"
                  : 'text_string_sys));
-# 4547 "parser.fs"
+# 4546 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1215 "parser.yy"
+# 1235 "parser.yy"
                                                    MbSqlAbSyn.Expr.NodeTyped ("num",_1) 
                    )
-# 1215 "parser.yy"
+# 1235 "parser.yy"
                  : 'num_literal));
-# 4558 "parser.fs"
+# 4557 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1219 "parser.yy"
+# 1239 "parser.yy"
                                                    MbSqlAbSyn.Expr.NodeTyped ("float",_1)
                    )
-# 1219 "parser.yy"
+# 1239 "parser.yy"
                  : 'num_literal));
-# 4569 "parser.fs"
+# 4568 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr_list)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1225 "parser.yy"
+# 1245 "parser.yy"
                                                                      
                                  let id = MbSqlAbSyn.Expr.NodeTyped ("id","date")
                                  MbSqlAbSyn.Expr.FunctionCall (id,MbSqlAbSyn.Expr.ExprList _3)
                                  
                    )
-# 1225 "parser.yy"
+# 1245 "parser.yy"
                  : 'function_call_keyword));
-# 4583 "parser.fs"
+# 4582 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1231 "parser.yy"
+# 1251 "parser.yy"
                                                                  
                                  let id = MbSqlAbSyn.Expr.NodeTyped ("id","now")
                                  MbSqlAbSyn.Expr.FunctionCall (id,_3)
                                  
                    )
-# 1231 "parser.yy"
+# 1251 "parser.yy"
                  : 'function_call_nonkeyword));
-# 4597 "parser.fs"
+# 4596 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident_sys)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'opt_udf_expr_list)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1237 "parser.yy"
+# 1257 "parser.yy"
                                                                               
                                  MbSqlAbSyn.Expr.FunctionCall (_1,_3)
                                  
                    )
-# 1237 "parser.yy"
+# 1257 "parser.yy"
                  : 'function_call_generic));
-# 4611 "parser.fs"
+# 4610 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
@@ -4616,185 +4615,185 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1240 "parser.yy"
+# 1260 "parser.yy"
                                                                                    
                                  let id_list = MbSqlAbSyn.Expr.ExprListTyped ("id",[_1;_3])
                                  MbSqlAbSyn.Expr.FunctionCall (id_list,_5)
                                  
                    )
-# 1240 "parser.yy"
+# 1260 "parser.yy"
                  : 'function_call_generic));
-# 4627 "parser.fs"
+# 4626 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1246 "parser.yy"
-                                               MbSqlAbSyn.Expr.Null 
+# 1266 "parser.yy"
+                                               MbSqlAbSyn.Expr.Empty 
                    )
-# 1246 "parser.yy"
+# 1266 "parser.yy"
                  : 'opt_expr_list));
-# 4637 "parser.fs"
+# 4636 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr_list)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1247 "parser.yy"
+# 1267 "parser.yy"
                                                MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 1247 "parser.yy"
+# 1267 "parser.yy"
                  : 'opt_expr_list));
-# 4648 "parser.fs"
+# 4647 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1250 "parser.yy"
+# 1270 "parser.yy"
                                                MbSqlAbSyn.Expr.Null 
                    )
-# 1250 "parser.yy"
+# 1270 "parser.yy"
                  : 'opt_udf_expr_list));
-# 4658 "parser.fs"
+# 4657 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'udf_expr_list)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1251 "parser.yy"
+# 1271 "parser.yy"
                                                MbSqlAbSyn.Expr.ExprList _1 
                    )
-# 1251 "parser.yy"
+# 1271 "parser.yy"
                  : 'opt_udf_expr_list));
-# 4669 "parser.fs"
+# 4668 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'udf_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1254 "parser.yy"
+# 1274 "parser.yy"
                                                                        [_1] 
                    )
-# 1254 "parser.yy"
+# 1274 "parser.yy"
                  : 'udf_expr_list));
-# 4680 "parser.fs"
+# 4679 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'udf_expr_list)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'udf_expr)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1255 "parser.yy"
+# 1275 "parser.yy"
                                                                        _1 @ [_3] 
                    )
-# 1255 "parser.yy"
+# 1275 "parser.yy"
                  : 'udf_expr_list));
-# 4692 "parser.fs"
+# 4691 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'expr)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'select_alias)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1259 "parser.yy"
+# 1279 "parser.yy"
                                                        MbSqlAbSyn.Expr.Binary ("as",_1,_2) 
                    )
-# 1259 "parser.yy"
+# 1279 "parser.yy"
                  : 'udf_expr));
-# 4704 "parser.fs"
+# 4703 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1266 "parser.yy"
+# 1286 "parser.yy"
                                                MbSqlAbSyn.Expr.NodeTyped ("id",_1) 
                    )
-# 1266 "parser.yy"
+# 1286 "parser.yy"
                  : 'ident_sys));
-# 4715 "parser.fs"
+# 4714 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1267 "parser.yy"
+# 1287 "parser.yy"
                                                MbSqlAbSyn.Expr.NodeTyped ("id",_1) 
                    )
-# 1267 "parser.yy"
+# 1287 "parser.yy"
                  : 'ident_sys));
-# 4726 "parser.fs"
+# 4725 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : string)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1271 "parser.yy"
+# 1292 "parser.yy"
                                  
                              MbSqlAbSyn.Expr.NodeTyped ("id",_1)
                              
                    )
-# 1271 "parser.yy"
+# 1292 "parser.yy"
                  : 'ident));
-# 4739 "parser.fs"
+# 4738 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1275 "parser.yy"
+# 1296 "parser.yy"
                                                    _1 
                    )
-# 1275 "parser.yy"
+# 1296 "parser.yy"
                  : 'simple_ident));
-# 4750 "parser.fs"
+# 4749 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident_q)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1276 "parser.yy"
+# 1297 "parser.yy"
                                                    _1 
                    )
-# 1276 "parser.yy"
+# 1297 "parser.yy"
                  : 'simple_ident));
-# 4761 "parser.fs"
+# 4760 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1279 "parser.yy"
+# 1300 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 1279 "parser.yy"
+# 1300 "parser.yy"
                  : 'simple_ident_nospvar));
-# 4772 "parser.fs"
+# 4771 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'simple_ident_q)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1280 "parser.yy"
+# 1301 "parser.yy"
                                                    MbSqlAbSyn.Expr.Temp 
                    )
-# 1280 "parser.yy"
+# 1301 "parser.yy"
                  : 'simple_ident_nospvar));
-# 4783 "parser.fs"
+# 4782 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1283 "parser.yy"
+# 1304 "parser.yy"
                                                    
                                  MbSqlAbSyn.Expr.ExprList [_1;_3]
                                  
                    )
-# 1283 "parser.yy"
+# 1304 "parser.yy"
                  : 'simple_ident_q));
-# 4797 "parser.fs"
+# 4796 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
@@ -4802,49 +4801,49 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1286 "parser.yy"
+# 1307 "parser.yy"
                                                                 
                                  MbSqlAbSyn.Expr.ExprList [_1;_3;_5]
                                  
                    )
-# 1286 "parser.yy"
+# 1307 "parser.yy"
                  : 'simple_ident_q));
-# 4812 "parser.fs"
+# 4811 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1291 "parser.yy"
+# 1312 "parser.yy"
                                                        MbSqlAbSyn.Expr.ExprList [_1] 
                    )
-# 1291 "parser.yy"
+# 1312 "parser.yy"
                  : 'table_ident));
-# 4823 "parser.fs"
+# 4822 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1292 "parser.yy"
+# 1313 "parser.yy"
                                                        MbSqlAbSyn.Expr.ExprList [_1;_3] 
                    )
-# 1292 "parser.yy"
+# 1313 "parser.yy"
                  : 'table_ident));
-# 4835 "parser.fs"
+# 4834 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _2 = (let data = parseState.GetInput(2) in (Microsoft.FSharp.Core.Operators.unbox data : 'opt_wild)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1295 "parser.yy"
+# 1316 "parser.yy"
                                                                MbSqlAbSyn.Expr.ExprList ([_1] @ _2) 
                    )
-# 1295 "parser.yy"
+# 1316 "parser.yy"
                  : 'table_ident_opt_wild));
-# 4847 "parser.fs"
+# 4846 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
@@ -4852,60 +4851,60 @@ let _fsyacc_reductions ()  =    [|
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1296 "parser.yy"
+# 1317 "parser.yy"
                                                                MbSqlAbSyn.Expr.ExprList ([_1;_3] @ _4)
                    )
-# 1296 "parser.yy"
+# 1317 "parser.yy"
                  : 'table_ident_opt_wild));
-# 4860 "parser.fs"
+# 4859 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1299 "parser.yy"
+# 1320 "parser.yy"
                                                    [] 
                    )
-# 1299 "parser.yy"
+# 1320 "parser.yy"
                  : 'opt_wild));
-# 4870 "parser.fs"
+# 4869 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1300 "parser.yy"
+# 1321 "parser.yy"
                                                    [MbSqlAbSyn.Expr.NodeTyped ("id","*")] 
                    )
-# 1300 "parser.yy"
+# 1321 "parser.yy"
                  : 'opt_wild));
-# 4880 "parser.fs"
+# 4879 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1303 "parser.yy"
+# 1324 "parser.yy"
                                                       
                                  MbSqlAbSyn.Expr.ExprList [_1;MbSqlAbSyn.Expr.NodeTyped ("id","*")]
                                  
                    )
-# 1303 "parser.yy"
+# 1324 "parser.yy"
                  : 'table_wild));
-# 4893 "parser.fs"
+# 4892 "parser.fs"
         (fun (parseState : Microsoft.FSharp.Text.Parsing.IParseState) ->
             let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             let _3 = (let data = parseState.GetInput(3) in (Microsoft.FSharp.Core.Operators.unbox data : 'ident)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
-# 1306 "parser.yy"
+# 1327 "parser.yy"
                                                                    
                                  MbSqlAbSyn.Expr.ExprList [_1;_3;MbSqlAbSyn.Expr.NodeTyped ("id","*")]
                                  
                    )
-# 1306 "parser.yy"
+# 1327 "parser.yy"
                  : 'table_wild));
 |]
-# 4908 "parser.fs"
+# 4907 "parser.fs"
 let tables () : Microsoft.FSharp.Text.Parsing.Tables<_> = 
   { reductions= _fsyacc_reductions ();
     endOfInputTag = _fsyacc_endOfInputTag;
