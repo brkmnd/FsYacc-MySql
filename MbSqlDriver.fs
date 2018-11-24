@@ -39,6 +39,9 @@ let private parse_string (s : string) =
         | _ ->
             let msg = syntax_error_at (MbSqlLexer.getPrevTokenVal tokens)
             [MbSqlAbSyn.Qs.Error msg]
+type Log =
+    abstract member ErrorSyntax : string -> string
+    abstract member AddError : string -> unit
 type Traverse<'T> =
     static member gen (f,acc,l) =
         let val_name n = {vname=n;vtype="";vval="";vargs=[||]} : MbSqlTraverse.TreeVal<'T>
@@ -50,13 +53,11 @@ type Traverse<'T> =
         match MbSqlTraverse.traverse f fs (Some acc) l with
         | Some res -> res
         | _ -> acc
-    static member dotnet (f : System.Func<int,'T,MbSqlTraverse.TreeVal<'T>,'T>,acc,q) =
+    static member dotnet (f : System.Func<int,'T,MbSqlTraverse.TreeVal<'T>,'T>,acc,q,log_c : Log) =
         let travF d a x = f.Invoke(d,a,x)
-        let (l,status) =
-            match parse_string q with
-            | [MbSqlAbSyn.Qs.Error msg] -> ([],msg)
-            | l -> (l,"")
-        (status,Traverse<'T>.gen (travF,acc,l))
+        match parse_string q with
+        | [MbSqlAbSyn.Qs.Error msg] -> log_c.AddError(log_c.ErrorSyntax(msg)); acc
+        | l -> Traverse<'T>.gen (travF,acc,l)
 let query2absyn_tree (q) =
     match parse_string q with
     | [MbSqlAbSyn.Qs.Error msg] -> ([],msg)
