@@ -32,13 +32,14 @@ let prg8 = "select 1 + 2 + 3"
 let prg9 = "select 2 * (3 + 4) - -2 * 2 as i1, i2, true as i3 from t1"
 let prg10 = "select 2 * (3 + 4) - -2 * 2 as i1, id, true as i3 from users,blogaden"
 let prg11 = "select 1 as a,true as b"
-let prg12 = "select 1 as a,2 as b,id from blogaden where id = 2 order by id desc limit 15,10"
-let prg13 = "select 1 as a,2 as b,id from blogaden order by id desc,id asc"
+let prg14 = "(select id,titel from blogaden order by id desc) union (select 'noget' as id, 'andet' as titel)"
+let prg15 = "select /* **/ 1"
 
 //errors
 let err1 = "select 1 from t1 join 'test'"
+let err2 = "select 1 from t1 where id = '233"
 
-let q = prg13
+let q = prg15
 printfn "q:%s" q
 printfn "%s" (MbSqlDriver.query2absyn_string(q))
 

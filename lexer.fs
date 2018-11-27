@@ -23,10 +23,21 @@ let lex inStr =
     let addToken_id (idStr : string) =
         let t2type =
             match idStr.ToLower() with
+            | "all" -> MbSqlParser.token.KEY_ALL
+            | "and" -> MbSqlParser.token.OP_AND_TXT
+            | "any" -> MbSqlParser.token.KEY_ANY
+            | "as" -> MbSqlParser.token.KEY_AS
+            | "asc" -> MbSqlParser.token.KEY_ASC
+            | "between" -> MbSqlParser.token.OP_BETWEEN
+            | "by" -> MbSqlParser.token.KEY_BY
+            | "cross" -> MbSqlParser.token.OP_CROSS
+            | "columns" -> MbSqlParser.token.KEY_COLUMNS
+            | "char" -> MbSqlParser.token.KEY_CHAR
+            | "cast" -> MbSqlParser.token.KEY_CAST
+            | "convert" -> MbSqlParser.token.KEY_CONVERT
             | "select" -> MbSqlParser.token.KEY_SELECT
             | "from" -> MbSqlParser.token.KEY_FROM
             | "where" -> MbSqlParser.token.KEY_WHERE
-            | "as" -> MbSqlParser.token.KEY_AS
             | "is" -> MbSqlParser.token.KEY_IS
             | "null" -> MbSqlParser.token.VAL_NULL
             | "true" -> MbSqlParser.token.VAL_TRUE
@@ -34,19 +45,14 @@ let lex inStr =
             | "dual" -> MbSqlParser.token.VAL_DUAL
             | "in" -> MbSqlParser.token.OP_IN
             | "into" -> MbSqlParser.token.OP_INTO
-            | "between" -> MbSqlParser.token.OP_BETWEEN
             | "sounds" -> MbSqlParser.token.OP_SOUNDS
             | "like" -> MbSqlParser.token.OP_LIKE
             | "mod" -> MbSqlParser.token.OP_MOD_TXT
             | "div" -> MbSqlParser.token.OP_DIV_TXT
             | "not" -> MbSqlParser.token.OP_NOT_TXT
             | "or" -> MbSqlParser.token.OP_OR_TXT
-            | "and" -> MbSqlParser.token.OP_AND_TXT
-            | "all" -> MbSqlParser.token.KEY_ALL
-            | "any" -> MbSqlParser.token.KEY_ANY
             | "join" -> MbSqlParser.token.OP_JOIN
             | "inner" -> MbSqlParser.token.OP_INNER
-            | "cross" -> MbSqlParser.token.OP_CROSS
             | "straight_join" -> MbSqlParser.token.OP_STRAIGHT_JOIN
             | "natural" -> MbSqlParser.token.OP_NATURAL
             | "left" -> MbSqlParser.token.OP_LEFT
@@ -55,9 +61,7 @@ let lex inStr =
             | "group" -> MbSqlParser.token.OP_GROUP
             | "order" -> MbSqlParser.token.KEY_ORDER
             | "limit" -> MbSqlParser.token.KEY_LIMIT
-            | "by" -> MbSqlParser.token.KEY_BY
             | "desc" -> MbSqlParser.token.KEY_DESC
-            | "asc" -> MbSqlParser.token.KEY_ASC
             | "using" -> MbSqlParser.token.OP_USING
             | "outfile" -> MbSqlParser.token.KEY_OUTFILE
             | "force" -> MbSqlParser.token.KEY_FORCE
@@ -66,7 +70,6 @@ let lex inStr =
             | "keys" -> MbSqlParser.token.KEY_KEYS
             | "unique" -> MbSqlParser.token.KEY_UNIQUE
             | "json_table" -> MbSqlParser.token.OP_JSON_TABLE
-            | "columns" -> MbSqlParser.token.KEY_COLUMNS
             | "for" -> MbSqlParser.token.KEY_FOR
             | "ordinality" -> MbSqlParser.token.NOKEY_ORDINALITY
             | "nested" -> MbSqlParser.token.NOKEY_NESTED

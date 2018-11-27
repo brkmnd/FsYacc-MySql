@@ -71,7 +71,7 @@ let query2absyn_string (q) =
             let s1 = sprintf "%s%s<option>\n" d0 x.vname
             let s2 = x.vargs.[0]
             acc + s1 + s2
-        elif x.vname = "union" then
+        elif x.vname = "union" || x.vname = "union-all" then
             let s0 = sprintf "%sunion<%s>\n" d0 x.vtype
             let s1 = sprintf "%s%s" (d2s (depth + 1)) x.vargs.[0]
             let s2 = sprintf "%s%s" (d2s (depth + 1)) x.vargs.[1]

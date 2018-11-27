@@ -20,6 +20,7 @@ type token =
   | NOKEY_PATH
   | NOKEY_ORDINALITY
   | KEY_SQL_NO_CACHE
+  | KEY_BINARY
   | KEY_DATE
   | KEY_WINDOW
   | KEY_HAVING
@@ -35,6 +36,10 @@ type token =
   | KEY_EXISTS
   | KEY_DISTINCT
   | KEY_PARTITION
+  | KEY_COLLATE
+  | KEY_CONVERT
+  | KEY_CAST
+  | KEY_CHAR
   | KEY_OFFSET
   | KEY_DESC
   | KEY_ASC
@@ -134,6 +139,7 @@ type tokenId =
     | TOKEN_NOKEY_PATH
     | TOKEN_NOKEY_ORDINALITY
     | TOKEN_KEY_SQL_NO_CACHE
+    | TOKEN_KEY_BINARY
     | TOKEN_KEY_DATE
     | TOKEN_KEY_WINDOW
     | TOKEN_KEY_HAVING
@@ -149,6 +155,10 @@ type tokenId =
     | TOKEN_KEY_EXISTS
     | TOKEN_KEY_DISTINCT
     | TOKEN_KEY_PARTITION
+    | TOKEN_KEY_COLLATE
+    | TOKEN_KEY_CONVERT
+    | TOKEN_KEY_CAST
+    | TOKEN_KEY_CHAR
     | TOKEN_KEY_OFFSET
     | TOKEN_KEY_DESC
     | TOKEN_KEY_ASC
@@ -341,6 +351,7 @@ type nonTerminalId =
     | NONTERM_comp_op
     | NONTERM_all_or_any
     | NONTERM_simple_expr
+    | NONTERM_cast_type
     | NONTERM_literal
     | NONTERM_text_literal
     | NONTERM_text_string_sys

@@ -75,6 +75,12 @@
 %token KEY_ASC
 %token KEY_DESC
 %token KEY_OFFSET
+//types
+%token KEY_CHAR
+//functions
+%token KEY_CAST
+%token KEY_CONVERT
+%token KEY_COLLATE
 //not in lexer yet
 %token KEY_PARTITION
 %token KEY_DISTINCT
@@ -91,6 +97,7 @@
 %token KEY_HAVING
 %token KEY_WINDOW
 %token KEY_DATE
+%token KEY_BINARY
 //might be deprecated
 %token KEY_SQL_NO_CACHE
 //nokeys are not reserverd keywords. these can be used for idents 
@@ -131,8 +138,8 @@
 %left   OP_UP
 %left   OP_TILDE NEG
 %right  OP_NOT OP_NOT_TXT
-%right  BINARY_SYM COLLATE_SYM
-%left  INTERVAL_SYM
+%right  KEY_BINARY KEY_COLLATE
+%left   KEY_INTERVAL
 %left PREC_SUBQUERY_AS_EXPR
 %left PAR_LPAR PAR_RPAR
 
@@ -1181,9 +1188,15 @@ simple_expr:
         //| PAR_LBRACE ident expr PAR_RBRACE {}
         //| KEY_MATCH ident_list_arg KEY_AGAINST PAR_LPAR bit_expr fulltext_options PAR_RPAR {}
         //| BINARY_SYM simple_expr %prec OP_NEG {}
-        //| CAST_SYM PAR_LPAR expr KEY_AS cast_type PAR_RPAR {}
+        | KEY_CAST PAR_LPAR expr KEY_AS cast_type PAR_RPAR {
+            let args = MbSqlAbSyn.Expr.ExprList [$3;$5]
+            MbSqlAbSyn.Expr.FunctionCall (MbSqlAbSyn.Expr.NodeTyped ("id","cast"),args)
+            }
         //| CASE_SYM opt_expr when_list opt_else END {}
-        //| CONVERT_SYM '(' expr ',' cast_type ')' {}
+        | KEY_CONVERT PAR_LPAR expr DELIM_COMMA cast_type PAR_RPAR {
+            let args = MbSqlAbSyn.Expr.ExprList [$3;$5]
+            MbSqlAbSyn.Expr.FunctionCall (MbSqlAbSyn.Expr.NodeTyped ("id","convert"),args)
+            }
         //| CONVERT_SYM '(' expr USING charset_name ')' {}
         //| DEFAULT_SYM '(' simple_ident ')' {}
         //| VALUES '(' simple_ident_nospvar ')' {}
@@ -1191,6 +1204,10 @@ simple_expr:
         //| simple_ident JSON_SEPARATOR_SYM TEXT_STRING_literal {}
         //| simple_ident JSON_UNQUOTED_SEPARATOR_SYM TEXT_STRING_literal {}
         ;
+cast_type:
+          KEY_CHAR /* opt_field_length opt_charset_with_opt_binary */ {
+            MbSqlAbSyn.Expr.NodeTyped ("cast","char")
+            }
 literal:
           text_literal          { $1 }
         | num_literal           { $1 }
@@ -1205,10 +1222,10 @@ literal:
             MbSqlAbSyn.Expr.NodeTyped ("keyword","true")
             }
         | VAL_HEX {
-            MbSqlAbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.NodeTyped ("hex",$1)
             }
         | VAL_BIN {
-            MbSqlAbSyn.Expr.Temp
+            MbSqlAbSyn.Expr.NodeTyped ("bin",$1)
             }
         //| UNDERSCORE_CHARSET HEX_NUM {}
         //| UNDERSCORE_CHARSET BIN_NUM {}

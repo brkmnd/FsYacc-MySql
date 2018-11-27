@@ -45,10 +45,15 @@ and traverse_qs depth f vfs acc q =
         let acc2 = add2acc (f depth) acc (v_nta "options" "query" args0)
         acc2
     | Union (t,q1,q2) ->
+        let t0 =
+            let u = "union"
+            match t with
+            | "" | "none" -> u
+            | s -> u + "-" + s
         let acc0 = traverse_qs (depth + 1) f vfs acc q1
         let acc1 = traverse_qs (depth + 1) f vfs acc q2
         let args = args2arr [|acc0;acc1|]
-        let acc2 = add2acc (f depth) acc (v_nta "union" "query" args)
+        let acc2 = add2acc (f depth) acc (v_nta t0 "query" args)
         acc2
     | _ -> acc
 and traverse_q_select depth f vfs acc = function
