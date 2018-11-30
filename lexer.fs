@@ -8,8 +8,8 @@ let removeMultComment =
         elif str.Length = 1 then Sub (string str.[0],str.Substring(1))
         else Sub2 (string str.[0],str.[0 .. 1],str.Substring(1))
     let rec exec acc commOn = function
-        //return acc, comment_ended
-        | Empty -> (acc,not commOn)
+        //return acc, comment_open
+        | Empty -> (acc,commOn)
         | Sub (c,rest) -> exec (acc + c) commOn rest
         | Sub2 (c,s2,rest) when commOn ->
             if s2 = "*/" then exec acc false (rest.Substring(1))
@@ -96,6 +96,7 @@ let lex inStr =
             | "%" -> MbSqlParser.token.OP_PERC
             | "." -> MbSqlParser.token.OP_DOT
             | "||" -> MbSqlParser.token.OP_OR
+            | "&&" -> MbSqlParser.token.OP_AND
             | "|" -> MbSqlParser.token.OP_BOR
             | "<<" -> MbSqlParser.token.OP_SHIFT_LEFT
             | ">>" -> MbSqlParser.token.OP_SHIFT_RIGHT
@@ -112,8 +113,7 @@ let lex inStr =
             | ")" -> MbSqlParser.token.PAR_RPAR
             | "{" -> MbSqlParser.token.PAR_LBRACE
             | "}" -> MbSqlParser.token.PAR_RBRACE
-            | t ->
-                MbSqlParser.token.OP_DOT
+            | t -> MbSqlParser.token.OP_DOT
         (t,t2type)
     let addToken xIndex (tGroup : GroupCollection) =
         let i = 1
@@ -160,20 +160,23 @@ let lex inStr =
         "([0-9]*\\.[0-9]+)|"+
         "([0-9]+)|"+
         "(;|,)|"+
-        "(\\|\\|\\||\\+|-|\\*|\\/|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!|\\(|\\)|\\{|\\}|\\[|\\])|"+
+        "(\\|\\||\\&\\&|\\+|-|\\*|\\/|%|\\.|<<|>>|==|=|<|>|<=|>=|!=|<>|!|\\(|\\)|\\{|\\}|\\[|\\])|"+
         //ignore
         " +|\\n+"
     let matchF (m : Match) =
         addToken m.Index m.Groups
         ""
     let residueStr =
+        let (removedComm,openComm) = removeMultComment inStr
+        if openComm then
+            failwith "end of input"
         getToken_i <- 0
-        Regex.Replace(inStr,regToken,matchF)
+        Regex.Replace(removedComm,regToken,matchF)
     //check if anything not catched by lexer
     if residueStr <> "" then
         let len = tokens.Count
         if len = 0 then
-            failwith "soi" //start of input
+            failwith "start of input" //start of input
         else failwith (fst tokens.[len - 1])
     else
         tokens.Add("eoi",MbSqlParser.token.END_OF_INPUT)
