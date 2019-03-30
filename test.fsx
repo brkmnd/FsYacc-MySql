@@ -34,7 +34,7 @@ let prg10 = "select 2 * (3 + 4) - -2 * 2 as i1, id, true as i3 from users,blog"
 let prg11 = "select 1 as a,true as b"
 let prg14 = "(select id,titel from t1 order by id desc) union (select 'something' as id, 'other' as title)"
 let prg15 = "select /* **/ 1"
-let prg16 = "select id from t1 where id = 2 && id != 3"
+let prg16 = "select * from t1 where id = 2 && id != 3"
 
 //errors
 let err1 = "select 1 from t1 join 'test'"
